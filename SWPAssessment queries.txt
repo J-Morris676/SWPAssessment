@@ -1,0 +1,70 @@
+Aggregation to only get questions & answers:
+db.assessments.aggregate( [ { $project : { "QAs.question" : 1, "QAs.answers": 1 } } ] ).pretty()
+db.assessments.find({}, { "QAs.question" : 1, "QAs.answers": 1 }).pretty()
+
+e.g. QA doc:
+
+{  
+   "title":"ass1",
+   "version":1,
+   "QAs":[  
+      {  
+         "type":"multi",
+         "question":"What is the capital of England?",
+         "answers":[  
+            "Cardiff",
+            "Glasgow",
+            "London",
+            "Dublin",
+            "Belfast"
+         ],
+         "answer":2
+      }
+   ]
+}
+
+To add a new question to an assessment:
+db.assessments.update(
+   { version: 1029.1221 },
+   { $push: { "QAs": {  
+         "type":"multi",
+         "question":"What is the capital of England?",
+         "answers":[  
+            "Cardiff",
+            "Glasgow",
+            "London",
+            "Dublin",
+            "Belfast"
+         ],
+         "answer":2
+      } } }
+)
+
+To edit a question in an assessment:
+db.assessments.update(
+   { version: 1029.1221 },
+   { $set: { "QAs.0" : {  
+         "type":"multi",
+         "question":"What is the capital of Northern Ireland?",
+         "answers":[  
+            "Cardiff",
+            "Glasgow",
+            "London",
+            "Dublin",
+            "Belfast"
+         ],
+         "answer": 4
+      }
+} }
+)
+
+To delete an individual question:
+db.assessments.update( { version: 1029.1221 },   
+      {  
+   $pull:{  
+      "QAs":{  
+         "_id":ObjectId("54d893445cda22d8199c89b8")
+      }
+   }
+}
+)

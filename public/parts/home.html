@@ -1,0 +1,93 @@
+<section style="margin-top: 25px;">
+    <div class="row">
+        <!-- col 1 -->
+        <div class="col-md-offset-1 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 style="margin-top:10px;">
+                        Assessment Schedule
+                        <span style="float:right" class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <current-time format="dd/MM/yyyy', ' HH:mm" style="float:right"></current-time>
+                    <!-- Currently ongoing -->
+                    <div ng-show="currentlyOngoingAssessments.length>0">
+
+                        <h4>Currently Ongoing</h4>
+                        <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
+                            <li ng-repeat="assessmentSchedule in currentlyOngoingAssessments | orderBy: 'endDate':false" class="list-group-item">
+                                Started: {{assessmentSchedule.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                Ends: {{assessmentSchedule.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                Time left: <countdown on-done="filterDates" ng-model="assessmentSchedule.endDate"></countdown>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="currentlyOngoingAssessments.length==0">
+                        <h4>Currently Ongoing</h4>
+                        <h5>No currently ongoing assessments!</h5>
+                    </div>
+
+                    <!-- Recently finished -->
+                    <div ng-show="recentlyFinishedScheduledAssessments.length>0">
+                        <h4>Recently Finished</h4>
+                        <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
+                            <li ng-repeat="assessmentSchedule in recentlyFinishedScheduledAssessments | orderBy: 'endDate':true" class="list-group-item">
+                                Started: {{assessmentSchedule.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                Ended: {{assessmentSchedule.endDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="recentlyFinishedScheduledAssessments.length==0">
+                        <h4>Recently Completed</h4>
+                        <h5>No recently completed scheduled assessments!</h5>
+                    </div>
+
+                    <!-- In the next week -->
+                    <div ng-show="assessmentsInTheNextWeek.length>0">
+                        <h4>Coming up in the next week</h4>
+                        <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
+                            <li ng-repeat="assessmentSchedule in assessmentsInTheNextWeek| orderBy: 'startDate':false" class="list-group-item">
+                                Starts: {{assessmentSchedule.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                Ends: {{assessmentSchedule.endDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="assessmentsInTheNextWeek.length==0">
+                        <h4>In the next week</h4>
+                        <h5>No scheduled assessments in the next week!</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- col 2 -->
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 style="margin-top:10px;">
+                        Assessments
+                        <span style="float:right;" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-show="assessments.length == 0">
+                        There are no assessments, make one <a href="#">here</a>
+                    </div>
+                    <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
+                        <li ng-repeat="assessment in assessments" class="list-group-item">
+                            <button ng-click="goToAssessment(assessment._id)" class="btn btn-default" style="float:right">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                Edit
+                            </button>
+                            <div>
+                                Title: {{assessment.title}}</br>
+                                Versions: {{assessment.versions.length}}
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

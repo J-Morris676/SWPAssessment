@@ -1,0 +1,12 @@
+/*
+    -- Application specific Bootstrap css
+*/
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
+    opacity: 1;
+    background-color: #AF0E38;
+}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a:focus {
+    opacity: 1;
+    background-color: #AF0E38;
+    background-image: none;
+}

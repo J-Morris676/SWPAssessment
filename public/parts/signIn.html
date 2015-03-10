@@ -1,0 +1,21 @@
+<div class="container">
+
+    <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+
+        <input ng-model="loginDetails.username" type="text" id="inputEmail" class="form-control" placeholder="Username" required="" autofocus="">
+
+        <input ng-model="loginDetails.password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+
+        <div style="word-break: break-all;text-align: center" ng-show="loginError" class="alert alert-danger" role="alert">
+            <b>
+                <i>
+                    {{loginError}}
+                </i>
+            </b>
+        </div>
+
+        <button ng-click="login()" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+
+</div>

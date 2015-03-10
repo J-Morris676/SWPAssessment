@@ -1,0 +1,73 @@
+db.students.insert([
+{   
+   "username": "sample1",
+    "password": "sample1",
+    "firstName": "sample1",
+    "lastName": "sample1",
+    "assessmentResults": []
+},
+{   
+   "username": "sample2",
+    "password": "sample2",
+    "firstName": "sample2",
+    "lastName": "sample2",
+    "assessmentResults": []
+},
+{   
+   "username": "sample3",
+    "password": "sample3",
+    "firstName": "sample3",
+    "lastName": "sample3",
+    "assessmentResults": []
+},
+{   
+   "username": "sample4",
+    "password": "sample4",
+    "firstName": "sample4",
+    "lastName": "sample4",
+    "assessmentResults": []
+},
+{   
+   "username": "sample5",
+    "password": "sample5",
+    "firstName": "sample5",
+    "lastName": "sample5",
+    "assessmentResults": []
+},
+{   
+   "username": "sample6",
+    "password": "sample6",
+    "firstName": "sample6",
+    "lastName": "sample6",
+    "assessmentResults": []
+},
+{   
+   "username": "sample7",
+    "password": "sample7",
+    "firstName": "sample7",
+    "lastName": "sample7",
+    "assessmentResults": []
+},
+{   
+   "username": "sample8",
+    "password": "sample8",
+    "firstName": "sample8",
+    "lastName": "sample8",
+    "assessmentResults": []
+},
+{   
+   "username": "sample9",
+    "password": "sample9",
+    "firstName": "sample9",
+    "lastName": "sample9",
+    "assessmentResults": []
+},
+{   
+   "username": "sample10",
+    "password": "sample10",
+    "firstName": "sample10",
+    "lastName": "sample10",
+    "assessmentResults": []
+}
+])
+	

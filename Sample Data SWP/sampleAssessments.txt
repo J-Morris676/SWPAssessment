@@ -1,0 +1,134 @@
+db.assessments.insert([  
+   {  
+      "title":"Assessment 1",
+      "version":1,
+      "QAs":[  
+         {  
+            "type":"multi",
+            "question":"What is the capital of England?",
+            "answers":[  
+               "Cardiff",
+               "Edinburgh",
+               "London",
+               "Dublin",
+               "Belfast"
+            ],
+            "answer":2
+         },
+         {  
+            "type":"multi",
+            "question":"What is the capital of Wales?",
+            "answers":[  
+               "Cardiff",
+               "Edinburgh",
+               "London",
+               "Dublin",
+               "Belfast"
+            ],
+            "answer":0
+         },
+         {  
+            "type":"multi",
+            "question":"What is the capital of Scotland?",
+            "answers":[  
+               "Cardiff",
+               "Edinburgh",
+               "London",
+               "Dublin",
+               "Belfast"
+            ],
+            "answer":1
+         },
+         {  
+            "type":"multi",
+            "question":"What is the capital of Northern Ireland?",
+            "answers":[  
+               "Cardiff",
+               "Edinburgh",
+               "London",
+               "Dublin",
+               "Belfast"
+            ],
+            "answer":4
+         },
+         {  
+            "type":"multi",
+            "question":"What is the capital of Rep.Ireland?",
+            "answers":[  
+               "Cardiff",
+               "Edinburgh",
+               "London",
+               "Dublin",
+               "Belfast"
+            ],
+            "answer":3
+         }
+      ]
+   },
+   {  
+      "title":"Assessment 2",
+      "version":2,
+      "QAs":[  
+         {  
+            "type":"multi",
+            "question":"How many legs does a cow have?",
+            "answers":[  
+               1,
+               2,
+               4,
+               6,
+               8
+            ],
+            "answer":2
+         },
+         {  
+            "type":"multi",
+            "question":"How many legs does a spider have?",
+            "answers":[  
+               1,
+               2,
+               4,
+               6,
+               8
+            ],
+            "answer":4
+         },
+         {  
+            "type":"multi",
+            "question":"How many legs does a dog have?",
+            "answers":[  
+               1,
+               2,
+               4,
+               6,
+               8
+            ],
+            "answer":2
+         },
+         {  
+            "type":"multi",
+            "question":"How many legs does a human have?",
+            "answers":[  
+               1,
+               2,
+               4,
+               6,
+               8
+            ],
+            "answer":1
+         },
+         {  
+            "type":"multi",
+            "question":"How many legs does a cat have?",
+            "answers":[  
+               1,
+               2,
+               4,
+               6,
+               8
+            ],
+            "answer":2
+         }
+      ]
+   }
+])

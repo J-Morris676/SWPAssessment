@@ -1,0 +1,52 @@
+In this new solution.. the version in which the question belongs to must be 
+provided - sake of these examples --> version == 1, QA == 1.
+
+ 
+EDITING a question in a version:
+(Whole question set can be edited by leaving out QAs index (versions.0.QAs))
+	--> Question order can be set doing this...?
+
+db.assessments.update(
+   { title: "Assessment 2" },
+   { $set: { "versions.0.QAs.1" : {  
+         "type":"multi",
+         "question":"What is the capital of blah blah?",
+         "answers":[  
+            "Cardiff",
+            "Glasgow",
+            "London",
+            "Dublin",
+            "Belfast"
+         ],
+         "answer": 4
+      }
+} }
+)
+
+To DELETE an individual question!!!:
+db.assessments.update( { title: "Assessment 2"},   
+      {  
+   $pull:{  
+      "versions.0.QAs":{  
+         "_id":ObjectId("54d935d9e7fafe27285251ab")
+      }
+   }
+}
+)
+
+To ADD a new question to an assessment:
+db.assessments.update(
+   { title: "Assessment 2" },
+   { $push: { "versions.0.QAs": {  
+         "type":"multi",
+         "question":"What is the capital of England?",
+         "answers":[  
+            "Cardiff",
+            "Glasgow",
+            "London",
+            "Dublin",
+            "Belfast"
+         ],
+         "answer":2
+      } } }
+)

@@ -1,0 +1,48 @@
+<section style="margin-top: 25px">
+    <div class="panel panel-default">
+        <div style="text-align: center" class="panel-body">
+            <h2>Edit Assessment</h2>
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="title"><h4>Title:</h4></label>
+                    <input ng-model="assessment.title" ng-change="updateAssessment()" type="text" class="form-control" id="title" placeholder="Title">
+                </div>
+            </form>
+        </div>
+        <!-- TODO: Pretty this out, maybe put it in a bootstrap table - How to make it adjustable?? -->
+            <div style="margin-left: 10px;margin-right:10px;">
+                        <h3>'{{assessment.title}}' Versions</h3>
+                        <div style="margin-left: 10px;margin-right:10px;" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div ng-repeat="version in assessment.versions track by $index" class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Version {{$index+1}}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <div ng-repeat="QA in version.QAs track by $index">
+                                            <h4>Question {{$index+1}}</h4>
+                                            <form class="form-inline">
+                                                <div class="form-group">
+
+                                                    <label for="qa-type-{{$index}}"><h4>Type:</h4></label>
+                                                    <input ng-model="QA.type" ng-change="updateAssessment()" type="text" class="form-control" id="qa-type-{{$index}}" placeholder="Type">
+                                                    <label for="qa-question-{{$index}}"><h4>Question:</h4></label>
+                                                    <input ng-model="QA.question" ng-change="updateAssessment()" type="text" class="form-control" id="qa-question-{{$index}}" placeholder="Question">
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+    </div>
+
+
+</section>
