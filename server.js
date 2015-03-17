@@ -24,8 +24,6 @@ var session = require("express-session");
 
 var app = express();
 
-//TODO: Clean up, (Jamie Morris in files!!) use Bower & push to Git
-
 // all environments
 app.set('port', process.env.PORT || 3002);
 
@@ -125,8 +123,10 @@ app.delete("/resources/schedules/:scheduleId/students/:username", validate(param
 
 //Error handle:
 app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+    var error = (err.stack === 'undefined') ? err.stack : err;
+    console.error(error);
+
+    res.status(500).send({error: error});
 });
 
 

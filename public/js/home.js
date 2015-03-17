@@ -12,13 +12,13 @@ angular.module('myApp.home', ['ngResource'])
             $scope.assessmentSchedules = data;
             $scope.filterDates();
         }).error(function(data, err) {
-                alert("Failed to get schedules");
+                console.log("Failed to get schedules");
         });
 
         $http.get("/resources/assessments").success(function(data, status) {
             $scope.assessments = data;
         }).error(function(data, err) {
-                alert("Failed to get schedules");
+            console.log("Failed to get schedules");
         });
 
         $scope.filterDates = function() {

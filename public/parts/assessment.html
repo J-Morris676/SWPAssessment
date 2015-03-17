@@ -1,48 +1,133 @@
 <section style="margin-top: 25px">
-    <div class="panel panel-default">
+    <!-- Loader -->
+    <div ng-show="assessment==null" class="panel panel-default">
+        <div class="spinner">
+            <div class="spinner-container container1">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container2">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container3">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div style="margin-left:27px;">Loading..</div>
+        </div>
+    </div>
+    <!-- Content -->
+    <div ng-show="assessment!=null" class="panel panel-default">
         <div style="text-align: center" class="panel-body">
             <h2>Edit Assessment</h2>
 
             <form class="form-inline">
                 <div class="form-group">
                     <label for="title"><h4>Title:</h4></label>
-                    <input ng-model="assessment.title" ng-change="updateAssessment()" type="text" class="form-control" id="title" placeholder="Title">
+                    <div class="input-group">
+                        <input id="title" type="text" class="form-control" ng-model="tempTitle" placeholder="Assessment title..">
+                          <span class="input-group-btn">
+                            <button ng-disabled="tempTitle==assessment.title|| tempTitle==''" ng-click="updateAssessment();" class="btn btn-default" type="button">
+                                <span title="Save assessment title" class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                            </button>
+                          </span>
+                    </div>
                 </div>
             </form>
         </div>
-        <!-- TODO: Pretty this out, maybe put it in a bootstrap table - How to make it adjustable?? -->
-            <div style="margin-left: 10px;margin-right:10px;">
-                        <h3>'{{assessment.title}}' Versions</h3>
-                        <div style="margin-left: 10px;margin-right:10px;" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            <div ng-repeat="version in assessment.versions track by $index" class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingOne">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Version {{$index+1}}
-                                        </a>
-                                    </h4>
+
+        <div style="text-align:center">
+            <i style="color: #FFCC00" ng-show="isMobile()">
+                Due to the scale of the assessments, it is highly recommended that you use a full-screen desktop
+                computer to edit assessments.
+            </i>
+        </div>
+
+        <div style="margin-left: 10px;margin-right:10px;">
+            <h3>'{{assessment.title}}' Versions</h3>
+            <div style="margin-left: 10px;margin-right:10px;" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                <div style="margin-top:0px;" ng-init="collapsedQuestions.push([]);collapsedVersions.push(true)" ng-repeat="version in assessment.versions track by $index" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <span ng-click="deleteVersion(version._id, $index+1)" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+
+                            <span ng-show="collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                            <span ng-show="!collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+
+                            <p>
+                                Version {{$index+1}}
+                            </p>
+                        </h4>
+                    </div>
+
+                    <div>
+                        <div class="col-md-offset-1">
+                            <div collapse="collapsedVersions[$index]" style="padding:0px" class="panel-body">
+                                <div style="margin-top:0px" ng-init="collapsedQuestions[$parent.$index].push(true)" ng-repeat="QA in version.QAs track by $index" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+                                                Question {{$index+1}}
+                                            </div>
+                                            <div class="col-md-offset-7 col-md-2">
+
+                                                <span ng-click="deleteQuestion({id: version._id, no:$parent.$index+1}, {id: QA._id, no:$index+1})" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+
+                                                <span ng-show="collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                                                <span ng-show="!collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div collapse="collapsedQuestions[$parent.$index][$index]" class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-offset-1">
+                                                <question update-callback="updateQuestion" question-number="$index" version="version._id" ng-model="QA"></question>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                    <div class="panel-body">
-                                        <div ng-repeat="QA in version.QAs track by $index">
-                                            <h4>Question {{$index+1}}</h4>
-                                            <form class="form-inline">
-                                                <div class="form-group">
 
-                                                    <label for="qa-type-{{$index}}"><h4>Type:</h4></label>
-                                                    <input ng-model="QA.type" ng-change="updateAssessment()" type="text" class="form-control" id="qa-type-{{$index}}" placeholder="Type">
-                                                    <label for="qa-question-{{$index}}"><h4>Question:</h4></label>
-                                                    <input ng-model="QA.question" ng-change="updateAssessment()" type="text" class="form-control" id="qa-question-{{$index}}" placeholder="Question">
+                                <!-- Add question panel -->
+                                <div class="row">
+                                    <div class="col-md-offset-11 col-md-1">
+                                        <div ng-click="addQuestion(version._id)" title="Add question" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <div style="height: 20px;" class="panel-title">
+                                                    <span style="color: green;" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                 </div>
-                                            </form>
-
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Add version panel -->
+                <div class="row">
+                    <div class="col-md-offset-11 col-md-1">
+                        <div ng-click="addVersion()" title="Add version" style="text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <div style="height: 20px;" class="panel-title">
+                                    <span style="color: green;text-align:center" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
     </div>
-
-
 </section>

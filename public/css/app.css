@@ -36,3 +36,8 @@ footer {
     background-color:grey;
     cursor: pointer;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

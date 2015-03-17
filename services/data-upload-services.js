@@ -159,7 +159,6 @@ exports.insertQuestionIntoVersionOfAssessment = function(req, res) {
 exports.editQuestionInVersionOfAssessment = function(req, res) {
     logger.info("PUT: editing question [assessment: " + req.params.assessmentId + ", version: " + req.params.versionId + ", question: " +
         req.params.questionNo + "]");
-
     if (authCheck.admin.checkAuthenticated(req.user)) {
         dataUploadRepository.editQuestionInVersionOfAssessment(req.body, req.params.assessmentId, req.params.versionId, req.params.questionNo,
             function(err, uploadResponse) {

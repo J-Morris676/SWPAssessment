@@ -1,0 +1,214 @@
+<!-- TODO: Needs more 'xs' classes.. to fit mobile!! -->
+<div style="padding-top: 10px;" class="row vertical-align">
+    <div class="col-md-2" style="padding-top:5px;">
+        <label for="question-{{ngModel._id}}">Question:</label>
+    </div>
+    <div class="col-md-9">
+        <input ng-change="changes=true" placeholder="What is the colour of the sky?" ng-model="ngModel.question" id="question-{{ngModel._id}}" class="form-control">
+    </div>
+</div>
+
+<!-- Answers -->
+<div style="padding-top: 10px;">
+    <div class="row vertical-align">
+        <div class="col-xs-12 col-md-2">
+            <label for="answer-{{ngModel._id}}">Add Answer: </label>
+        </div>
+        <div class="col-xs-12 col-md-8">
+            <input ng-keyup="$event.keyCode == 13 && isValidAnswer() &&  addAnswer()" ng-model="answer" id="answer-{{ngModel._id}}" placeholder="blue" class="form-control">
+        </div>
+        <div class="col-md-offset-0 col-xs-offset-6 col-xs-6 col-md-2">
+            <button ng-disabled="!isValidAnswer()" ng-click="addAnswer();" type="button" class="btn btn-success" aria-label="Left Align">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+    <div style="padding-top: 10px;" class="row vertical-align">
+        <div class="col-xs-12 col-md-2">
+            <label id="answers-{{ngModel._id}}">Answers: </label>
+        </div>
+        <div style="max-height:150px;overflow-y: scroll" class="col-xs-12 col-md-8">
+            <table class="table table-hover table-condensed">
+                <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear; cursor:pointer" ng-repeat="answer in ngModel.answers track by $id(answer)">
+                    <td ng-click="ngModel.answer=$index;changes = true;" title="Click to mark as correct answer">
+                        <span>{{answer}}</span>
+                    </td>
+                    <td ng-click="removeAnswer($index);" title="Click to remove answer">
+                        <span style="color:red;cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </td>
+                    <td ng-show="ngModel.answer==$index" title="Marked as the correct answer">
+                        <span style="color:green;cursor:pointer;" class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                    </td>
+                    <td ng-click="ngModel.answer=$index;changes = true;" ng-show="ngModel.answer!=$index" title="Click to mark as correct answer"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Call Info -->
+<div class="row vertical-align">
+    <div class="col-xs-12 col-md-2">
+        <label id="additionalInfo-{{ngModel._id}}">Call Information: </label>
+    </div>
+    <div class="col-xs-12 col-md-9">
+        <ul class="nav nav-tabs">
+            <li role="presentation" ng-click="view='background'" ng-class="{active: view=='background'}">
+                <a href="javascript:void(0);">Background</a>
+            </li>
+            <li role="presentation" ng-click="view='details'" ng-class="{active: view=='details'}">
+                <a href="javascript:void(0);">Details</a>
+            </li>
+        </ul>
+        <!-- Background form -->
+        <div style="padding-top:10px;max-height:400px;overflow-y: scroll;overflow-x:hidden;" ng-show="view=='background'">
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerId-{{ngModel._id}}">Unique ID:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.uniqueID" id="callerId-{{ngModel._id}}" placeholder="ID" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerName-{{ngModel._id}}">Caller Name:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.callerName" id="callerName-{{ngModel._id}}" placeholder="Status" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerAddress-{{ngModel._id}}">Caller Address:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.callerAddress" id="callerAddress-{{ngModel._id}}" placeholder="Address" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerTelephone-{{ngModel._id}}">Caller Number:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.callerTelephone" id="callerTelephone-{{ngModel._id}}" placeholder="Status" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerStatus-{{ngModel._id}}">Caller Status:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.callerStatus" id="callerStatus-{{ngModel._id}}" placeholder="Status" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="callerMethod-{{ngModel._id}}">Contact Method:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.contactMethod" id="callerMethod-{{ngModel._id}}" placeholder="Status" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="incidentLocation-{{ngModel._id}}">Incident Location:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.incidentLocation" id="incidentLocation-{{ngModel._id}}" placeholder="Status" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="openCodeCategory-{{ngModel._id}}">Open Code Category:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.openCodeCategory" id="openCodeCategory-{{ngModel._id}}" placeholder="Open Code Category" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="response-{{ngModel._id}}">Response:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <input ng-model="ngModel.additionalInfo.background.response" id="response-{{ngModel._id}}" placeholder="Response" class="form-control">
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="dateReceived-{{ngModel._id}}">Date Received:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <datepicker  ng-model="ngModel.additionalInfo.background.dateReceived" id="dateReceived-{{ngModel._id}}"
+                                 min-date="minDate" show-weeks="true" class="well well-sm">
+                    </datepicker>
+                </div>
+            </div>
+
+            <div style="padding-top:10px;" class="row vertical-align">
+                <div class="col-xs-12 col-md-4">
+                    <label for="dateRecorded-{{ngModel._id}}">Date Recorded:</label>
+                </div>
+                <div class="col-xs-12 col-md-8">
+                    <datepicker  ng-model="ngModel.additionalInfo.background.dateRecorded" id="dateRecorded-{{ngModel._id}}"
+                                 show-weeks="true" class="well well-sm">
+                    </datepicker>
+                </div>
+            </div>
+        </div>
+        <!-- Details -->
+        <div style="padding-top:10px;max-height:400px;overflow-y: scroll;overflow-x:hidden;" ng-show="view=='details'">
+            <div ng-repeat="callDetails in ngModel.additionalInfo.details">
+                <div class="row vertical-align">
+                    <div class="col-xs-12 col-md-3">
+                        <label >Log:</label>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        <input ng-model="callDetails.log" placeholder="Log" class="form-control">
+                    </div>
+                </div>
+                <div class="row vertical-align">
+                    <div class="col-xs-12 col-md-3">
+                        <label >Time:</label>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        <timepicker ng-model="callDetails.date" show-meridian="false"></timepicker>
+                    </div>
+                </div>
+                <div class="row vertical-align">
+                    <div class="col-xs-12 col-md-3">
+                        <label >Date:</label>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        <datepicker ng-model="callDetails.date"
+                                     show-weeks="true" class="well well-sm">
+                        </datepicker>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submit button -->
+<div style="padding-top: 10px;" class="row vertical-align">
+
+    <div class="col-xs-12 col-md-offset-6 col-md-4">
+        <i style="float:right;padding-top:5px;color:green" ng-bind="updateMessage"></i>
+    </div>
+
+    <div class="col-xs-8 col-md-2">
+        <button style="display:inline" ng-click="questionUpdate(ngModel, updateCallback)" type="button" class="btn btn-default">Update</button>
+    </div>
+</div>

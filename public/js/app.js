@@ -1,6 +1,14 @@
 'use strict';
 
-angular.module('myApp', ["myApp.signIn", "myApp.home", "myApp.assessment", "myApp.assessments", "myApp.timeDirectives", "ngRoute"])
+angular.module('myApp', ["myApp.signIn",
+    "myApp.home",
+    "myApp.assessment",
+    "myApp.assessmentEditingDirectives",
+    "myApp.assessments",
+    "myApp.timeDirectives",
+    "ngRoute",
+    "ui.bootstrap"
+])
 
 	.config(function($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(true);

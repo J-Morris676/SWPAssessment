@@ -1,6 +1,6 @@
 /**
  * Created by Jamie Morris on 02/03/15.
- *  - Functions to determine what access rights of a given user
+ *  - Functions to determine the access rights of a given user
  */
 exports.student = {};
 exports.admin = {};
@@ -10,7 +10,7 @@ exports.checkAuthenticated = function(user) {
         return true;
     else
         return false;
-}
+};
 
 //Admins:
 exports.admin.checkAuthenticated = function(user) {
@@ -25,7 +25,7 @@ exports.admin.checkAuthenticated = function(user) {
     else {
         return false;
     }
-}
+};
 
 exports.admin.checkAuthenticatedByUserName = function(user, username) {
     if (exports.admin.checkAuthenticated(user)) {
@@ -39,7 +39,7 @@ exports.admin.checkAuthenticatedByUserName = function(user, username) {
     else {
         return false;
     }
-}
+};
 
 //Students:
 exports.student.checkAuthenticated = function(user) {
@@ -54,7 +54,7 @@ exports.student.checkAuthenticated = function(user) {
     else {
         return false;
     }
-}
+};
 
 exports.student.checkAuthenticatedByUserName = function(user, username) {
     if (exports.student.checkAuthenticated(user)) {
@@ -68,4 +68,4 @@ exports.student.checkAuthenticatedByUserName = function(user, username) {
     else {
         return false;
     }
-}
+};

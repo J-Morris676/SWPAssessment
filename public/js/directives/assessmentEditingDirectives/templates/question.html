@@ -1,0 +1,13 @@
+<div class="row vertical-align">
+    <div class="col-md-2" style="padding-top:5px;">
+        <label for="type-{{ngModel._id}}">Type:</label>
+    </div>
+    <div class="col-md-9">
+        <select id="type-{{ngModel._id}}" ng-change="changeType()" ng-model="ngModel.type" class="form-control">
+            <option value="multi">Multiple Choice</option>
+            <option value="call">Call Log</option>
+            <option value="free">Free Text</option>
+        </select>
+    </div>
+</div>
+<hr>

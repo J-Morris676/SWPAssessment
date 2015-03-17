@@ -39,6 +39,7 @@ passport.use('local', new LocalStrategy(
                             message: 'Incorrect password.'
                         });
                     }
+                    admin = {username: admin.username, id: admin._id};
                     return done(null, {admin: admin});
                 });
             }
@@ -48,6 +49,7 @@ passport.use('local', new LocalStrategy(
                 });
             }
             else if (student) {
+                student = {username: student.username, id: student._id};
                 return done(null, {student: student});
             }
         });
