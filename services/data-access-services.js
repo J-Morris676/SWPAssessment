@@ -45,9 +45,14 @@ exports.getAllAdmins = function(req, res) {
 };
 
 exports.getAllStudents = function(req, res) {
-    logger.info("GET: all students");
+    (req.query.like == null ? logger.info("GET: all students") : logger.info("GET: students LIKE '" + req.query.like + "'"));
+
     if (authCheck.admin.checkAuthenticated(req.user)) {
-        dataRepository.findStudents({}, function(err, students) {
+        var query = {};
+        if (req.query.like != null) {
+            query.username = new RegExp('.*'+req.query.like+'.*', "i");
+        }
+        dataRepository.findStudents(query, function(err, students) {
             if (err) res.status(500).json(err);
             else res.json(students);
         });
@@ -56,6 +61,8 @@ exports.getAllStudents = function(req, res) {
         res.status(401).json({"message": "Not authenticated"});
     }
 };
+
+
 
 exports.getStudentByUserName = function(req, res) {
     logger.info("GET: student " + req.params.username);

@@ -72,15 +72,45 @@
                 </div>
                 <div class="panel-body">
                     <div ng-show="assessments.length == 0">
-                        There are no assessments, make one <a href="#">here</a>
+                        There are no assessments, make one <a href="/assessments">here</a>
                     </div>
                     <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
                         <li ng-repeat="assessment in assessments" class="list-group-item">
                             <div>
-                                Title: {{assessment.title}}</br>
-                                Versions: {{assessment.versions.length}}
+                                <b>Title: </b> {{assessment.title}}</br>
+                                <b>Versions: </b> {{assessment.versions.length}}
                             </div>
                         </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- col 3 -->
+        <div class="col-md-offset-1 col-md-5">
+            <div class="panel panel-default">
+                <div style="cursor:pointer" ng-click="goToStudents()" class="panel-heading">
+                    <h3 style="margin-top:10px;">
+                        Students
+                        <span style="float:right" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-body">
+                        <div ng-show="assessments.length == 0">
+                            There are no Students, make one <a href="/students">here</a>
+                        </div>
+                        <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
+                            <li ng-repeat="student in students | orderBy:'username'" class="list-group-item">
+                                <div>
+                                    <b>Username: </b> {{student.username}}</br>
+                                    <b>Name: </b>  {{student.firstName}} {{student.lastName}}</br>
+                                    <b>Completed Assessments: </b>  {{student.assessmentResults.length}}</br>
+                                </div>
+                            </li>
+                        </div>
                     </div>
                 </div>
             </div>

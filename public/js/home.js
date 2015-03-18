@@ -21,6 +21,12 @@ angular.module('myApp.home', ['ngResource'])
             console.log("Failed to get schedules");
         });
 
+        $http.get("/resources/students").success(function(data, status) {
+            $scope.students = data;
+        }).error(function(data, err) {
+            console.log("Failed to get students");
+        });
+
         $scope.filterDates = function() {
             //Filter out the scheduled assessments:
             $scope.recentlyFinishedScheduledAssessments = $scope.assessmentSchedules.filter(function(scheduledAssessment) {
@@ -45,5 +51,8 @@ angular.module('myApp.home', ['ngResource'])
         };
         $scope.goToAssessments = function() {
             $location.path("/assessments");
+        };
+        $scope.goToStudents = function() {
+            $location.path("/students");
         }
     });

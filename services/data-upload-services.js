@@ -31,13 +31,12 @@ exports.insertStudent = function(req, res) {
     logger.info("POST: inserting a student");
 
     if (authCheck.admin.checkAuthenticated(req.user)) {
-        var studentDetails = {
-            username: req.body.username,
-            password: md5(req.body.password)
-        };
+        var studentDetails = req.body;
+        studentDetails.password = md5(req.body.password);
 
         dataAccessRepository.findStudentByUsername(studentDetails.username, {}, function(err, student) {
-            if (err || student) res.status(500).json(err);
+            if (err) res.status(500).json(err);
+            else if (student) res.status(400).json({error: {errors:[{messages:["Student '" + req.body.username + "' already exists."]}]}});
             else {
                 dataUploadRepository.insertStudent(this.studentDetails, function(err, uploadResponse) {
                     if (err) res.status(500).json(err);
