@@ -10,3 +10,13 @@
     background-color: #AF0E38;
     background-image: none;
 }
+
+/*
+    screen-xs
+        Change the property of vertical align when extra small.
+*/
+@media (max-width: 768px) {
+    .vertical-align {
+        display:block;
+    }
+}

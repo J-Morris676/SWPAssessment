@@ -59,7 +59,9 @@ var versionsSchema = new Schema({
 
 var assessmentSchema = new Schema({
     "title": String,
-    "versions": [versionsSchema]
+    "versions": [versionsSchema],
+    "createdBy": String,
+    "createdDate": Date
 }, { versionKey: false });
 
 var resultSchema = new Schema({

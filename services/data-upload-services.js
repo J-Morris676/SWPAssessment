@@ -86,6 +86,8 @@ exports.insertAssessment = function(req, res) {
         dataAccessRepository.findAssessmentById(req.body._id, {}, function(err, assessment) {
             if (err || assessment) res.status(500).json(err);
             else {
+                req.body.createdBy = req.user.admin.username;
+                req.body.createdDate = new Date();
                 dataUploadRepository.insertAssessment(req.body, function(err, uploadResponse) {
                     if (err) res.status(500).json(err);
                     else res.status(201).json(uploadResponse);

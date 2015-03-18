@@ -43,7 +43,7 @@ exports.assessment = {
         versions: Joi.array().includes(Joi.object().keys({
             QAs:  Joi.array().includes(Joi.object().keys({
                 type: Joi.string().valid(["multi", "free", "call"]).required(),
-                question: Joi.string().required(),
+                question: Joi.string().allow('').required(),
                 answer: Joi.any().required(),
 
                 answers: Joi.array(),

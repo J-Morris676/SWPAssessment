@@ -1,3 +1,57 @@
-<section>
-    Placeholder
+<section style="margin-top: 25px">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2 style="text-align: center;margin-bottom:50px;">Assessments</h2>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <th>Title</th>
+                    <th>Versions</th>
+                    <th>Created By</th>
+                    <th>Created Date</th>
+                    <th></th>
+
+                    <tr ng-repeat="assessment in assessments track by $index">
+                        <td>
+                            {{assessment.title}}
+                        </td>
+                        <td>
+                            {{assessment.versions.length}}
+                        </td>
+                        <td>
+                            {{assessment.createdBy}}
+                        </td>
+                        <td>
+                            {{assessment.createdDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                        </td>
+                        <td>
+                            <button style="margin-left:5px;float:right;" ng-click="deleteAssessment($index)" class="btn btn-danger" style="float:right">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                            <button ng-click="goToAssessment(assessment._id)" class="btn btn-warning" style="float:right">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </button>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float:right">
+                <form class="form-inline ng-pristine ng-valid">
+                    <div class="form-group">
+                        <label>Submit new assessment: </label>
+                        <div class="input-group">
+
+                            <input id="submit" class="form-control" ng-model="newAssessment.title" placeholder="Title..">
+                            <span class="input-group-btn">
+                               <button ng-disabled="!isValidTitle()" ng-click="submitAssessment()" class="btn btn-success">
+                                    <span title="Save assessment title" class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                                </button>
+                              </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>

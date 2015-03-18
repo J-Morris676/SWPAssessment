@@ -64,7 +64,7 @@
         <!-- col 2 -->
         <div class="col-md-5">
             <div class="panel panel-default">
-                <div class="panel-heading">
+                <div style="cursor:pointer" ng-click="goToAssessments()" class="panel-heading">
                     <h3 style="margin-top:10px;">
                         Assessments
                         <span style="float:right;" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
@@ -76,10 +76,6 @@
                     </div>
                     <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
                         <li ng-repeat="assessment in assessments" class="list-group-item">
-                            <button ng-click="goToAssessment(assessment._id)" class="btn btn-default" style="float:right">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                Edit
-                            </button>
                             <div>
                                 Title: {{assessment.title}}</br>
                                 Versions: {{assessment.versions.length}}

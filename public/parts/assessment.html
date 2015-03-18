@@ -69,16 +69,16 @@
                     </div>
 
                     <div>
-                        <div class="col-md-offset-1">
+                        <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1">
                             <div collapse="collapsedVersions[$index]" style="padding:0px" class="panel-body">
                                 <div style="margin-top:0px" ng-init="collapsedQuestions[$parent.$index].push(true)" ng-repeat="QA in version.QAs track by $index" class="panel panel-default">
                                     <div class="panel-heading">
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-xs-7 col-sm-3 col-md-3">
                                                 <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
                                                 Question {{$index+1}}
                                             </div>
-                                            <div class="col-md-offset-7 col-md-2">
+                                            <div class="col-xs-5 col-sm-offset-7 col-sm-2 col-md-offset-7 col-md-2">
 
                                                 <span ng-click="deleteQuestion({id: version._id, no:$parent.$index+1}, {id: QA._id, no:$index+1})" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 
@@ -90,7 +90,7 @@
 
                                     <div collapse="collapsedQuestions[$parent.$index][$index]" class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-offset-1">
+                                            <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1">
                                                 <question update-callback="updateQuestion" question-number="$index" version="version._id" ng-model="QA"></question>
                                             </div>
                                         </div>
@@ -98,31 +98,24 @@
                                 </div>
 
                                 <!-- Add question panel -->
-                                <div class="row">
-                                    <div class="col-md-offset-11 col-md-1">
-                                        <div ng-click="addQuestion(version._id)" title="Add question" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div style="height: 20px;" class="panel-title">
-                                                    <span style="color: green;" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                </div>
-                                            </div>
+                                <div ng-click="addQuestion(version._id)" title="Add question" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div style="height: 20px;color: green" class="panel-title">
+                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Add version panel -->
-                <div class="row">
-                    <div class="col-md-offset-11 col-md-1">
-                        <div ng-click="addVersion()" title="Add version" style="text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
-                            <div class="panel-heading">
-                                <div style="height: 20px;" class="panel-title">
-                                    <span style="color: green;text-align:center" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </div>
-                            </div>
+                <div ng-click="addVersion()" title="Add version" style="text-align:center;cursor:pointer;margin-top:5px;" class="panel panel-default">
+                    <div class="panel-heading">
+                        <div style="height: 20px;color: green" class="panel-title">
+                            <span style="text-align:center" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>

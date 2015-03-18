@@ -77,7 +77,8 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 scope.changes = false;
 
                 scope.isValidAnswer = function() {
-                    if (scope.ngModel.answers == null) return true;
+                    if (scope.answer==""||scope.answer==null) return false;
+                    else if (scope.ngModel.answers == null) return true;
                     else if (scope.ngModel.answers.length == 0) return true;
                     else return scope.ngModel.answers.indexOf(scope.answer) == -1 && scope.answer!='' && scope.answer!=null;
                 };
@@ -145,7 +146,8 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 scope.changes = false;
 
                 scope.isValidAnswer = function() {
-                    if (scope.ngModel.answer == null || typeof(scope.ngModel.answer) != "object") return true;
+                    if (scope.answer==""||scope.answer==null) return false;
+                    else if (scope.ngModel.answer == null || typeof(scope.ngModel.answer) != "object") return true;
                     else if (scope.ngModel.answer.length == 0) return true;
                     else return scope.ngModel.answer.indexOf(scope.answer) == -1 && scope.answer!='' && scope.answer!=null;
                 };
@@ -208,7 +210,8 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 scope.view = 'background';
 
                 scope.isValidAnswer = function() {
-                    if (scope.ngModel.answers == null) return true;
+                    if (scope.answer==""||scope.answer==null) return false;
+                    else if (scope.ngModel.answers == null) return true;
                     else if (scope.ngModel.answers.length == 0) return true;
                     else return scope.ngModel.answers.indexOf(scope.answer) == -1 && scope.answer!='' && scope.answer!=null;
                 };
@@ -250,6 +253,32 @@ angular.module("myApp.assessmentEditingDirectives", [])
                             scope.ngModel.answer--;
                         }
                         scope.ngModel.answers.splice(index, 1);
+                    }
+                };
+
+                scope.addCallDetail = function() {
+                    var newCallDetail = {
+                        log: "",
+                        date: new Date()
+                    };
+                    if (scope.ngModel.additionalInfo == null) {
+                        scope.ngModel.additionalInfo = {
+                            details: [newCallDetail],
+                            background: {}
+                        };
+                    }
+                    else if (scope.ngModel.additionalInfo.details == null) {
+                        scope.ngModel.additionalInfo.details = [newCallDetail];
+                    }
+                    else {
+                        scope.ngModel.additionalInfo.details.push(newCallDetail)
+                    }
+                };
+
+                scope.removeCallDetail = function(index) {
+                    var confirmed = confirm("Are you sure you want to delete this call log?");
+                    if (confirmed) {
+                        scope.ngModel.additionalInfo.details.splice(index, 1);
                     }
                 }
             }

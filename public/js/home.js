@@ -27,20 +27,23 @@ angular.module('myApp.home', ['ngResource'])
                 if (new Date(scheduledAssessment.endDate) < new Date() && new Date(scheduledAssessment.startDate) > (new Date().getTime() - (7 * 24 * 60 * 60 * 1000))) {
                     return true;
                 }
-            })
+            });
             $scope.currentlyOngoingAssessments = $scope.assessmentSchedules.filter(function(scheduledAssessment) {
                 if (new Date(scheduledAssessment.startDate) < new Date() && new Date() < new Date(scheduledAssessment.endDate)) {
                     return true;
                 }
-            })
+            });
             $scope.assessmentsInTheNextWeek = $scope.assessmentSchedules.filter(function(scheduledAssessment) {
                 if (new Date(scheduledAssessment.startDate) > new Date() && new Date(scheduledAssessment.startDate) < (new Date().getTime() + (7 * 24 * 60 * 60 * 1000))) {
                     return true;
                 }
             })
-        }
+        };
 
         $scope.goToAssessment = function(id) {
             $location.path("/assessments/" + id);
+        };
+        $scope.goToAssessments = function() {
+            $location.path("/assessments");
         }
     });

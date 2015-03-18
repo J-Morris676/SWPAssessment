@@ -77,6 +77,7 @@ angular.module('myApp.assessment', ['ngResource'])
                      callback(data, status);
                  })
         };
+
         $scope.isMobile = function() {
             if(window.innerWidth <= 800 && window.innerHeight <= 600) {
                 return true;
@@ -86,10 +87,12 @@ angular.module('myApp.assessment', ['ngResource'])
         };
 
         $scope.updateAssessment = function() {
+            var id = $scope.assessment._id;
             delete $scope.assessment._id;
             $scope.assessment.title = $scope.tempTitle;
             $http.put("/resources/assessments/" + $routeParams.assessmentId, $scope.assessment).success(function(data, status) {
                 console.log(data);
+                $scope.assessment._id = id;
             })
         }
     });
