@@ -13,6 +13,14 @@ exports.user = {
     }
 };
 
+exports.editUser = {
+    body: {
+        password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/),
+        firstName: Joi.string().min(2).max(30),
+        lastName: Joi.string().min(2).max(30)
+    }
+};
+
 exports.QA = {
     body: {
         type: Joi.string().valid(["multi", "free", "call"]).required(),

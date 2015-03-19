@@ -4,6 +4,7 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.home",
     "myApp.assessment",
     "myApp.assessmentEditingDirectives",
+    "myApp.userDetailsDirectives",
     "myApp.assessments",
     "myApp.students",
     "myApp.student",
@@ -21,8 +22,8 @@ angular.module('myApp', ["myApp.signIn",
         $routeProvider.when('/assessments', {templateUrl: 'parts/assessments.html', controller: 'assessmentsCtrl'});
         $routeProvider.when('/assessments/:assessmentId', {templateUrl: 'parts/assessment.html', controller: 'assessmentCtrl'});
 
-        $routeProvider.when('/students', {templateUrl: 'parts/students.html', controller: 'studentsCtrl'});
-        $routeProvider.when('/students/:studentId', {templateUrl: 'parts/student.html', controller: 'studentCtrl'});
+        $routeProvider.when('/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
+        $routeProvider.when('/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});
         $routeProvider.otherwise({redirectTo: '/home'});
 	})
 
@@ -34,12 +35,16 @@ angular.module('myApp', ["myApp.signIn",
         $scope.$on('$routeChangeStart', function(next, current) {
             $http.get("/auth/isLoggedIn").success(function(data, status) {
                 if (data.loggedIn) {
+                    $scope.user = data;
+                    $scope.username = data.username;
                     if ($location.path() == "/signIn") {
                         $location.path('/home');
                     }
-                    $scope.username = data.username;
+                    console.log("changing username..");
                 }
                 else {
+                    $scope.user = null;
+                    $scope.username = null;
                     $location.path('/signIn');
                 }
             })
@@ -48,9 +53,12 @@ angular.module('myApp', ["myApp.signIn",
 
         $scope.logOut = function() {
             $http.get("/auth/logout").success(function(data, status) {
+                $scope.user = data;
+                $scope.username = data.username;
                 $location.path('/signIn');
             });
         };
+
 
         $scope.isRoute = function(route) {
 			return $location.path() == route;

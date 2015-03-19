@@ -1,0 +1,75 @@
+<!-- Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 style="color:grey;float:right;">{{userDetails.userType}}</h5>
+                <h3 style="display:inline" class="modal-title" id="myModalLabel">{{userDetails.user.username}}</h3>
+            </div>
+            <div class="modal-body">
+                <h5 ng-show="userDetails.userType=='Student'" style="color:#CB1442;text-align:center;margin-left:20px;"><i>Please contact an admin if you would like your details changed.</i></h5>
+
+                <div style="margin-top: 25px; height: auto;">
+                    <div ng-show="userDetails.userType!='Student'" style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-3">
+                            <label>Password: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <input type="password" ng-keyup="$event.keyCode == 13 && editStudent()" ng-model="userDetails.user.password" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Password..">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-3">
+                            <label>First Name: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <input ng-disabled="userDetails.userType=='Student'" ng-keyup="$event.keyCode == 13 && editStudent()" ng-model="userDetails.user.firstName" class="form-control" placeholder="First Name..">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-3">
+                            <label>Last Name: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <input ng-disabled="userDetails.userType=='Student'" ng-keyup="$event.keyCode == 13 && editStudent()" id="last-name" ng-model="userDetails.user.lastName" class="form-control" placeholder="Last Name..">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-3" style="padding-right:0px;">
+                            <label>Account Created: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <input disabled class="form-control" value="{{userDetails.user.createdDate | date:&quot;dd/MM/yyyy 'at' h:mma&quot;}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-offset-2 col-xs-7 col-md-offset-4 col-md-6">
+                            <ol>
+                                <li style="color:red" ng-repeat="message in errorSubmitMessage">
+                                    <i>
+                                        {{message}}
+                                    </i>
+                                </li>
+                                <li style="color:green" ng-repeat="message in successSubmitMessage">
+                                    <i>
+                                        {{message}}
+                                    </i>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-xs-3 col-md-2">
+                            <button ng-show="userDetails.userType!='Student'" type="button" ng-click="editAdmin()" class="btn btn-success btn-responsive">
+                                Update
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

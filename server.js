@@ -45,8 +45,10 @@ app.use(bodyParser.json());
 app.get('/:name', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
-//Passes urls on for Angular app:
 app.get('/assessments/:name', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
+app.get('/students/:name', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
 
@@ -55,6 +57,8 @@ app.get('/assessments/:name', function(req, res) {
  *            Access                            *
  *                                              *
  ***********************************************/
+app.get("/resources/users/:username", dataAccessServices.getUserByUserName);
+
 app.get("/resources/admins", dataAccessServices.getAllAdmins);
 
 app.get("/resources/students", dataAccessServices.getAllStudents);
@@ -81,8 +85,10 @@ app.get("/auth/isLoggedIn", dataAccessServices.isLoggedIn);
 
 
 app.post("/resources/students", validate(bodyValidation.user), dataUploadServices.insertStudent);
+app.put("/resources/students/:studentUsername", validate(bodyValidation.editUser), dataUploadServices.editStudent);
 
 app.post("/resources/admins", validate(bodyValidation.user), dataUploadServices.insertAdmin);
+app.put("/resources/admins/:adminUsername", validate(bodyValidation.editUser), dataUploadServices.editAdmin);
 
 app.post("/resources/assessments", validate(bodyValidation.assessment), dataUploadServices.insertAssessment);
 app.put("/resources/assessments/:assessmentId", validate(bodyValidation.assessment), dataUploadServices.editAssessment);

@@ -29,6 +29,32 @@ exports.isConnectedToDatabase = function(req, res) {
     else
          res.json({"connected": dataRepository.isConnected() });
 };
+exports.getUserByUserName = function(req, res) {
+    logger.info("GET: user by username '" + req.params.username + "''");
+
+    if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
+        dataRepository.findStudentByUsername(req.params.username, {password:0}, function(err, student) {
+            if (err) res.status(500).json(err);
+            if (student != null) {
+                res.json({userType: "Student", user: student});
+            }
+            else {
+                dataRepository.findAdminByUsername(req.params.username, {password:0}, function(err, admin) {
+                    if (err) res.status(500).json(err);
+                    if (admin != null) {
+                        res.json({userType: "Admin", user: admin});
+                    }
+                    else {
+                        res.json({});
+                    }
+                });
+            }
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
 
 exports.getAllAdmins = function(req, res) {
     logger.info("GET: all admins");

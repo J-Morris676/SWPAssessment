@@ -1,0 +1,54 @@
+<section style="margin: 25px">
+    <div class="panel panel-default">
+        <div style="margin-left:15%;margin-right:15%;text-align: center" class="panel-body">
+            <h2>Edit Student '{{student.username}}'</h2>
+            <div id="edit-student-form" style="margin-top:25px;height: auto;">
+                <div style="margin-bottom:10px;" class="row vertical-align">
+                    <div class="col-xs-12 col-sm-2 col-md-2">
+                        <label>Password: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-md-9">
+                        <input ng-keyup="$event.keyCode == 13 &&  editStudent()" type="password" ng-model="student.password" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Password..">
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;" class="row vertical-align">
+                    <div class="col-xs-12 col-sm-2 col-md-2">
+                        <label>First Name: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-md-9">
+                        <input ng-keyup="$event.keyCode == 13 && editStudent()" ng-model="student.firstName" class="form-control ng-pristine ng-untouched ng-valid" placeholder="First Name..">
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;" class="row vertical-align">
+                    <div class="col-xs-12 col-sm-2 col-md-2">
+                        <label>Last Name: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-md-9">
+                        <input ng-keyup="$event.keyCode == 13 && editStudent()" id="last-name" ng-model="student.lastName" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Last Name..">
+                    </div>
+                </div>
+                <div class="row vertical-align">
+                    <div class="col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+                        <ol>
+                            <li style="color:red" ng-repeat="message in errorSubmitMessage">
+                                <i>
+                                    {{message}}
+                                </i>
+                            </li>
+                            <li style="color:green" ng-repeat="message in successSubmitMessage">
+                                <i>
+                                    {{message}}
+                                </i>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="col-xs-offset-7 col-xs-5 col-sm-offset-0 col-sm-3 col-md-offset-0 col-md-3">
+                        <button class="btn btn-success btn-responsive" ng-click="editStudent()">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

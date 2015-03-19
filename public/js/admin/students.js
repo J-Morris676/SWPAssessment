@@ -37,8 +37,8 @@ angular.module('myApp.students', ['ngResource'])
             }
         };
 
-        $scope.goToStudent = function(id) {
-            $location.path("/students/" + id);
+        $scope.goToStudent = function(username) {
+            $location.path("/students/" + username);
         };
 
         $scope.deleteStudent = function(username) {

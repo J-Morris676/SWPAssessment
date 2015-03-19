@@ -39,7 +39,7 @@ exports.insertAdmin = function(admin, cb) {
 };
 
 exports.editAdmin = function(username, admin, cb) {
-    databaseConnection.students.update({ "username": username}, admin, function(err, data) {repositoryCallback(err,data,cb);} );
+    databaseConnection.admins.update({ "username": username}, admin, function(err, data) {repositoryCallback(err,data,cb);} );
 };
 
 exports.insertAssessment = function(assessment, cb) {

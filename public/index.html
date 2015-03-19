@@ -50,9 +50,9 @@
                           <li class="dropdown">
                               <a style="color: white" href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-expanded="false">{{username}} <span class="caret"></span></a>
                               <ul class="dropdown-menu" role="menu">
-                                  <li><a href="#">Details</a></li>
+                                  <li style="cursor:pointer"><a ng-click="triggerModal()">Details</a></li>
                                   <li class="divider"></li>
-                                  <li><a ng-click="logOut()">Log out</a></li>
+                                  <li style="cursor:pointer"><a ng-click="logOut()">Log out</a></li>
                               </ul>
                           </li>
                       </ul>
@@ -66,6 +66,7 @@
                 <img src="img/ajax-loader.gif">
             </div>
       </div>
+        <user-details ng-model="username" trigger-modal="triggerModal"></user-details>
 
         <!--
             lib scripts
@@ -86,11 +87,12 @@
         <script src="js/home.js"></script>
         <script src="js/assessments.js"></script>
         <script src="js/assessment.js"></script>
-        <script src="js/students.js"></script>
-        <script src="js/student.js"></script>
+        <script src="js/admin/students.js"></script>
+        <script src="js/admin/student.js"></script>
 
         <!-- Angular Directives -->
         <script src="js/directives/timerDirectives.js"></script>
         <script src="js/directives/assessmentEditingDirectives/assessmentEditingDirectives.js"></script>
+        <script src="js/directives/userDetailsDirective/userDetailsDirectives.js"></script>
     </body>
 </html>

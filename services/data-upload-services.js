@@ -33,17 +33,46 @@ exports.insertStudent = function(req, res) {
     if (authCheck.admin.checkAuthenticated(req.user)) {
         var studentDetails = req.body;
         studentDetails.password = md5(req.body.password);
+        studentDetails.createdDate = new Date();
 
         dataAccessRepository.findStudentByUsername(studentDetails.username, {}, function(err, student) {
             if (err) res.status(500).json(err);
             else if (student) res.status(400).json({error: {errors:[{messages:["Student '" + req.body.username + "' already exists."]}]}});
             else {
-                dataUploadRepository.insertStudent(this.studentDetails, function(err, uploadResponse) {
+                dataAccessRepository.findAdminByUsername(studentDetails.username, {}, function(err, student) {
                     if (err) res.status(500).json(err);
-                    else res.status(201).json(uploadResponse);
+                    else if (student) res.status(400).json({error: {errors:[{messages:["Username '" + req.body.username + "' is already in use by an admin."]}]}});
+                    else {
+                        dataUploadRepository.insertStudent(studentDetails, function(err, uploadResponse) {
+                            if (err) res.status(500).json(err);
+                            else res.status(201).json(uploadResponse);
+                        });
+                    }
                 });
             }
-        }.bind({studentDetails: studentDetails}))
+        })
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
+exports.editStudent = function(req, res) {
+    logger.info("PUT: editing student '" + req.params.studentUsername + "'");
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        var username = req.body.username;
+        var studentDetails = req.body;
+        delete req.body.username;
+        delete req.body._id;
+        if (studentDetails.password!=null) {
+            studentDetails.password = md5(req.body.password);
+        }
+
+        dataUploadRepository.editStudent(username, studentDetails, function(err, editResponse) {
+            if (err) res.status(500).json(err);
+            else res.status(201).json(editResponse);
+        });
     }
     else {
         res.status(401).json({"message": "Not authenticated"});
@@ -54,20 +83,51 @@ exports.insertAdmin = function(req, res) {
     logger.info("POST: inserting an admin");
 
     if (authCheck.admin.checkAuthenticated(req.user)) {
-        var adminDetails = {
-            username: req.body.username,
-            password: md5(req.body.password)
-        };
+        var adminDetails = req.body;
+        adminDetails.password = md5(req.body.password);
+        adminDetails.createdDate = new Date();
 
         dataAccessRepository.findAdminByUsername(req.body.username, {}, function(err, admin) {
-            if (err || admin) res.status(500).json(err);
+            if (err) res.status(500).json(err);
+            else if (admin) res.status(400).json({error: {errors:[{messages:["Admin '" + req.body.username + "' already exists."]}]}});
             else {
-                dataUploadRepository.insertAdmin(this.adminDetails, function(err, uploadResponse) {
+                dataAccessRepository.findStudentByUsername(adminDetails.username, {}, function(err, student) {
                     if (err) res.status(500).json(err);
-                    else res.status(201).json(uploadResponse);
+                    else if (student) res.status(400).json({error: {errors:[{messages:["Username '" + req.body.username + "' is already in use by an student."]}]}});
+                    else {
+                        dataUploadRepository.insertAdmin(adminDetails, function(err, uploadResponse) {
+                            if (err) res.status(500).json(err);
+                            else res.status(201).json(uploadResponse);
+                        });
+                    }
                 });
+
             }
-        }.bind({adminDetails: adminDetails}))
+        })
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
+exports.editAdmin = function(req, res) {
+    logger.info("PUT: editing admin '" + req.params.adminUsername + "'");
+
+    if (authCheck.admin.checkAuthenticatedByUserName(req.user, req.params.adminUsername)) {
+        var username = req.body.username;
+        var adminDetails = req.body;
+        delete req.body.username;
+        delete req.body._id;
+        delete req.body.createdDate;
+
+        if (adminDetails.password != null) {
+            adminDetails.password = md5(req.body.password);
+        }
+
+        dataUploadRepository.editAdmin(username, adminDetails, function(err, editResponse) {
+            if (err) res.status(500).json(err);
+            else res.status(201).json(editResponse);
+        });
     }
     else {
         res.status(401).json({"message": "Not authenticated"});
