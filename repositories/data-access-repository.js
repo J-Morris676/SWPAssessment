@@ -10,7 +10,7 @@ var log4js = require("log4js");
 
 var databaseConnection = require('./database-connection');
 var ObjectId = require('mongoose').Types.ObjectId;
-
+var async = require('async');
 //Standard callback function for all access repository functions:
 function repositoryCallback(err, data, cb) {
     if (err) cb(err, null);
@@ -90,8 +90,32 @@ exports.findAssessmentWithoutAnswers = function(assessmentVersion, cb) {
             "_id": 1, "version": 1, "title": 1}, function(err, data) {repositoryCallback(err,data,cb);});
 };
 
-exports.findAllScheduledAssessments = function(cb) {
-    databaseConnection.assessmentSchedule.find({}, function(err, data) {repositoryCallback(err,data,cb)});
+exports.findAllScheduledAssessments = function(query, cb) {
+    databaseConnection.assessmentSchedule.find(query, function(err, data) {
+        //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+        async.each(data, function(d, asyncCallback) {
+            databaseConnection.assessments.findOne({_id: d.assessment}, function(err, assessment) {
+                assessment = assessment.toObject();
+                if (assessment != null) d["_doc"].assessment = assessment;
+                for (var version in assessment.versions) {
+                    if (assessment.versions[version]._id.equals(d["_doc"].version)) {
+                        d["_doc"].version = {
+                            "no": (parseInt(version)+1),
+                            "object": assessment.versions[version]
+                        };
+                        break;
+                    }
+                }
+                asyncCallback();
+            })
+        }, function(err) {
+            if (err) repositoryCallback(err,null,null);
+            else {
+                repositoryCallback(err,data,cb);
+            }
+        });
+
+    });
 };
 
 exports.findScheduledAssessmentById = function(scheduleId, cb) {

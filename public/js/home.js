@@ -54,5 +54,8 @@ angular.module('myApp.home', ['ngResource'])
         };
         $scope.goToStudents = function() {
             $location.path("/students");
-        }
+        };
+        $scope.goToAssessmentSchedules = function() {
+            $location.path("/assessmentSchedules");
+        };
     });

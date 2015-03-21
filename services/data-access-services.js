@@ -241,10 +241,30 @@ exports.getScheduledAssessments = function(req, res) {
     logger.info("GET: scheduled assessments");
 
     if (authCheck.admin.checkAuthenticated(req.user)) {
-        dataRepository.findAllScheduledAssessments(function(err, scheduledAssessments) {
-            if (err) res.status(500).json(err);
-            else res.json(scheduledAssessments);
-        });
+        if (req.query.when == null) {
+            dataRepository.findAllScheduledAssessments({}, function(err, scheduledAssessments) {
+                if (err) res.status(500).json(err);
+                else res.json(scheduledAssessments);
+            });
+        }
+        else if (req.query.when.toLowerCase() == "ongoing") {
+            dataRepository.findAllScheduledAssessments({"startDate": {"$lt": new Date()}, "endDate": { "$gt": new Date()}}, function(err, scheduledAssessments) {
+                if (err) res.status(500).json(err);
+                else res.json(scheduledAssessments);
+            });
+        }
+        else if (req.query.when.toLowerCase() == "past") {
+            dataRepository.findAllScheduledAssessments({"endDate": { "$lt": new Date()}}, function(err, scheduledAssessments) {
+                if (err) res.status(500).json(err);
+                else res.json(scheduledAssessments);
+            });
+        }
+        else if (req.query.when.toLowerCase() == "future") {
+            dataRepository.findAllScheduledAssessments({"startDate": { "$gt": new Date()}}, function(err, scheduledAssessments) {
+                if (err) res.status(500).json(err);
+                else res.json(scheduledAssessments);
+            });
+        }
     }
     else {
         res.status(401).json({"message": "Not authenticated"});
@@ -258,6 +278,20 @@ exports.getScheduledAssessmentsByStudentUsername = function(req, res) {
         dataRepository.findScheduledAssessmentsByStudentUserName(req.params.username, function(err, scheduledAssessments) {
             if (err) res.status(500).json(err);
             else res.json(scheduledAssessments);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
+exports.getScheduledAssessmentsById = function(req, res) {
+    logger.info("GET: scheduled assessment " + req.params.scheduledAssessmentId);
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function(err, scheduledAssessment) {
+            if (err) res.status(500).json(err);
+            else res.json(scheduledAssessment);
         });
     }
     else {

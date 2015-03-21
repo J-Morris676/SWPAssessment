@@ -45,10 +45,13 @@ app.use(bodyParser.json());
 app.get('/:name', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
-app.get('/assessments/:name', function(req, res) {
+app.get('/assessments/:id', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
-app.get('/students/:name', function(req, res) {
+app.get('/students/:id', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
+app.get('/assessmentSchedules/:id', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
 
@@ -73,6 +76,7 @@ app.get("/resources/assessments/:assessmentId/versions/:versionId/questions", va
 app.get("/resources/assessments/:assessmentId/versions/:versionId/questions/:questionId", validate(paramsValidation.assessmentAndVersionAndQuestion), dataAccessServices.getQuestionByAssessmentIdAndVersionIdAndQuestionId);
 
 app.get("/resources/schedules", dataAccessServices.getScheduledAssessments);
+app.get("/resources/schedules/:scheduledAssessmentId", dataAccessServices.getScheduledAssessmentsById);
 app.get("/resources/schedules/students/:username", validate(paramsValidation.user), dataAccessServices.getScheduledAssessmentsByStudentUsername);
 
 app.get("/auth/isLoggedIn", dataAccessServices.isLoggedIn);

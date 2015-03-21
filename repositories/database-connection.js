@@ -78,16 +78,12 @@ var studentSchema = new Schema({
     "password": String,
     "firstName": String,
     "lastName": String,
-    "createdDate": Date,
     "assessmentResults": [resultSchema]
 }, { versionKey: false });
 
 var adminSchema = new Schema({
     "username": String,
-    "password": String,
-    "firstName": String,
-    "lastName": String,
-    "createdDate": Date
+    "password": String
 }, { versionKey: false });
 
 var assessmentSchedule = new Schema({

@@ -8,6 +8,8 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.assessments",
     "myApp.students",
     "myApp.student",
+    "myApp.assessmentSchedules",
+    "myApp.assessmentSchedule",
     "myApp.timeDirectives",
     "ngRoute",
     "ui.bootstrap"
@@ -19,8 +21,11 @@ angular.module('myApp', ["myApp.signIn",
         $routeProvider.when('/signIn', {templateUrl: 'parts/signIn.html', controller: 'signInCtrl'});
         $routeProvider.when('/home', {templateUrl: 'parts/home.html', controller: 'homeCtrl'});
 
-        $routeProvider.when('/assessments', {templateUrl: 'parts/assessments.html', controller: 'assessmentsCtrl'});
-        $routeProvider.when('/assessments/:assessmentId', {templateUrl: 'parts/assessment.html', controller: 'assessmentCtrl'});
+        $routeProvider.when('/assessments', {templateUrl: 'parts/admin/assessments.html', controller: 'assessmentsCtrl'});
+        $routeProvider.when('/assessments/:assessmentId', {templateUrl: 'parts/admin/assessment.html', controller: 'assessmentCtrl'});
+
+        $routeProvider.when('/assessmentSchedules', {templateUrl: 'parts/admin/assessmentSchedules.html', controller: 'assessmentSchedulesCtrl'});
+        $routeProvider.when('/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/admin/assessmentSchedule.html', controller: 'assessmentScheduleCtrl'});
 
         $routeProvider.when('/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
         $routeProvider.when('/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});

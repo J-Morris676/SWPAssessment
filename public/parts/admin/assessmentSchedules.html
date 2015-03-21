@@ -1,0 +1,215 @@
+<section style="margin-top: 25px">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2 style="text-align: center;margin-bottom:25px;">Scheduled Assessments</h2>
+
+            <!-- Schedule Assessment -->
+            <div style="padding:10px;margin-left:15%;margin-right:15%;" class="well">
+                <div>
+                    <div ng-init="collapseSchedule=true" style="float:right">
+                        <span ng-show="collapseSchedule==true" ng-click="collapseSchedule=!collapseSchedule" style="cursor:pointer;" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                        <span ng-show="collapseSchedule==false" ng-click="collapseSchedule=!collapseSchedule" style="cursor:pointer;" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+                    </div>
+                    <h4 style="text-align: center">Schedule Assessment</h4>
+                </div>
+                <div collapse="collapseSchedule" id="add-schedule-form">
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Trainer: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <input ng-keyup="$event.keyCode == 13 &&  addStudent()" ng-model="newAssessmentSchedule.admin" class="form-control" placeholder="Trainer..">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Assessment: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <select ng-model="newAssessmentSchedule.assessment" class="form-control">
+                                <option
+                                        ng-repeat="assessment in assessments"
+                                        value="{{assessment._id}}">
+                                    {{assessment.title}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Version: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9">
+                            <select ng-model="newAssessmentSchedule.version" class="form-control">
+                                <option ng-repeat="version in selectedAssessment(newAssessmentSchedule.assessment).versions track by $index"
+                                        value="{{version._id}}">
+                                    {{$index+1}} ({{version.QAs.length}} question(s))
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label >Add Student: </label>
+                        </div>
+                        <div class="col-xs-10 col-sm-9 col-md-9">
+                            <input typeahead-on-select="addStudent()" ng-model="student" placeholder="Username.." typeahead="student as student.username for student in getStudents($viewValue)" class="form-control">
+
+                        </div>
+                    </div>
+
+                    <div ng-show="newAssessmentSchedule.students.length>0" style="padding-top: 10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Students: </label>
+                        </div>
+                        <div style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
+                            <table class="table table-hover table-condensed">
+                                <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear; cursor:pointer" ng-repeat="student in newAssessmentSchedule.students track by $id(student)">
+                                    <td style="width:95%;">
+                                        <span>{{student.username}}</span>
+                                    </td>
+                                    <td ng-click="removeStudent($index);" title="Click to remove answer">
+                                        <span style="color:red;cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Start Time: </label>
+                        </div>
+                        <div class="col-xs-9 col-sm-8 col-md-8">
+                            <timepicker ng-change="updateEndDate(duration);" ng-model="newAssessmentSchedule.startDate" show-meridian="false"></timepicker>
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Start Date: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="well well-sm" style="overflow-x:auto">
+                                <datepicker min-date="minDate" ng-change="updateEndDate(duration);" ng-model="newAssessmentSchedule.startDate"
+                                            show-weeks="true" >
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 10px;" class="row vertical-align">
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <label>Duration: </label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <select ng-init="duration=60;updateEndDate(duration);" ng-change="updateEndDate(duration)" ng-model="duration" class="form-control">
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">1 hour</option>
+                                <option value="75">1 hour 15 minutes</option>
+                                <option value="90">1 hour 30 minutes</option>
+                                <option value="115">1 hour 45 minutes</option>
+                                <option value="130">2 hours</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px;" class="row vertical-align">
+                        <div class="col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+                            <ol>
+                                <li style="color:red" ng-repeat="message in errorSubmitMessage">
+                                    <i>
+                                        {{message}}
+                                    </i>
+                                </li>
+                                <li style="color:green" ng-repeat="message in successSubmitMessage">
+                                    <i>
+                                        {{message}}
+                                    </i>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="col-xs-offset-7 col-xs-5 col-sm-offset-0 col-sm-3 col-md-offset-0 col-md-3">
+                            <button class="btn btn-success btn-responsive" ng-click="insertAssessment()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <button ng-init="getSchedules('All')" ng-click="getSchedules('All')" ng-class="{ active: selectedButton=='All'}" type="button" class="btn btn-default">All</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button ng-click="getSchedules('Past')" ng-class="{ active: selectedButton=='Past'}" type="button" class="btn btn-default">Past</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button ng-click="getSchedules('Ongoing')" ng-class="{ active: selectedButton=='Ongoing'}" type="button" class="btn btn-default">Ongoing</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button ng-click="getSchedules('Future')" ng-class="{ active: selectedButton=='Future'}" type="button" class="btn btn-default">Future</button>
+                    </div>
+                </div>
+            <!-- Loader -->
+            <div ng-show="schedules==null" class="panel panel-default">
+                <div class="spinner">
+                    <div class="spinner-container container1">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                    <div class="spinner-container container2">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                    <div class="spinner-container container3">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                    <div style="margin-left:27px;">Loading..</div>
+                </div>
+            </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <th>Assessment Title</th>
+                        <th>Version</th>
+                        <th>Trainer</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th></th>
+
+                        <tr ng-repeat="schedule in schedules">
+                            <td>{{schedule.assessment.title}}</td>
+
+                            <td>{{schedule.version.no}}</td>
+
+                            <td>{{schedule.admin}}</td>
+
+                            <td>{{schedule.startDate  | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+
+                            <td>{{schedule.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+
+                            <td>
+                                <button style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                                <button ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right">
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+        </div>
+    </div>
+</section>
