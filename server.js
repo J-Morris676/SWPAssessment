@@ -63,6 +63,7 @@ app.get('/assessmentSchedules/:id', function(req, res) {
 app.get("/resources/users/:username", dataAccessServices.getUserByUserName);
 
 app.get("/resources/admins", dataAccessServices.getAllAdmins);
+app.get("/resources/admins/:username", dataAccessServices.getAdminByUsername);
 
 app.get("/resources/students", dataAccessServices.getAllStudents);
 app.get("/resources/students/:username", validate(paramsValidation.user), dataAccessServices.getStudentByUserName);
@@ -106,6 +107,8 @@ app.put("/resources/assessments/:assessmentId/versions/:versionId/questions/:que
 app.post("/resources/schedules", validate(bodyValidation.assessmentSchedule), dataUploadServices.insertAssessmentScheduleDate);
 app.post("/resources/schedules/:scheduleId/students", validate(bodyValidation.assessmentScheduleStudent), dataUploadServices.insertStudentsIntoAssessmentSchedule);
 app.put("/resources/schedules/:scheduleId/dates", validate(bodyValidation.assessmentScheduleDates), dataUploadServices.editDatesOnAssessmentSchedule);
+app.put("/resources/schedules/:scheduleId", validate(bodyValidation.assessmentSchedule), dataUploadServices.editAssessmentSchedule);
+
 
 //Attempts to allow a Student to start and end a given assessment (sessions):
 app.post("/resources/schedules/:scheduleId/start/:studentUsername", validate(bodyValidation.startScheduledAssessment), dataUploadServices.attemptAssessmentStart);

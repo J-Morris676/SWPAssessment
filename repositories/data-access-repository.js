@@ -120,7 +120,22 @@ exports.findAllScheduledAssessments = function(query, cb) {
 
 exports.findScheduledAssessmentById = function(scheduleId, cb) {
     databaseConnection.assessmentSchedule.findOne({"_id": scheduleId},
-        function(err, data) {repositoryCallback(err,data,cb);
+        function(err, data) {
+            //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+            databaseConnection.assessments.findOne({_id: data.assessment}, function(err, assessment) {
+                assessment = assessment.toObject();
+                if (assessment != null) data["_doc"].assessment = assessment;
+                for (var version in assessment.versions) {
+                    if (assessment.versions[version]._id.equals(data["_doc"].version)) {
+                        data["_doc"].version = {
+                            "no": (parseInt(version)+1),
+                            "object": assessment.versions[version]
+                        };
+                        break;
+                    }
+                }
+                repositoryCallback(err,data,cb);
+            });
         });
 };
 

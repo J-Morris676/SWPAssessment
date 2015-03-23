@@ -18,15 +18,16 @@
                             <label>Trainer: </label>
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <input ng-keyup="$event.keyCode == 13 &&  addStudent()" ng-model="newAssessmentSchedule.admin" class="form-control" placeholder="Trainer..">
+                            <input ng-model="newAssessmentSchedule.admin" placeholder="Username.." typeahead="admin for admin in getAdmins($viewValue)" class="form-control">
                         </div>
                     </div>
                     <div style="margin-bottom:10px;" class="row vertical-align">
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Assessment: </label>
                         </div>
+
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <select ng-model="newAssessmentSchedule.assessment" class="form-control">
+                            <select ng-change="newAssessmentSchedule.version=selectedAssessment(newAssessmentSchedule.assessment).versions[0]._id" ng-model="newAssessmentSchedule.assessment" class="form-control">
                                 <option
                                         ng-repeat="assessment in assessments"
                                         value="{{assessment._id}}">
@@ -40,8 +41,11 @@
                             <label>Version: </label>
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <select ng-model="newAssessmentSchedule.version" class="form-control">
-                                <option ng-repeat="version in selectedAssessment(newAssessmentSchedule.assessment).versions track by $index"
+                            <p style="color:red;font-style: italic;" ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length == 0">
+                                The selected assessment has no versions, you can make one <a ng-href="/assessments/{{selectedAssessment(newAssessmentSchedule.assessment)._id}}">here</a>
+                            </p>
+                            <select ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length > 0" ng-model="newAssessmentSchedule.version" class="form-control">
+                                <option ng-repeat="version in selectedAssessment(newAssessmentSchedule.assessment).versions"
                                         value="{{version._id}}">
                                     {{$index+1}} ({{version.QAs.length}} question(s))
                                 </option>
@@ -55,7 +59,6 @@
                         </div>
                         <div class="col-xs-10 col-sm-9 col-md-9">
                             <input typeahead-on-select="addStudent()" ng-model="student" placeholder="Username.." typeahead="student as student.username for student in getStudents($viewValue)" class="form-control">
-
                         </div>
                     </div>
 
@@ -111,8 +114,8 @@
                                 <option value="60">1 hour</option>
                                 <option value="75">1 hour 15 minutes</option>
                                 <option value="90">1 hour 30 minutes</option>
-                                <option value="115">1 hour 45 minutes</option>
-                                <option value="130">2 hours</option>
+                                <option value="105">1 hour 45 minutes</option>
+                                <option value="120">2 hours</option>
                             </select>
                         </div>
                     </div>
@@ -180,12 +183,14 @@
                 </div>
             </div>
                 <div class="table-responsive">
-                    <table class="table table-striped">
-                        <th>Assessment Title</th>
-                        <th>Version</th>
-                        <th>Trainer</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                    <table style="text-align:center" class="table table-striped">
+                        <th style="text-align:center">Assessment Title</th>
+                        <th style="text-align:center">Version</th>
+                        <th style="text-align:center">Trainer</th>
+                        <th style="text-align:center">Start Date</th>
+                        <th style="text-align:center">Duration</th>
+                        <th style="text-align:center">No. Students Enrolled</th>
+
                         <th></th>
 
                         <tr ng-repeat="schedule in schedules">
@@ -197,7 +202,9 @@
 
                             <td>{{schedule.startDate  | date:"dd/MM/yyyy 'at' h:mma"}}</td>
 
-                            <td>{{schedule.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+                            <td>{{findDurationInMinutes(schedule.startDate, schedule.endDate) | time:'mm':'hh hour(s), mm min(s)':false}}</td>
+
+                            <td>{{schedule.students.length}}</td>
 
                             <td>
                                 <button style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">

@@ -5,6 +5,41 @@
 
 angular.module('myApp.assessmentSchedules', ['ngResource'])
 
+    /*
+        Time filter to display time as in a desired format:
+            url: http://stackoverflow.com/questions/25470475/angular-js-format-minutes-in-template
+     */
+    .filter('time', function() {
+
+        var conversions = {
+            'ss': angular.identity,
+            'mm': function(value) { return value * 60; },
+            'hh': function(value) { return value * 3600; }
+        };
+
+        var padding = function(value, length) {
+            var zeroes = length - ('' + (value)).length,
+                pad = '';
+            while(zeroes-- > 0) pad += '0';
+            return pad + value;
+        };
+
+        return function(value, unit, format, isPadded) {
+            var totalSeconds = conversions[unit || 'ss'](value),
+                hh = Math.floor(totalSeconds / 3600),
+                mm = Math.floor((totalSeconds % 3600) / 60),
+                ss = totalSeconds % 60;
+
+            format = format || 'hh:mm:ss';
+            isPadded = angular.isDefined(isPadded)? isPadded: true;
+            hh = isPadded? padding(hh, 2): hh;
+            mm = isPadded? padding(mm, 2): mm;
+            ss = isPadded? padding(ss, 2): ss;
+            console.log(format);
+            return format.replace(/hh/, hh).replace(/mm/, mm).replace(/ss/, ss);
+        };
+    })
+
     .controller("assessmentSchedulesCtrl", function($scope, $http, $timeout, $location) {
         $scope.newAssessmentSchedule = {
             "admin": $scope.username,
@@ -56,24 +91,39 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
             if ($scope.newAssessmentSchedule.startDate < new Date(new Date().getTime()+30*60000)) {
                 setMessageTimer(["Start date must be at least 30 minutes ahead of now."], true);
             }
+            else if ($scope.selectedAssessment($scope.newAssessmentSchedule.assessment).versions.length == 0) {
+                setMessageTimer(["An assessment with a version must be selected!"], true)
+            }
             else {
-                $http.post("/resources/schedules", $scope.newAssessmentSchedule).success(function(data, status) {
-                    $scope.getSchedules($scope.selectedButton);
-                    console.log(data);
-                    setMessageTimer(["Successfully scheduled assessment."]);
+                $http.get("/resources/admins/" +  $scope.newAssessmentSchedule.admin).success(function(data, status) {
+                    $http.post("/resources/schedules", $scope.newAssessmentSchedule).success(function (data, status) {
+                        $scope.getSchedules($scope.selectedButton);
+                        setMessageTimer(["Successfully scheduled assessment."]);
 
-                    //Reset new assessment schedule:
-                    $scope.newAssessmentSchedule["admin"] = $scope.username;
-                    $scope.newAssessmentSchedule["students"] = [];
-                    $scope.newAssessmentSchedule["startDate"] = new Date();
-                    $scope.duration = 60;
-                    $scope.updateEndDate($scope.duration);
+                        //Reset new assessment schedule:
+                        $scope.newAssessmentSchedule["admin"] = $scope.username;
+                        $scope.newAssessmentSchedule["students"] = [];
+                        $scope.newAssessmentSchedule["startDate"] = new Date(new Date().getTime() + 31 * 60000);
+                        $scope.duration = 60;
+                        $scope.updateEndDate($scope.duration);
+                    })
+                }).error(function(data, status) {
+                    if (status == 404) {
+                        setMessageTimer(["Selected trainer is invalid (" + $scope.newAssessmentSchedule.admin + "), please " +
+                        "begin typing the trainer and select them from menu."], true)
+                    }
                 })
+
+
             }
         };
 
         $scope.updateEndDate = function(duration) {
             $scope.newAssessmentSchedule.endDate = new Date($scope.newAssessmentSchedule.startDate.getTime()+duration*60000);
+        };
+
+        $scope.findDurationInMinutes = function(startDate, endDate) {
+            return Math.round((new Date(endDate) - new Date(startDate)) / 60000);
         };
 
         $scope.selectedAssessment = function(id) {
@@ -105,6 +155,17 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
             }
         });
 
+        $scope.getAdmins = function(val) {
+            return $http.get('/resources/admins?like=' + val).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                var admins = response.map(function (item) {
+                    return item.username;
+                });
+                return admins;
+            });
+        };
+
         $scope.getStudents = function(val) {
             return $http.get('/resources/students?like=' + val).then(function (response) {
                 return response.data;
@@ -133,8 +194,6 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
 
             if ($scope.newAssessmentSchedule.students == null) $scope.newAssessmentSchedule.students = [$scope.student];
             else $scope.newAssessmentSchedule.students.unshift($scope.student);
-
-            var newStudent = $scope.student;
 
             $scope.student = null;
         };

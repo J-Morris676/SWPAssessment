@@ -323,6 +323,27 @@ exports.editDatesOnAssessmentSchedule = function(req, res) {
     }
 };
 
+exports.editAssessmentSchedule = function(req, res) {
+    logger.info("PUT: updating scheduled assessment " + req.params.scheduleId);
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataAccessRepository.findScheduledAssessmentById(req.params.scheduleId, function(err, assessmentSchedule) {
+            if (err) res.status(500).json(err);
+            else if (assessmentSchedule == null) res.status(404).json({"message": "Assessment " + req.params.scheduleId + " not found."});
+            else {
+                delete req.body._id;
+                dataUploadRepository.editAssessmentSchedule(req.params.scheduleId, req.body, function(err, uploadResponse) {
+                    if (err) res.status(500).json(err);
+                    else res.status(201).json(uploadResponse);
+                });
+            }
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
 
 //Starts AND locks assessment version:
 exports.attemptAssessmentStart = function(req, res) {

@@ -57,12 +57,33 @@ exports.getUserByUserName = function(req, res) {
 };
 
 exports.getAllAdmins = function(req, res) {
-    logger.info("GET: all admins");
-    console.log(req.user);
+    (req.query.like == null ? logger.info("GET: all admins") : logger.info("GET: admins LIKE '" + req.query.like + "'"));
+
     if (authCheck.admin.checkAuthenticated(req.user)) {
-        dataRepository.findAdmins({}, function(err, admins) {
+        var query = {};
+        if (req.query.like != null) {
+            query.username = new RegExp('.*'+req.query.like+'.*', "i");
+        }
+        dataRepository.findAdmins(query, function(err, admins) {
             if (err) res.status(500).json(err);
             else res.json(admins);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
+exports.getAdminByUsername = function(req, res) {
+    logger.info("GET: admin: " + req.params.username);
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataRepository.findAdminByUsername(req.params.username, {password:0}, function(err, admin) {
+            if (err) res.status(500).json(err);
+            if (admin) {
+                res.json(admin)
+            }
+            else res.status(404).json(admin);
         });
     }
     else {
@@ -271,13 +292,12 @@ exports.getScheduledAssessments = function(req, res) {
     }
 };
 
-exports.getScheduledAssessmentsByStudentUsername = function(req, res) {
-    logger.info("GET: scheduled assessments for user: " + req.params.username);
-
-    if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
-        dataRepository.findScheduledAssessmentsByStudentUserName(req.params.username, function(err, scheduledAssessments) {
+exports.getScheduledAssessmentsById = function(req, res) {
+    logger.info("GET: scheduled assessment: " + req.params.scheduledAssessmentId);
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function(err, scheduledAssessment) {
             if (err) res.status(500).json(err);
-            else res.json(scheduledAssessments);
+            else res.json(scheduledAssessment);
         });
     }
     else {
@@ -285,13 +305,13 @@ exports.getScheduledAssessmentsByStudentUsername = function(req, res) {
     }
 };
 
-exports.getScheduledAssessmentsById = function(req, res) {
-    logger.info("GET: scheduled assessment " + req.params.scheduledAssessmentId);
+exports.getScheduledAssessmentsByStudentUsername = function(req, res) {
+    logger.info("GET: scheduled assessments for user: " + req.params.username);
 
-    if (authCheck.admin.checkAuthenticated(req.user)) {
-        dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function(err, scheduledAssessment) {
+    if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
+        dataRepository.findScheduledAssessmentsByStudentUserName(req.params.username, function(err, scheduledAssessments) {
             if (err) res.status(500).json(err);
-            else res.json(scheduledAssessment);
+            else res.json(scheduledAssessments);
         });
     }
     else {

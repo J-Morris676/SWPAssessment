@@ -103,6 +103,12 @@ exports.editAssessmentScheduleDates = function(scheduledAssessmentId, dates, cb)
         function(err, data) {repositoryCallback(err,data,cb);});
 };
 
+exports.editAssessmentSchedule = function(scheduledAssessmentId, schedule, cb) {
+    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId) },
+        schedule,
+        function(err, data) {repositoryCallback(err,data,cb);});
+};
+
 exports.lockAssessmentVersion = function(assessmentId, versionId, cb) {
     databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions._id": ObjectId(versionId) },
         { $set: { "versions.$.locked": true}},
