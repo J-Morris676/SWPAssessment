@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
                             <p style="color:red;font-style: italic;" ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length == 0">
-                                The selected assessment has no versions, you can make one <a ng-href="/assessments/{{selectedAssessment(newAssessmentSchedule.assessment)._id}}">here</a>
+                                The selected assessment has no versions, you can make one <a ng-href="/admin/assessments/{{selectedAssessment(newAssessmentSchedule.assessment)._id}}">here</a>
                             </p>
                             <select ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length > 0" ng-model="newAssessmentSchedule.version" class="form-control">
                                 <option ng-repeat="version in selectedAssessment(newAssessmentSchedule.assessment).versions"

@@ -199,7 +199,7 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
         };
 
         $scope.goToAssessmentSchedule = function(scheduleId) {
-            $location.path("/assessmentSchedules/" + scheduleId);
+            $location.path("/admin/assessmentSchedules/" + scheduleId);
         }
 
     });

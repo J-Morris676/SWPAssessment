@@ -1,0 +1,156 @@
+<section style="margin-top: 25px">
+    <!-- Assessment stuff to show -->
+    <div ng-show="student.assessmentResults.length>0||futureAssessments.length>0">
+        <div class="row">
+            <!-- col 1 -->
+            <div class="col-md-offset-1 col-md-5">
+                <div class="panel panel-default">
+                    <div style="cursor:pointer" ng-click="goToAssessmentSchedules()" class="panel-heading">
+                        <h3 style="margin-top:10px;">
+                            Upcoming Assessments
+                            <span style="float:right" class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <current-time format="dd/MM/yyyy', ' HH:mm" style="float:right"></current-time>
+
+                        <!-- Currently ongoing -->
+                        <div ng-show="ongoingAssessments.length>0">
+
+                            <h4>Currently Ongoing</h4>
+                            <h4 style="color:red">
+                                WARNING! You are enrolled on an ongoing assessment, you must finish it before the time is up.
+                            </h4>
+
+                            <ul class="list-group"  style="color:red;max-height:200px;overflow-y: scroll">
+                                <li ng-repeat="ongoingAssessment in ongoingAssessments | orderBy: 'endDate':false" class="list-group-item">
+                                    Started: {{ongoingAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                    Ends: {{ongoingAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                    Time left: <countdown on-done="getAssessmentSchedules" ng-model="ongoingAssessment.endDate"></countdown>
+                                </li>
+                            </ul>
+                        </div>
+                        <div ng-show="ongoingAssessments.length==0">
+                            <h4>Currently Ongoing</h4>
+                            <h5>There are no currently ongoing assessments you're enrolled on.</h5>
+                        </div>
+
+                        <!-- Future -->
+                        <div ng-show="futureAssessments.length>0">
+                            <h4>Coming up in the next week</h4>
+                            <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
+                                <li ng-repeat="futureAssessment in futureAssessments| orderBy: 'startDate':false" class="list-group-item">
+                                    Starts: {{futureAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                    Ends: {{futureAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div ng-show="futureAssessments.length==0">
+                            <h4>Assessments you're enrolled on</h4>
+                            <h5>You are not enrolled to take any assessments.</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- col 2 -->
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div style="cursor:pointer" ng-click="goToAssessments()" class="panel-heading">
+                        <h3 style="margin-top:10px;">
+                            Trainers
+                            <span style="float:right;" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div style="max-height:200px;overflow-y: scroll">
+                            <li ng-repeat="trainer in trainers" class="list-group-item">
+                                <div>
+                                    <b>Username: </b> {{trainer}}</br>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TODO: When it's possible to finish an assessment, fill this out: -->
+        <div class="row">
+            <!-- col 3 -->
+            <div ng-show="student.assessmentResults.length > 0" class="col-md-offset-1 col-md-5">
+                <div class="panel panel-default">
+                    <div style="cursor:pointer" ng-click="goToStudents()" class="panel-heading">
+                        <h3 style="margin-top:10px;">
+                            Completed Assessments
+                            <span style="float:right" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
+                                <li ng-repeat="student in students | orderBy:'username'" class="list-group-item">
+                                    <div>
+                                        <b>Username: </b> {{student.username}}</br>
+                                        <b>Name: </b>  {{student.firstName}} {{student.lastName}}</br>
+                                        <b>Completed Assessments: </b>  {{student.assessmentResults.length}}</br>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- New user -- No assessments enrolled on. -->
+    <div ng-show="student.assessmentResults.length==0&&scheduledAssessments.length==0" style="margin-left:15%;margin-right:15%;" id="new-user">
+        <!-- Loader -->
+        <div ng-show="student==null" class="panel panel-default">
+            <div class="spinner">
+                <div class="spinner-container container1">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container2">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container3">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div style="margin-left:27px;">Loading..</div>
+            </div>
+        </div>
+
+        <!-- Remind trainer message-->
+        <div ng-show="student!=null" class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <h1>Hi {{student.firstName}},</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-offset-1 col-xs-11 col-md-offset-1 col-md-11">
+                        <h3>
+                            You haven't been enrolled to take any assessments yet, please remind your
+                            trainer to enrol you and check back again.
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

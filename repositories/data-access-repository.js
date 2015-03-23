@@ -139,12 +139,6 @@ exports.findScheduledAssessmentById = function(scheduleId, cb) {
         });
 };
 
-exports.findScheduledAssessmentsByStudentUserName = function (studentUsername, cb) {
-    databaseConnection.assessmentSchedule.find({"students.username": studentUsername},
-        function(err, data) {repositoryCallback(err,data,cb);
-    });
-};
-
 exports.findScheduledAssessmentByScheduleIdAndStudentUserName = function (scheduleId, studentUsername, cb) {
     databaseConnection.assessmentSchedule.findOne({"_id": scheduleId, "students.username": studentUsername},
         function(err, data) {repositoryCallback(err,data,cb);

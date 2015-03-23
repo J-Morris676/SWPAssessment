@@ -22,7 +22,13 @@ angular.module('myApp.signIn', ['ngResource'])
                     }
                     else {
                         //Begin user session
-                        $location.path('/home');
+                        if (data.authType.toLowerCase() == "admin") {
+                            $location.path('/admin/home');
+                        }
+                        else if (data.authType.toLowerCase() == "student") {
+                            $location.path('/student/home');
+                        }
+
                     }
                 }).error(function(data, status) {
                         console.log(data);

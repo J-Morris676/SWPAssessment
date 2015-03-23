@@ -49,6 +49,6 @@ angular.module('myApp.assessments', ['ngResource'])
         };
 
         $scope.goToAssessment = function(id) {
-            $location.path("/assessments/" + id);
+            $location.path("/admin/assessments/" + id);
         }
     });

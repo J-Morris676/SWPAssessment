@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('myApp', ["myApp.signIn",
-    "myApp.home",
+    "myApp.adminHome",
+    "myApp.studentHome",
     "myApp.assessment",
     "myApp.assessmentEditingDirectives",
     "myApp.userDetailsDirectives",
@@ -19,17 +20,26 @@ angular.module('myApp', ["myApp.signIn",
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
         $routeProvider.when('/signIn', {templateUrl: 'parts/signIn.html', controller: 'signInCtrl'});
-        $routeProvider.when('/home', {templateUrl: 'parts/home.html', controller: 'homeCtrl'});
 
-        $routeProvider.when('/assessments', {templateUrl: 'parts/admin/assessments.html', controller: 'assessmentsCtrl'});
-        $routeProvider.when('/assessments/:assessmentId', {templateUrl: 'parts/admin/assessment.html', controller: 'assessmentCtrl'});
+        /*
+            Admin routes
+         */
+        $routeProvider.when('/admin/home', {templateUrl: 'parts/admin/home.html', controller: 'adminHomeCtrl'});
 
-        $routeProvider.when('/assessmentSchedules', {templateUrl: 'parts/admin/assessmentSchedules.html', controller: 'assessmentSchedulesCtrl'});
-        $routeProvider.when('/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/admin/assessmentSchedule.html', controller: 'assessmentScheduleCtrl'});
+        $routeProvider.when('/admin/assessments', {templateUrl: 'parts/admin/assessments.html', controller: 'assessmentsCtrl'});
+        $routeProvider.when('/admin/assessments/:assessmentId', {templateUrl: 'parts/admin/assessment.html', controller: 'assessmentCtrl'});
 
-        $routeProvider.when('/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
-        $routeProvider.when('/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});
-        $routeProvider.otherwise({redirectTo: '/home'});
+        $routeProvider.when('/admin/assessmentSchedules', {templateUrl: 'parts/admin/assessmentSchedules.html', controller: 'assessmentSchedulesCtrl'});
+        $routeProvider.when('/admin/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/admin/assessmentSchedule.html', controller: 'assessmentScheduleCtrl'});
+
+        $routeProvider.when('/admin/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
+        $routeProvider.when('/admin/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});
+
+        /*
+            Student routes
+         */
+        $routeProvider.when('/student/home', {templateUrl: 'parts/student/home.html', controller: 'studentHomeCtrl'});
+        $routeProvider.otherwise({redirectTo: '/signIn'});
 	})
 
 	.controller('IndexCtrl', function($rootScope, $scope, $location, $http) {
@@ -43,9 +53,13 @@ angular.module('myApp', ["myApp.signIn",
                     $scope.user = data;
                     $scope.username = data.username;
                     if ($location.path() == "/signIn") {
-                        $location.path('/home');
+                        if ($scope.user.authType.toLowerCase() == "admin") {
+                            $location.path('/admin/home');
+                        }
+                        else {
+                            $location.path('/student/home');
+                        }
                     }
-                    console.log("changing username..");
                 }
                 else {
                     $scope.user = null;
@@ -54,7 +68,6 @@ angular.module('myApp', ["myApp.signIn",
                 }
             })
         });
-
 
         $scope.logOut = function() {
             $http.get("/auth/logout").success(function(data, status) {
@@ -66,6 +79,11 @@ angular.module('myApp', ["myApp.signIn",
 
 
         $scope.isRoute = function(route) {
-			return $location.path() == route;
+            var split = $location.path().split("/");
+			return split[split.length-1] == route;
 		};
+
+        $scope.isRouteSignIn = function() {
+            return $location.path() == '/signIn';
+        }
 	});

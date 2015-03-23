@@ -37,10 +37,6 @@ angular.module('myApp.students', ['ngResource'])
             }
         };
 
-        $scope.goToStudent = function(username) {
-            $location.path("/students/" + username);
-        };
-
         $scope.deleteStudent = function(username) {
             var confirmed = confirm("Are you sure you want to delete Student '" + username + "'?");
             if (confirmed) {
@@ -80,6 +76,9 @@ angular.module('myApp.students', ['ngResource'])
                 }
                 setMessageTimer(errorArray, true);
             });
+        };
 
+        $scope.goToStudent = function(username) {
+            $location.path("/admin/students/" + username);
         };
     });

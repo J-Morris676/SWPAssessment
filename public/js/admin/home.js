@@ -3,9 +3,9 @@
  */
 'use strict';
 
-angular.module('myApp.home', ['ngResource'])
+angular.module('myApp.adminHome', ['ngResource'])
 
-    .controller("homeCtrl", function($scope, $http, $location) {
+    .controller("adminHomeCtrl", function($scope, $http, $location) {
         $scope.currentDate = new Date();
 
         $http.get("/resources/schedules").success(function(data, status) {
@@ -47,15 +47,15 @@ angular.module('myApp.home', ['ngResource'])
         };
 
         $scope.goToAssessment = function(id) {
-            $location.path("/assessments/" + id);
+            $location.path("/admin/assessments/" + id);
         };
         $scope.goToAssessments = function() {
-            $location.path("/assessments");
+            $location.path("/admin/assessments");
         };
         $scope.goToStudents = function() {
-            $location.path("/students");
+            $location.path("/admin/students");
         };
         $scope.goToAssessmentSchedules = function() {
-            $location.path("/assessmentSchedules");
+            $location.path("/admin/assessmentSchedules");
         };
     });

@@ -42,7 +42,11 @@ app.use(flash());
 app.use(bodyParser.json());
 
 //Passes urls on for Angular app:
-app.get('/:name', function(req, res) {
+app.get('/:page', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
+//Admins:
+app.get('/admin/:name', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
 app.get('/assessments/:id', function(req, res) {
@@ -54,6 +58,12 @@ app.get('/students/:id', function(req, res) {
 app.get('/assessmentSchedules/:id', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
+//Student paths:
+app.get('/student/:name', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
+
+
 
 /************************************************
  *                                              *

@@ -447,7 +447,13 @@ exports.authenticateUser = function(req, res, next) {
             //Setup a session:
             req.logIn(user, function(err) {
                 if (err) { res.json({"authenticated": false, "error": err}); }
-                res.json({"authenticated": true, "authenticatedUser": user});
+                if (user.admin != null) {
+                    res.json({"authType": "admin", "authenticated": true, "authenticatedUser": user});
+                }
+                else {
+                    res.json({"authType": "student", "authenticated": true, "authenticatedUser": user});
+                }
+
             });
         }
     })(req, res);

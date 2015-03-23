@@ -29,6 +29,7 @@ exports.isConnectedToDatabase = function(req, res) {
     else
          res.json({"connected": dataRepository.isConnected() });
 };
+
 exports.getUserByUserName = function(req, res) {
     logger.info("GET: user by username '" + req.params.username + "''");
 
@@ -309,7 +310,22 @@ exports.getScheduledAssessmentsByStudentUsername = function(req, res) {
     logger.info("GET: scheduled assessments for user: " + req.params.username);
 
     if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
-        dataRepository.findScheduledAssessmentsByStudentUserName(req.params.username, function(err, scheduledAssessments) {
+        var query = {"students.username": req.params.username};
+        if (req.query.when) {
+            if (req.query.when.toLowerCase() == "ongoing") {
+                query.startDate = {"$lt": new Date()};
+                query.endDate = { "$gt": new Date()};
+            }
+            else if (req.query.when.toLowerCase() == "past") {
+                query.endDate = { "$lt": new Date()};
+            }
+            else if (req.query.when.toLowerCase() == "future") {
+                query.startDate = { "$gt": new Date()};
+            }
+        }
+
+
+        dataRepository.findAllScheduledAssessments(query, function(err, scheduledAssessments) {
             if (err) res.status(500).json(err);
             else res.json(scheduledAssessments);
         });
@@ -343,8 +359,15 @@ exports.logout = function(req, res) {
 exports.isLoggedIn = function(req, res) {
     logger.info("GET: Is a user logged in");
     if (req.user) {
-        var user = req.user.student || req.user.admin;
-        res.json({username: user.username, "loggedIn": true});
+        if (req.user.student != null) {
+            res.json({username: req.user.student.username, authType: "student", "loggedIn": true});
+        }
+        else if (req.user.admin!= null) {
+            res.json({username: req.user.admin.username, authType: "admin", "loggedIn": true});
+        }
+        else {
+            res.json({"loggedIn": false});
+        }
     }
     else {
         res.json({"loggedIn": false});
