@@ -1,0 +1,56 @@
+<section style="margin-top: 25px">
+    <div style="margin-left:15%;margin-right:15%;">
+        <!-- Loader -->
+        <div ng-show="assessmentSchedule==null" class="panel panel-default">
+            <div class="spinner">
+                <div class="spinner-container container1">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container2">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container3">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div style="margin-left:27px;">Loading..</div>
+            </div>
+        </div>
+
+        <!-- Remind trainer message-->
+        <div ng-show="assessmentSchedule!=null" class="panel panel-default">
+            <div class="panel-body">
+                <h3 style="text-align: center">
+                    This assessment will begin when the countdown is complete</br>
+                    You will be automatically redirected when it
+                    does.
+                </h3>
+                <div style="margin-left:10%;margin-right:10%;" class="well well-sm">
+                    <table class="table">
+                        <tr>
+                            <th>Trainer</th>
+                            <th>Assessment</th>
+                            <th>Countdown to Start Time</th>
+                            <th></th>
+                        </tr>
+
+                        <tr>
+                            <td>{{assessmentSchedule.admin}}</td>
+                            <td>{{assessmentSchedule.assessment.title}}</td>
+                            <td><countdown on-done="goToSitAssessment" ng-model="assessmentSchedule.startDate"></countdown></td>
+                            <td ng-show="countdownFinished==true"><button class="btn btn-default">Start</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

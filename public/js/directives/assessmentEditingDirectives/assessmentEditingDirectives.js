@@ -145,6 +145,10 @@ angular.module("myApp.assessmentEditingDirectives", [])
 
                 scope.changes = false;
 
+                //Delete any possibly pre-existing fields that is not suitable for a free type:
+                delete scope.ngModel.answers;
+                delete scope.ngModel.additionalInfo;
+
                 scope.isValidAnswer = function() {
                     if (scope.answer==""||scope.answer==null) return false;
                     else if (scope.ngModel.answer == null || typeof(scope.ngModel.answer) != "object") return true;

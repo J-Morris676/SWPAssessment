@@ -1,6 +1,6 @@
 <section style="margin-top: 25px">
     <!-- Assessment stuff to show -->
-    <div ng-show="student.assessmentResults.length>0||futureAssessments.length>0">
+    <div ng-show="student.assessmentResults.length>0||futureAssessments.length>0||ongoingAssessments.length>0">
         <div class="row">
             <!-- col 1 -->
             <div class="col-md-offset-1 col-md-5">
@@ -24,6 +24,8 @@
 
                             <ul class="list-group"  style="color:red;max-height:200px;overflow-y: scroll">
                                 <li ng-repeat="ongoingAssessment in ongoingAssessments | orderBy: 'endDate':false" class="list-group-item">
+                                    <button style="float:right" ng-click="goToSitAssessment(ongoingAssessment._id)" class="btn btn-default">Start</button>
+
                                     Started: {{ongoingAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
                                     Ends: {{ongoingAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
                                     Time left: <countdown on-done="getAssessmentSchedules" ng-model="ongoingAssessment.endDate"></countdown>
@@ -40,8 +42,10 @@
                             <h4>Coming up in the next week</h4>
                             <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
                                 <li ng-repeat="futureAssessment in futureAssessments| orderBy: 'startDate':false" class="list-group-item">
-                                    Starts: {{futureAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
-                                    Ends: {{futureAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}
+                                    <button style="float:right" ng-click="goToStudentScheduledAssessmentPage(futureAssessment._id)" ng-show="findDurationInMinutes('now', futureAssessment.startDate) < 30" class="btn btn-default">View</button>
+
+                                    <b>Starts:</b> {{futureAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
+                                    <b>Ends:</b> {{futureAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}
                                 </li>
                             </ul>
                         </div>
@@ -108,7 +112,7 @@
 
 
     <!-- New user -- No assessments enrolled on. -->
-    <div ng-show="student.assessmentResults.length==0&&scheduledAssessments.length==0" style="margin-left:15%;margin-right:15%;" id="new-user">
+    <div ng-show="student.assessmentResults.length==0&&futureAssessments.length==0&&ongoingAssessments.length==0" style="margin-left:15%;margin-right:15%;" id="new-user">
         <!-- Loader -->
         <div ng-show="student==null" class="panel panel-default">
             <div class="spinner">

@@ -37,6 +37,13 @@ angular.module('myApp.studentHome', ['ngResource'])
             }
         };
 
+        $scope.findDurationInMinutes = function(startDate, endDate) {
+            if (startDate == "now") startDate = new Date();
+            if (endDate == "now") endDate = new Date();
+            return Math.round((new Date(endDate) - new Date(startDate)) / 60000);
+        };
+
+
         //User is async:
         if ($scope.user!=null) {
             $scope.getAssessmentSchedules();
@@ -52,4 +59,10 @@ angular.module('myApp.studentHome', ['ngResource'])
             })
         }
 
+        $scope.goToStudentScheduledAssessmentPage = function(scheduledAssessmentId) {
+            $location.path("/student/assessmentSchedules/" + scheduledAssessmentId);
+        };
+        $scope.goToSitAssessment = function(scheduledAssessmentId) {
+            $location.path("/student/assessmentSchedules/" + scheduledAssessmentId + "/sitAssessment");
+        };
     });

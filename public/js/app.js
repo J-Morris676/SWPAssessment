@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp', ["myApp.signIn",
+    //Admin modules & directives:
     "myApp.adminHome",
-    "myApp.studentHome",
     "myApp.assessment",
     "myApp.assessmentEditingDirectives",
     "myApp.userDetailsDirectives",
@@ -11,7 +11,16 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.student",
     "myApp.assessmentSchedules",
     "myApp.assessmentSchedule",
+
+    //Student modules:
+    "myApp.studentHome",
+    "myApp.studentAssessmentSchedule",
+    "myApp.studentSitAssessment",
+
+    //Directives:
     "myApp.timeDirectives",
+
+    //Lib modules:
     "ngRoute",
     "ui.bootstrap"
 ])
@@ -39,6 +48,10 @@ angular.module('myApp', ["myApp.signIn",
             Student routes
          */
         $routeProvider.when('/student/home', {templateUrl: 'parts/student/home.html', controller: 'studentHomeCtrl'});
+        $routeProvider.when('/student/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/student/assessmentSchedule.html', controller: 'studentAssessmentScheduleCtrl'});
+        $routeProvider.when('/student/assessmentSchedules/:assessmentScheduleId/sitAssessment', {templateUrl: 'parts/student/sitAssessment.html', controller: 'studentSitAssessmentCtrl'});
+
+
         $routeProvider.otherwise({redirectTo: '/signIn'});
 	})
 
@@ -71,8 +84,8 @@ angular.module('myApp', ["myApp.signIn",
 
         $scope.logOut = function() {
             $http.get("/auth/logout").success(function(data, status) {
-                $scope.user = data;
-                $scope.username = data.username;
+                $scope.user = {};
+                $scope.username = "";
                 $location.path('/signIn');
             });
         };

@@ -16,7 +16,7 @@ angular.module("myApp.timeDirectives", [])
     .directive("countdown", function($http, $interval) {
         return {
             restrict: 'E',
-            template: '<span>{{hoursRemaining}} hour(s), {{minutesRemaining}} minute(s), {{secondsRemaining}} second(s)</span>',
+            template: '<span ng-show="isValid(hoursRemaining)">{{hoursRemaining}} hour(s), {{minutesRemaining}} minute(s), {{secondsRemaining}} second(s)</span>',
             scope: {
                 ngModel: '=ngModel',
                 onDone: '=onDone'
@@ -27,13 +27,16 @@ angular.module("myApp.timeDirectives", [])
                 var _hour = _minute * 60;
                 var _day = _hour * 24;
 
+                scope.isValid = function(time) {
+                    return !isNaN(time);
+                };
+
                 var countdown = function() {
                     var now = new Date();
                     var distance = new Date(scope.ngModel) - now;
                     if (distance < 0) {
                         $interval.cancel(timer);
                         $(element).parent().remove();
-                        console.log(scope);
                         scope.onDone();
                     }
                     else {
@@ -41,7 +44,7 @@ angular.module("myApp.timeDirectives", [])
                         scope.minutesRemaining= Math.floor((distance % _hour) / _minute);
                         scope.secondsRemaining = Math.floor((distance % _minute) / _second);
                     }
-                }
+                };
                 countdown();
                 var timer = $interval(countdown, 1000)
             }

@@ -295,10 +295,27 @@ exports.getScheduledAssessments = function(req, res) {
 
 exports.getScheduledAssessmentsById = function(req, res) {
     logger.info("GET: scheduled assessment: " + req.params.scheduledAssessmentId);
+
     if (authCheck.admin.checkAuthenticated(req.user)) {
         dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function(err, scheduledAssessment) {
             if (err) res.status(500).json(err);
             else res.json(scheduledAssessment);
+        });
+    }
+    //Student can only GET schedules he/she's enrolled on:
+    else if (authCheck.student.checkAuthenticated(req.user)) {
+        dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function (err, scheduledAssessment) {
+            if (err) res.status(500).json(err);
+            else if (scheduledAssessment == null) res.json({});
+            else {
+                for (var student in scheduledAssessment.students) {
+                    if (scheduledAssessment.students[student].username == req.user.student.username) {
+                        res.json(scheduledAssessment);
+                        return;
+                    }
+                }
+                res.status(401).json({"message": "Not authenticated"});
+            }
         });
     }
     else {

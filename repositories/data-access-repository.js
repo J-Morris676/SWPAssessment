@@ -94,7 +94,7 @@ exports.findAllScheduledAssessments = function(query, cb) {
     databaseConnection.assessmentSchedule.find(query, function(err, data) {
         //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
         async.each(data, function(d, asyncCallback) {
-            databaseConnection.assessments.findOne({_id: d.assessment}, function(err, assessment) {
+            databaseConnection.assessments.findOne({_id: d.assessment}, {"versions.QAs.answer": 0},  function(err, assessment) {
                 assessment = assessment.toObject();
                 if (assessment != null) d["_doc"].assessment = assessment;
                 for (var version in assessment.versions) {
@@ -121,21 +121,26 @@ exports.findAllScheduledAssessments = function(query, cb) {
 exports.findScheduledAssessmentById = function(scheduleId, cb) {
     databaseConnection.assessmentSchedule.findOne({"_id": scheduleId},
         function(err, data) {
-            //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
-            databaseConnection.assessments.findOne({_id: data.assessment}, function(err, assessment) {
-                assessment = assessment.toObject();
-                if (assessment != null) data["_doc"].assessment = assessment;
-                for (var version in assessment.versions) {
-                    if (assessment.versions[version]._id.equals(data["_doc"].version)) {
-                        data["_doc"].version = {
-                            "no": (parseInt(version)+1),
-                            "object": assessment.versions[version]
-                        };
-                        break;
+            if (data == null) {
+                cb({"message": "Scheduled assessment " + scheduleId + " couldn't be found."});
+            }
+            else {
+                //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+                databaseConnection.assessments.findOne({_id: data.assessment}, {"versions.QAs.answer": 0}, function(err, assessment) {
+                    assessment = assessment.toObject();
+                    if (assessment != null) data["_doc"].assessment = assessment;
+                    for (var version in assessment.versions) {
+                        if (assessment.versions[version]._id.equals(data["_doc"].version)) {
+                            data["_doc"].version = {
+                                "no": (parseInt(version)+1),
+                                "object": assessment.versions[version]
+                            };
+                            break;
+                        }
                     }
-                }
-                repositoryCallback(err,data,cb);
-            });
+                    repositoryCallback(err,data,cb);
+                });
+            }
         });
 };
 
