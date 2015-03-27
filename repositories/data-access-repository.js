@@ -18,11 +18,63 @@ function repositoryCallback(err, data, cb) {
 }
 
 exports.findStudents = function(query, cb) {
-    databaseConnection.students.find(query, {password: 0}, function(err, data) {repositoryCallback(err,data,cb);});
+    databaseConnection.students.find(query, {password: 0}).lean().exec(function(err, students) {
+        //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+        async.each(students, function (student, studentsAsyncCallback) {
+            async.each(student.assessmentResults, function (assessmentResult, assessmentResultCallback) {
+                databaseConnection.assessments.findOne({_id: assessmentResult.assessment.toString()}, {"versions.QAs.answer": 0}).lean().exec(function (err, assessment) {
+                    if (assessment != null) {
+                        assessmentResult.assessment = assessment;
+                        for (var  version = 0; version < assessment.versions.length; version++) {
+                            if (assessment.versions[version]._id.equals(assessmentResult.version)) {
+                                assessmentResult.version = (version+1);
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        assessmentResult.assessment = null; //An assessment that doesn't exist - i.e. removed!!
+                    }
+                    assessmentResultCallback();
+                });
+            }, function (err) {
+                if (err) repositoryCallback(err, null, null);
+                studentsAsyncCallback();
+            });
+        }, function (err) {
+            repositoryCallback(err, students, cb);
+        });
+    });
 };
 
 exports.findStudentByUsername = function(username, projection, cb) {
-    databaseConnection.students.findOne({"username": username}, projection, function(err, data) {repositoryCallback(err,data,cb);});
+    databaseConnection.students.findOne({"username": username}, projection).lean().exec(function(err, student) {
+        if (err) repositoryCallback(err, null, cb);
+        else if (student == null) repositoryCallback(err, null, cb);
+        else {
+            //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+            async.each(student.assessmentResults, function (assessmentResult, assessmentResultCallback) {
+                databaseConnection.assessments.findOne({_id: assessmentResult.assessment.toString()}, {"versions.QAs.answer": 0}).lean().exec(function (err, assessment) {
+                    if (assessment != null) {
+                        assessmentResult.assessment = assessment;
+                        for (var  version = 0; version < assessment.versions.length; version++) {
+                            if (assessment.versions[version]._id.equals(assessmentResult.version)) {
+                                assessmentResult.version = (version+1);
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        assessmentResult.assessment = null; //An assessment that doesn't exist - i.e. removed!!
+                    }
+                    assessmentResultCallback();
+                });
+            }, function (err) {
+                if (err) repositoryCallback(err, null, null);
+                repositoryCallback(err, student, cb);
+            });
+        }
+    });
 };
 
 exports.findStudentById = function(id, cb) {
@@ -148,4 +200,34 @@ exports.findScheduledAssessmentByScheduleIdAndStudentUserName = function (schedu
     databaseConnection.assessmentSchedule.findOne({"_id": scheduleId, "students.username": studentUsername},
         function(err, data) {repositoryCallback(err,data,cb);
     });
+};
+
+exports.hasStudentStartedScheduledAssessment = function(scheduledAssessmentId, studentUsername, cb) {
+    databaseConnection.assessmentSchedule.findOne({_id: ObjectId(scheduledAssessmentId), "students.username": studentUsername, "students": { "$elemMatch": {"dates.startDate": {$exists: true}}}},
+        function(err,data) {
+            if (err) {
+                repositoryCallback(err, null,cb);
+            }
+            else if (data == null) {
+                repositoryCallback(err,false,cb);
+            }
+            else {
+                repositoryCallback(err,true,cb);
+            }
+        });
+};
+
+exports.hasStudentFinishedScheduledAssessment = function(scheduledAssessmentId, studentUsername, cb) {
+    databaseConnection.assessmentSchedule.findOne({_id: ObjectId(scheduledAssessmentId), "students.username": studentUsername, "students": { "$elemMatch": {"dates.endDate": {$exists: true}}}},
+        function(err,data) {
+            if (err) {
+                repositoryCallback(err, null,cb);
+            }
+            else if (data == null) {
+                repositoryCallback(err,false,cb);
+            }
+            else {
+                repositoryCallback(err,true,cb);
+            }
+        });
 };

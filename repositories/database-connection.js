@@ -78,6 +78,7 @@ var studentSchema = new Schema({
     "password": String,
     "firstName": String,
     "lastName": String,
+    "createdDate": Date,
     "assessmentResults": [resultSchema]
 }, { versionKey: false });
 
@@ -91,7 +92,7 @@ var assessmentSchedule = new Schema({
     endDate: Date,
     assessment: Schema.Types.ObjectId,
     version: Schema.Types.ObjectId,
-    students: [ {username: String, dates: {startDate: Date, endDate: Date} }],
+    students: [ {username: String, assessmentAnswers: Array, dates: {startDate: Date, endDate: Date} }],
     admin: String
 }, { versionKey: false });
 

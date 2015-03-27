@@ -31,7 +31,7 @@ angular.module("myApp.userDetailsDirectives", [])
                 }
                 else {
                     scope.$watch('ngModel', function () {
-                        if (scope.ngModel != null) {
+                        if (scope.ngModel != null||scope.ngModel != "") {
                             getUser();
                         }
                     });

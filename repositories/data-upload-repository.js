@@ -109,6 +109,12 @@ exports.editAssessmentSchedule = function(scheduledAssessmentId, schedule, cb) {
         function(err, data) {repositoryCallback(err,data,cb);});
 };
 
+exports.updateStudentProgress = function(scheduledAssessmentId, studentUsername, answers, cb) {
+    databaseConnection.assessmentSchedule.update({_id: ObjectId(scheduledAssessmentId), "students.username": studentUsername},
+        { $set: { "students.$.assessmentAnswers": answers }},
+        function(err, data) {repositoryCallback(err,data,cb);});
+};
+
 exports.lockAssessmentVersion = function(assessmentId, versionId, cb) {
     databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions._id": ObjectId(versionId) },
         { $set: { "versions.$.locked": true}},

@@ -7,12 +7,13 @@ exports.multiChoiceMark = function(question, answer) {
     var markObject = {
         "score": 0,
         "possible": 1,
-        "actual": question.answer
+        "actual": question.answers[question.answer]
     };
 
-    if (question.answer == answer.answer)
+    if (markObject.actual == answer.answer)
         markObject.score = 1;
     else markObject.score = 0;
+
     return markObject;
 };
 
@@ -21,10 +22,10 @@ exports.callLogMark = function(question, answer) {
     var markObject = {
         "score": 0,
         "possible": 1,
-        "actual": question.answer
+        "actual": question.answers[question.answer]
     };
 
-    if (question.answer == answer.answer)
+    if (markObject.actual == answer.answer)
         markObject.score = 1;
     else markObject.score = 0;
     return markObject;

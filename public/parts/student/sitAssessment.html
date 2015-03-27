@@ -5,11 +5,108 @@
                 <div class="panel-body">
                     <!-- Question numbers-->
                     <div class="row" id="question-number">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-12 col-md-3">
                             <h2>Question {{currentIndex+1}}</h2>
                         </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-offset-4 col-md-5">
+                            <h4 style="color:#D3D3D3;float:right;margin-top: 25px;margin-bottom: 10px;">
+                                <countdown on-done="filterDates" ng-model="assessmentSchedule.endDate"></countdown>
+                            </h4>
+
+                        </div>
                     </div>
-                    {{userAnswers}}
+
+                    <!-- Call log -->
+                    <div class="row" ng-show="questions[currentIndex].type=='call'" id="call-log-details">
+                        <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-11 col-md-offset-2 col-md-9">
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" ng-click="questions[currentIndex].callView='background'" ng-class="{active: questions[currentIndex].callView=='background'}" class="active">
+                                        <a href="javascript:void(0);">Background</a>
+                                    </li>
+                                    <li role="presentation" ng-click="questions[currentIndex].callView='details'" ng-class="{active: questions[currentIndex].callView=='details'}">
+                                        <a href="javascript:void(0);">Details</a>
+                                    </li>
+                                </ul>
+                                <div ng-show="questions[currentIndex].callView=='background'">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Caller Name:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.callerName}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Caller Address:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.callerAddress}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Caller Telephone:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.callerTelephone}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Caller Status:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.callerStatus}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Contact Method:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.contactMethod}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Open Code Category:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.openCodeCategory}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Unique ID:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.uniqueID}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Incident Location:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.incidentLocation}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Response:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.response}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Date Received:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.dateReceived | date:"dd/MM/yyyy"}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Date Recorded:</th>
+                                                    <td>{{questions[currentIndex].additionalInfo.background.dateRecorded | date:"dd/MM/yyyy"}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div style="margin-top:15px;height:200px;overflow-y: auto;overflow-x:hidden;" ng-show="questions[currentIndex].callView=='details'">
+                                    <div class="row" ng-repeat="callDetails in questions[currentIndex].additionalInfo.details | orderBy:'date'">
+                                        <div class="col-md-11">
+                                            <label>Date:</label>
+                                            {{callDetails.date | date:"dd/MM/yyyy"}}
+                                        </div>
+                                        <div class="col-md-11">
+                                            <label>Log:</label>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <textarea style="resize: none;" class="form-control" rows="5" disabled ng-model="callDetails.log"></textarea>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <hr style="border-color:black">
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+
                     <!-- Question -->
                     <div class="row" id="question">
                         <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-11 col-md-offset-1 col-md-11">
@@ -21,20 +118,25 @@
                                 <option value="">Select an answer..</option>
                             </select>
                             <!-- Free-text question-->
-                            <textarea style="resize: none;" ng-model="userAnswers[currentIndex].answer" ng-show="questions[currentIndex].type=='free'" placeholder="..." ng-show="questions[currentIndex].type=='multi'" class="form-control">
-
+                            <textarea style="resize: none;" ng-model="userAnswers[currentIndex].answer" ng-show="questions[currentIndex].type=='free'" placeholder="Answer..." ng-show="questions[currentIndex].type=='multi'" class="form-control">
                             </textarea>
                         </div>
                     </div>
 
 
-                    <!-- Switch question buttons -->
+                    <!-- Switch question & submit buttons -->
                     <div style="margin-top:25px" class="row" id="switch-question-buttons" >
                         <div style="padding-right:0px" class="col-xs-6 col-sm-6 col-md-6">
-                            <button ng-click="currentIndex=currentIndex-1" ng-disabled="currentIndex==0" type="button" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+                            <button ng-click="updateStudentAnswers();currentIndex=currentIndex-1" ng-disabled="currentIndex==0" type="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
                         </div>
                         <div style="padding-left:0px" class="col-xs-6 col-sm-6 col-md-6">
-                            <button ng-click="currentIndex=currentIndex+1" ng-disabled="currentIndex==(questions.length-1)" type="button" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+                            <button ng-click="updateStudentAnswers();currentIndex=currentIndex+1" ng-show="currentIndex!=(questions.length-1)" type="button" class="btn btn-default btn-block"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+                        </div>
+                        <div style="padding-left:0px" class="col-xs-6 col-sm-6 col-md-6">
+                            <button ng-click="submitAssessmentAnswers()" ng-show="currentIndex==(questions.length-1)" type="button" class="btn btn-success btn-block">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                Submit Answers
+                            </button>
                         </div>
                     </div>
 

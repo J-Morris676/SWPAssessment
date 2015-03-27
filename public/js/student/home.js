@@ -16,6 +16,7 @@ angular.module('myApp.studentHome', ['ngResource'])
         var getUser = function(username) {
             $http.get("/resources/students/" + username).success(function(data, status) {
                 $scope.student = data;
+                console.log($scope.student);
             });
         };
         $scope.getAssessmentSchedules = function() {
@@ -25,6 +26,15 @@ angular.module('myApp.studentHome', ['ngResource'])
             });
             scheduledAssessmentService($scope.user.username, "ongoing", function(data) {
                 $scope.ongoingAssessments = data;
+                //Change 'students' field in objects to just the 'student' that's viewing:
+                for (var ongoingAssessment = 0; ongoingAssessment < $scope.ongoingAssessments.length; ongoingAssessment++) {
+                    for (var student = 0; $scope.ongoingAssessments[ongoingAssessment].students; student++) {
+                        if ($scope.ongoingAssessments[ongoingAssessment].students[student].username == $scope.username) {
+                            $scope.ongoingAssessments[ongoingAssessment].student = $scope.ongoingAssessments[ongoingAssessment].students[student];
+                            delete $scope.ongoingAssessments[ongoingAssessment].students;
+                        }
+                    }
+                }
                 insertTrainerUnique(data);
             });
         };
@@ -42,7 +52,6 @@ angular.module('myApp.studentHome', ['ngResource'])
             if (endDate == "now") endDate = new Date();
             return Math.round((new Date(endDate) - new Date(startDate)) / 60000);
         };
-
 
         //User is async:
         if ($scope.user!=null) {

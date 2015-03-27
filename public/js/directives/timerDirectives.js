@@ -16,7 +16,10 @@ angular.module("myApp.timeDirectives", [])
     .directive("countdown", function($http, $interval) {
         return {
             restrict: 'E',
-            template: '<span ng-show="isValid(hoursRemaining)">{{hoursRemaining}} hour(s), {{minutesRemaining}} minute(s), {{secondsRemaining}} second(s)</span>',
+            template: '<span ng-show="isValid(hoursRemaining)">' +
+            '<span ng-hide="hoursRemaining==0">{{hoursRemaining}} Hr, </span>' +
+            '<span ng-hide="hoursRemaining==0&&minutesRemaining==0">{{minutesRemaining}} Min, </span>' +
+            '{{secondsRemaining}} Sec</span>',
             scope: {
                 ngModel: '=ngModel',
                 onDone: '=onDone'

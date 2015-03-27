@@ -16,15 +16,21 @@
 
                         <!-- Currently ongoing -->
                         <div ng-show="ongoingAssessments.length>0">
-
                             <h4>Currently Ongoing</h4>
-                            <h4 style="color:red">
-                                WARNING! You are enrolled on an ongoing assessment, you must finish it before the time is up.
-                            </h4>
 
                             <ul class="list-group"  style="color:red;max-height:200px;overflow-y: scroll">
-                                <li ng-repeat="ongoingAssessment in ongoingAssessments | orderBy: 'endDate':false" class="list-group-item">
-                                    <button style="float:right" ng-click="goToSitAssessment(ongoingAssessment._id)" class="btn btn-default">Start</button>
+                                <li ng-repeat="ongoingAssessment in ongoingAssessments track by $index | orderBy: 'endDate':false" class="list-group-item">
+                                    <!-- Show warning when this Student hasn't finished it yet: -->
+                                    <h4 ng-show="ongoingAssessment.student.dates.endDate == null" style="color:red">
+                                        WARNING! You are enrolled on this assessment, you must finish it before the time is up.
+                                    </h4>
+                                    <button ng-show="ongoingAssessment.student.dates.startDate == null" style="float:right" ng-click="goToSitAssessment(ongoingAssessment._id)" class="btn btn-default">
+                                        Start
+                                    </button>
+                                    <button ng-show="(ongoingAssessment.student.dates.startDate != null)&&(ongoingAssessment.student.dates.endDate==null)" style="float:right" ng-click="goToSitAssessment(ongoingAssessment._id)" class="btn btn-default">
+                                        Continue
+                                    </button>
+
 
                                     Started: {{ongoingAssessment.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
                                     Ends: {{ongoingAssessment.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</br>
@@ -93,12 +99,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="panel-body">
-                            <div style="max-height:200px;overflow-y: scroll" ng-show="assessments.length>0">
-                                <li ng-repeat="student in students | orderBy:'username'" class="list-group-item">
+                            <div style="max-height:200px;overflow-y: scroll" >
+                                <li ng-repeat="assessmentResult in student.assessmentResults | orderBy:'date'" class="list-group-item">
                                     <div>
-                                        <b>Username: </b> {{student.username}}</br>
-                                        <b>Name: </b>  {{student.firstName}} {{student.lastName}}</br>
-                                        <b>Completed Assessments: </b>  {{student.assessmentResults.length}}</br>
+                                        <b>Assessment: </b> {{assessmentResult.assessment.title}} </br>
+                                        <b>Version: </b>  {{assessmentResult.version}}</br>
+                                        <b>Date: </b>  {{assessmentResult.date  | date:"dd/MM/yyyy"}}</br>
+                                        <b>Result: </b>  {{assessmentResult.percent}}%</br>
                                     </div>
                                 </li>
                             </div>

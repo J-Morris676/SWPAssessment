@@ -127,6 +127,8 @@ app.put("/resources/schedules/:scheduleId", validate(bodyValidation.assessmentSc
 
 //Attempts to allow a Student to start and end a given assessment (sessions):
 app.post("/resources/schedules/:scheduleId/start/:studentUsername", validate(bodyValidation.startScheduledAssessment), dataUploadServices.attemptAssessmentStart);
+app.post("/resources/schedules/:scheduleId/updateProgress/:studentUsername", validate(bodyValidation.updateStudentProgress), dataUploadServices.updateAssessmentProgress);
+
 app.post("/resources/schedules/:scheduleId/end/:studentUsername", validate(bodyValidation.endScheduledAssessment), dataUploadServices.attemptAssessmentEnd);
 
 app.post('/auth/login', dataUploadServices.authenticateUser);

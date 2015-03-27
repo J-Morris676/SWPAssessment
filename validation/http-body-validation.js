@@ -105,3 +105,5 @@ exports.endScheduledAssessment = {
         answer: Joi.any().required()
     }))
 };
+
+exports.updateStudentProgress = exports.endScheduledAssessment;

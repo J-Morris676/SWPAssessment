@@ -382,6 +382,30 @@ exports.attemptAssessmentStart = function(req, res) {
     }
 };
 
+exports.updateAssessmentProgress = function(req, res) {
+    logger.info("Updating Student " + req.params.studentUsername + " progress on " + req.params.scheduleId);
+
+    if (authCheck.student.checkAuthenticatedByUserName(req.user, req.params.studentUsername)) {
+        dataAccessRepository.hasStudentStartedScheduledAssessment(req.params.scheduleId, req.params.studentUsername, function(err, hasStarted) {
+            if (err) res.status(500).json(err);
+            if (hasStarted) {
+                dataUploadRepository.updateStudentProgress(req.params.scheduleId, req.params.studentUsername, req.body, function(err, response) {
+                    if (err) res.status(500).json(err);
+                    else {
+                        res.json({"message": "Updated answers"});
+                    }
+                });
+            }
+            else {
+                res.status(401).json({"message": "User " + req.params.studentUsername + " has not yet started this assessment or is not enrolled."});
+            }
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
 //Ends AND marks assessment:
 exports.attemptAssessmentEnd = function(req, res) {
     logger.info("POST: attempting to end " + req.params.studentUsername + "'s session on " + req.params.scheduleId);
@@ -393,41 +417,52 @@ exports.attemptAssessmentEnd = function(req, res) {
                 res.status(401).json({endAssessment: false, message: "user " + req.params.studentUsername + " not enrolled onto " + req.params.scheduleId});
             }
             else {
-                var currentTime = new Date();
-                if (currentTime > scheduledAssessment.startDate && currentTime < scheduledAssessment.endDate) {
-                    dataUploadRepository.setStudentFinishedInAssessmentSchedule(req.params.scheduleId, req.params.studentUsername, function(err, response) {
-                        if (err) res.status(500).json(err);
-                        else {
-                            dataAccessRepository.findAssessmentVersionByAssessmentIdAndVersionId(scheduledAssessment.assessment, scheduledAssessment.version, {}, function(err, assessment) {
+                dataAccessRepository.hasStudentFinishedScheduledAssessment(req.params.scheduleId, req.params.studentUsername, function(err, hasFinished) {
+                    if (err) res.status(500).json(err);
+                    else if (hasFinished) res.status(401).json("Student '" + req.params.studentUsername + "' has already finished assessment." );
+                    else {
+                        var currentTime = new Date();
+                        if (currentTime > scheduledAssessment.startDate && currentTime < scheduledAssessment.endDate) {
+                            dataUploadRepository.setStudentFinishedInAssessmentSchedule(req.params.scheduleId, req.params.studentUsername, function(err, response) {
                                 if (err) res.status(500).json(err);
-                                else if (assessment != null) {
-                                    try {
-                                        var assessmentGrade = assessmentMarker.markAssessment(assessment, req.body);
-                                        assessmentGrade.assessment = new ObjectId(this.assessmentId);
-                                        assessmentGrade.version = new ObjectId(this.versionId);
-                                        dataUploadRepository.insertAssessmentResultIntoStudent(req.params.studentUsername, assessmentGrade, function(err, uploadResponse) {
-                                            if (err) throw err;
-                                            res.status(201).json({updatedStudentResultReponse: uploadResponse, endAssessment: true, message: "User " + req.params.studentUsername + " finished assessment."});
-                                        })
-                                    }
-                                    catch(e) {
-                                        //Responds any exceptions from marking:
-                                        res.json(e);
-                                    }
-                                }
                                 else {
-                                    res.status(400).json({"error": "No such assessment"});
+                                    dataAccessRepository.findAssessmentVersionByAssessmentIdAndVersionId(scheduledAssessment.assessment, scheduledAssessment.version, {}, function(err, assessment) {
+                                        if (err) res.status(500).json(err);
+                                        else if (assessment != null) {
+                                            try {
+                                                var assessmentGrade = assessmentMarker.markAssessment(assessment, req.body);
+                                                assessmentGrade.assessment = new ObjectId(scheduledAssessment.assessment);
+                                                assessmentGrade.version = new ObjectId(scheduledAssessment.version);
+
+                                                dataUploadRepository.insertAssessmentResultIntoStudent(req.params.studentUsername, assessmentGrade, function(err, uploadResponse) {
+                                                    if (err) throw err;
+                                                    //Remove correct answer before sending result back:
+                                                    for (var markedAnswer=0;markedAnswer < assessmentGrade.markedAnswers.length; markedAnswer++) {
+                                                        delete assessmentGrade.markedAnswers[markedAnswer].result.actual;
+                                                    }
+                                                    res.status(201).json({markedAssessment: assessmentGrade, endAssessment: true, message: "User " + req.params.studentUsername + " finished assessment."});
+                                                })
+                                            }
+                                            catch(e) {
+                                                //Responds any exceptions from marking:
+                                                res.json(e);
+                                            }
+                                        }
+                                        else {
+                                            res.status(400).json({"error": "No such assessment"});
+                                        }
+                                    });
                                 }
-                            });
+                            })
                         }
-                    })
-                }
-                else if (currentTime > scheduledAssessment.endDate) {
-                    res.status(401).json({endAssessment: false,message: "Scheduled assessment " + req.params.scheduleId + " has already been."});
-                }
-                else {
-                    res.status(401).json({endAssessment: false,message: "Scheduled assessment " + req.params.scheduleId + " hasn't started yet."});
-                }
+                        else if (currentTime > scheduledAssessment.endDate) {
+                            res.status(401).json({endAssessment: false,message: "Scheduled assessment " + req.params.scheduleId + " has already been."});
+                        }
+                        else {
+                            res.status(401).json({endAssessment: false,message: "Scheduled assessment " + req.params.scheduleId + " hasn't started yet."});
+                        }
+                    }
+                });
             }
         });
     }
