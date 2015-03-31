@@ -125,6 +125,21 @@ exports.getStudentByUserName = function(req, res) {
     }
 };
 
+//Unfinished:
+exports.getStudentResultsByUsernameAndScheduleId = function(req, res) {
+    logger.info("GET: Results for student " + req.params.username + " in assessment " + req.params.assessmentScheduleId);
+    if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
+        dataRepository.findStudentByUsernameAndAssessmentScheduleId(req.params.username, req.params.assessmentScheduleId, function(err, result) {
+            if (err) res.status(500).json(err);
+            else if (result == null) res.status(400).json(result);
+            else res.json(result);
+        })
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
+};
+
 exports.getAllAssessments = function(req, res) {
     logger.info("GET: all assessments");
     if (authCheck.admin.checkAuthenticated(req.user)) {

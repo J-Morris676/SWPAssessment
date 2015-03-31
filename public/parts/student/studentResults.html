@@ -1,0 +1,63 @@
+<section style="margin-top:25px;">
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <div ng-show="justFinished" class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p style="text-align:center">
+                    Your assessment answers have been successfully <strong>submitted</strong> and <strong>automatically marked</strong>.
+
+                </p>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4>Assessment Details</h4>
+                                </div>
+                                <div style="height:250px;" class="panel-body">
+                                    <b>Trainer</b>: {{results.admin}}<br>
+                                    <b>Assessment</b>: {{results.assessment.title}}<br>
+                                    <b>Version</b>: {{results.version.no}}<br>
+                                    <b>Completed</b>: {{results.date  | date:"dd/MM/yyyy"}}<br>
+                                    <br>
+                                    <b>Grade</b>: {{results.percent}}%<br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4>Questions Breakdown</h4>
+                                </div>
+                                <div style="height:250px;overflow-y:auto;padding:0px;" class="panel-body">
+                                    <table  class="table table-responsive">
+                                        <tr ng-class="{incorrectAnswer: markedAnswer.result.score == 0,
+                                                correctAnswer: markedAnswer.result.score == markedAnswer.result.possible,
+                                                partlyCorrectAnswer: markedAnswer.result.score != markedAnswer.result.possible &&
+                                                                    markedAnswer.result.score != 0}"
+                                            ng-repeat="markedAnswer in results.markedAnswers track by $index">
+
+                                            <td style="vertical-align:middle;">
+                                                <p style="margin-bottom:0px;font-size:25px;">Q{{$index+1}}</p>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                {{markedAnswer.question}}
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <b>{{markedAnswer.result.score}}/{{markedAnswer.result.possible}} </b>
+                                                <span style="font-size:10px;">({{markedAnswer.result.score/markedAnswer.result.possible*100 | number:0}}%)</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -45,7 +45,7 @@
 
                         <!-- Future -->
                         <div ng-show="futureAssessments.length>0">
-                            <h4>Coming up in the next week</h4>
+                            <h4>Coming up</h4>
                             <ul class="list-group"  style="max-height:200px;overflow-y: scroll">
                                 <li ng-repeat="futureAssessment in futureAssessments| orderBy: 'startDate':false" class="list-group-item">
                                     <button style="float:right" ng-click="goToStudentScheduledAssessmentPage(futureAssessment._id)" ng-show="findDurationInMinutes('now', futureAssessment.startDate) < 30" class="btn btn-default">View</button>
@@ -70,7 +70,7 @@
                     <div style="cursor:pointer" ng-click="goToAssessments()" class="panel-heading">
                         <h3 style="margin-top:10px;">
                             Trainers
-                            <span style="float:right;" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <span style="float:right;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
                         </h3>
                     </div>
 
@@ -94,7 +94,7 @@
                     <div style="cursor:pointer" ng-click="goToStudents()" class="panel-heading">
                         <h3 style="margin-top:10px;">
                             Completed Assessments
-                            <span style="float:right" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            <span style="float:right" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -102,6 +102,8 @@
                             <div style="max-height:200px;overflow-y: scroll" >
                                 <li ng-repeat="assessmentResult in student.assessmentResults | orderBy:'date'" class="list-group-item">
                                     <div>
+                                        <button style="float:right" ng-click="sendToResults(assessmentResult.scheduledAssessment)" class="btn btn-default">Breakdown</button>
+
                                         <b>Assessment: </b> {{assessmentResult.assessment.title}} </br>
                                         <b>Version: </b>  {{assessmentResult.version}}</br>
                                         <b>Date: </b>  {{assessmentResult.date  | date:"dd/MM/yyyy"}}</br>

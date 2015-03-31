@@ -433,6 +433,8 @@ exports.attemptAssessmentEnd = function(req, res) {
                                                 var assessmentGrade = assessmentMarker.markAssessment(assessment, req.body);
                                                 assessmentGrade.assessment = new ObjectId(scheduledAssessment.assessment);
                                                 assessmentGrade.version = new ObjectId(scheduledAssessment.version);
+                                                assessmentGrade.admin = scheduledAssessment.admin;
+                                                assessmentGrade.scheduledAssessment = scheduledAssessment._id;
 
                                                 dataUploadRepository.insertAssessmentResultIntoStudent(req.params.studentUsername, assessmentGrade, function(err, uploadResponse) {
                                                     if (err) throw err;

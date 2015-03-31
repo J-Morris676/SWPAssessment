@@ -46,6 +46,7 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
             if (confirmed) {
                 $http.post("/resources/schedules/" + $routeParams.assessmentScheduleId + "/end/" + $scope.username, $scope.userAnswers).success(function(data, status) {
                     console.log(status);
+                    $location.path("/student/assessmentSchedules/results/" + $routeParams.assessmentScheduleId).search({justFinished: 1});
                 }).error(function(data, status) {
                     if (status == 401) {
                         $location.path("/student/home");

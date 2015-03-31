@@ -68,6 +68,9 @@ app.get('/student/assessmentSchedules/:_id', function(req, res) {
 app.get('/student/assessmentSchedules/:_id/sitAssessment', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
+app.get('/student/assessmentSchedules/results/:_id', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
 
 
 /************************************************
@@ -82,6 +85,7 @@ app.get("/resources/admins/:username", dataAccessServices.getAdminByUsername);
 
 app.get("/resources/students", dataAccessServices.getAllStudents);
 app.get("/resources/students/:username", validate(paramsValidation.user), dataAccessServices.getStudentByUserName);
+app.get("/resources/students/:username/results/:assessmentScheduleId", dataAccessServices.getStudentResultsByUsernameAndScheduleId);
 
 app.get("/resources/assessments", dataAccessServices.getAllAssessments);
 app.get("/resources/assessments/:assessmentId", validate(paramsValidation.assessment), dataAccessServices.getAssessmentById);

@@ -70,7 +70,9 @@ var resultSchema = new Schema({
     "markedAnswers": Array,
     "percent": Number,
     "assessment": Schema.Types.ObjectId,
-    "version": Schema.Types.ObjectId
+    "version": Schema.Types.ObjectId,
+    "admin": String,
+    "scheduledAssessment": Schema.Types.ObjectId
 }, { versionKey: false });
 
 var studentSchema = new Schema({

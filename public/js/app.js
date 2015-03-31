@@ -16,6 +16,7 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.studentHome",
     "myApp.studentAssessmentSchedule",
     "myApp.studentSitAssessment",
+    "myApp.studentResults",
 
     //Directives:
     "myApp.timeDirectives",
@@ -50,6 +51,7 @@ angular.module('myApp', ["myApp.signIn",
         $routeProvider.when('/student/home', {templateUrl: 'parts/student/home.html', controller: 'studentHomeCtrl'});
         $routeProvider.when('/student/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/student/assessmentSchedule.html', controller: 'studentAssessmentScheduleCtrl'});
         $routeProvider.when('/student/assessmentSchedules/:assessmentScheduleId/sitAssessment', {templateUrl: 'parts/student/sitAssessment.html', controller: 'studentSitAssessmentCtrl'});
+        $routeProvider.when('/student/assessmentSchedules/results/:assessmentScheduleId', {templateUrl: 'parts/student/studentResults.html', controller: 'studentResultsCtrl'});
 
 
         $routeProvider.otherwise({redirectTo: '/signIn'});

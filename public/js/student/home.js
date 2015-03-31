@@ -16,6 +16,7 @@ angular.module('myApp.studentHome', ['ngResource'])
         var getUser = function(username) {
             $http.get("/resources/students/" + username).success(function(data, status) {
                 $scope.student = data;
+                insertTrainerUnique(data.assessmentResults);
                 console.log($scope.student);
             });
         };
@@ -74,4 +75,9 @@ angular.module('myApp.studentHome', ['ngResource'])
         $scope.goToSitAssessment = function(scheduledAssessmentId) {
             $location.path("/student/assessmentSchedules/" + scheduledAssessmentId + "/sitAssessment");
         };
+
+        $scope.sendToResults = function(scheduleId) {
+            console.log("/student/assessmentSchedules/results/" + scheduleId)
+            $location.path("/student/assessmentSchedules/results/" + scheduleId);
+        }
     });

@@ -77,6 +77,38 @@ exports.findStudentByUsername = function(username, projection, cb) {
     });
 };
 
+exports.findStudentByUsernameAndAssessmentScheduleId = function(username, scheduleId, cb) {
+    databaseConnection.students.findOne({"username": username, "assessmentResults.scheduledAssessment": scheduleId},
+        {"assessmentResults.markedAnswers.result.actual": 0}).lean().exec(function(err, data) {
+            if (data != null) {
+                for (var result = 0; result < data.assessmentResults.length; result++) {
+                    if (data.assessmentResults[result].scheduledAssessment == scheduleId) {
+                        data = data.assessmentResults[result];
+                        //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
+                        databaseConnection.assessments.findOne({_id: data.assessment}, {"versions.QAs.answer": 0}).lean().exec(function(err, assessment) {
+                            if (assessment != null) data.assessment = {"title": assessment.title};
+                            for (var version in assessment.versions) {
+                                if (assessment.versions[version]._id.equals(data.version)) {
+                                    data.version = {
+                                        "no": (parseInt(version)+1)
+                                    };
+                                    break;
+                                }
+                            }
+
+                            repositoryCallback(err, data, cb);
+                        })
+                        break;
+                    }
+                }
+            }
+            else {
+                repositoryCallback(err, null, cb);
+            }
+
+    });
+};
+
 exports.findStudentById = function(id, cb) {
     databaseConnection.students.findOne({"_id": id}, {password: 0}, function(err, data) {repositoryCallback(err,data,cb);});
 };

@@ -41,3 +41,14 @@ footer {
     display: flex;
     align-items: center;
 }
+
+.incorrectAnswer {
+     background-color:#ff9494;
+}
+
+.correctAnswer {
+     background-color:#99FF66;
+}
+.partlyCorrectAnswer {
+    background-color:#FF9966;
+}
