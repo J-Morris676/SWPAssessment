@@ -34,6 +34,15 @@ exports.insertAssessmentResultIntoStudent = function(username, assessmentResults
         });
 };
 
+//Drops the updated 'assessmentAnswers' field and adds a grade to the same Student:
+exports.insertGradeIntoAssessmentScheduleAndRemoveUpdatedAnswersByScheduleIdAndUsername = function(scheduleId, username, grade, cb) {
+  databaseConnection.assessmentSchedule.update({ "_id": scheduleId, "students.username": username},
+      { $unset: { "students.$.assessmentAnswers": ""}, $set: {"students.$.grade": grade}},
+      function(err, data) {
+          repositoryCallback(err,data,cb);
+      });
+};
+
 exports.insertAdmin = function(admin, cb) {
     databaseConnection.admins(admin).save(function(err, data) {repositoryCallback(err,data,cb);});
 };

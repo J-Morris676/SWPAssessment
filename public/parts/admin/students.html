@@ -87,13 +87,15 @@
                             {{student.assessmentResults.length}}
                         </td>
                         <td>
-                            <button style="margin-left:5px;float:right;" ng-click="deleteStudent(student.username)" class="btn btn-danger" style="float:right">
+                            <button style="margin-left:5px;float:right;" ng-click="deleteStudent(student.username)" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                             <button ng-click="goToStudent(student.username)" class="btn btn-warning" style="float:right">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
-
+                            <button ng-show="student.assessmentResults.length>0" style="margin-right:5px;float:right;" class="btn btn-default" ng-click="goToStudentAssessmentsResults(student.username)">
+                                View Results
+                            </button>
                         </td>
                     </tr>
                 </table>

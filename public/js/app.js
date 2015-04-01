@@ -11,6 +11,8 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.student",
     "myApp.assessmentSchedules",
     "myApp.assessmentSchedule",
+    "myApp.studentAssessmentResults",
+    "myApp.studentAssessmentsResults",
 
     //Student modules:
     "myApp.studentHome",
@@ -44,6 +46,9 @@ angular.module('myApp', ["myApp.signIn",
 
         $routeProvider.when('/admin/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
         $routeProvider.when('/admin/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});
+
+        $routeProvider.when('/admin/students/:studentUsername/results', {templateUrl: 'parts/admin/studentResults/studentAssessmentsResults.html', controller: 'studentAssessmentsResultsCtrl'});
+        $routeProvider.when('/admin/students/:studentUsername/results/:assessmentScheduleId', {templateUrl: 'parts/admin/studentResults/studentAssessmentResults.html', controller: 'studentAssessmentResultsCtrl'});
 
         /*
             Student routes

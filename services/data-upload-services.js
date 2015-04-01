@@ -437,12 +437,19 @@ exports.attemptAssessmentEnd = function(req, res) {
                                                 assessmentGrade.scheduledAssessment = scheduledAssessment._id;
 
                                                 dataUploadRepository.insertAssessmentResultIntoStudent(req.params.studentUsername, assessmentGrade, function(err, uploadResponse) {
-                                                    if (err) throw err;
-                                                    //Remove correct answer before sending result back:
-                                                    for (var markedAnswer=0;markedAnswer < assessmentGrade.markedAnswers.length; markedAnswer++) {
-                                                        delete assessmentGrade.markedAnswers[markedAnswer].result.actual;
+                                                    if (err) res.status(500).json(err);
+                                                    else {
+                                                        //Remove correct answer before sending result back:
+                                                        for (var markedAnswer=0;markedAnswer < assessmentGrade.markedAnswers.length; markedAnswer++) {
+                                                            delete assessmentGrade.markedAnswers[markedAnswer].result.actual;
+                                                        }
+                                                        dataUploadRepository.insertGradeIntoAssessmentScheduleAndRemoveUpdatedAnswersByScheduleIdAndUsername(scheduledAssessment._id, req.params.studentUsername, assessmentGrade.percent, function(err) {
+                                                            if (err) res.status(500).json(err);
+                                                            else {
+                                                                res.status(201).json({markedAssessment: assessmentGrade, endAssessment: true, message: "User " + req.params.studentUsername + " finished assessment."});
+                                                            }
+                                                        });
                                                     }
-                                                    res.status(201).json({markedAssessment: assessmentGrade, endAssessment: true, message: "User " + req.params.studentUsername + " finished assessment."});
                                                 })
                                             }
                                             catch(e) {

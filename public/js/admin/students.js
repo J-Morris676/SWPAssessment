@@ -81,4 +81,7 @@ angular.module('myApp.students', ['ngResource'])
         $scope.goToStudent = function(username) {
             $location.path("/admin/students/" + username);
         };
+        $scope.goToStudentAssessmentsResults = function(username) {
+            $location.path("/admin/students/" + username + "/results");
+        }
     });

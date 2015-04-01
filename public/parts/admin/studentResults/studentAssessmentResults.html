@@ -1,0 +1,95 @@
+<section style="margin-top: 25px">
+    <div  class="panel panel-default">
+        <div ng-show="results!=null" class="panel-body">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Assessment Details</h4>
+                        </div>
+                        <div style="height:250px;" class="panel-body">
+                            <b>Username</b>: {{studentUsername}}<br>
+                            <b>Trainer</b>: {{results.admin}}<br>
+                            <b>Assessment</b>: {{results.assessment.title}}<br>
+                            <b>Version</b>: {{results.version.no}}<br>
+                            <b>Completed</b>: {{results.date  | date:"dd/MM/yyyy"}}<br>
+                            <br>
+                            <b>Grade</b>: {{results.percent}}%<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Questions Breakdown</h4>
+                        </div>
+                        <div style="height:250px;overflow-y:auto;padding:0px;" class="panel-body">
+                            <table  class="table table-responsive">
+                                <tr ng-class="{incorrectAnswer: markedAnswer.result.score == 0,
+                                        correctAnswer: markedAnswer.result.score == markedAnswer.result.possible,
+                                        partlyCorrectAnswer: markedAnswer.result.score != markedAnswer.result.possible &&
+                                                            markedAnswer.result.score != 0}"
+                                    ng-repeat="markedAnswer in results.markedAnswers track by $index">
+
+                                    <td style="vertical-align:middle;">
+                                        <p style="margin-bottom:0px;font-size:25px;">Q{{$index+1}}</p>
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <div class="row">
+                                            <div style="margin-top:5px;" class="col-sm-12 col-md-1">
+                                                <b>Q:</b>
+                                            </div>
+                                            <div class="col-sm-12 col-md-10">
+                                                <input class="form-control"disabled ng-model="markedAnswer.question">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="margin-top:5px;" class="col-sm-12 col-md-1">
+                                                <b>A:</b>
+                                            </div>
+                                            <div class="col-sm-12 col-md-10">
+                                                <input ng-show="markedAnswer.type!='free'" class="form-control"disabled ng-model="markedAnswer.answer">
+                                                <textarea style="resize: none;" ng-show="markedAnswer.type=='free'" rows="5" class="form-control"disabled ng-model="markedAnswer.answer"></textarea>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <b>{{markedAnswer.result.score}}/{{markedAnswer.result.possible}} </b>
+                                        <span style="font-size:10px;">({{markedAnswer.result.score/markedAnswer.result.possible*100 | number:0}}%)</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Loader -->
+        <div ng-show="results==null" class="panel panel-body">
+            <div class="spinner">
+                <div class="spinner-container container1">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container2">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container3">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div style="margin-left:27px;">Loading..</div>
+            </div>
+        </div>
+    </div>
+</section>

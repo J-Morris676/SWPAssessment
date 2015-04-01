@@ -321,10 +321,14 @@ exports.getScheduledAssessmentsById = function(req, res) {
     else if (authCheck.student.checkAuthenticated(req.user)) {
         dataRepository.findScheduledAssessmentById(req.params.scheduledAssessmentId, function (err, scheduledAssessment) {
             if (err) res.status(500).json(err);
-            else if (scheduledAssessment == null) res.json({});
+            else if (scheduledAssessment == null) res.status(404).json(scheduledAssessment);
             else {
-                for (var student in scheduledAssessment.students) {
-                    if (scheduledAssessment.students[student].username == req.user.student.username) {
+                delete scheduledAssessment.assessment.versions;
+                for (var studentIndex = 0; studentIndex < scheduledAssessment.students.length; studentIndex++) {
+                    if (scheduledAssessment.students[studentIndex].username == req.user.student.username) {
+                        //Only return the student for students (Prevent from seeing other students)
+                        scheduledAssessment.student = scheduledAssessment.students[studentIndex];
+                        delete scheduledAssessment.students;
                         res.json(scheduledAssessment);
                         return;
                     }

@@ -94,7 +94,7 @@ var assessmentSchedule = new Schema({
     endDate: Date,
     assessment: Schema.Types.ObjectId,
     version: Schema.Types.ObjectId,
-    students: [ {username: String, assessmentAnswers: Array, dates: {startDate: Date, endDate: Date} }],
+    students: [ {username: String, assessmentAnswers: Array, grade: Number, dates: {startDate: Date, endDate: Date} }],
     admin: String
 }, { versionKey: false });
 

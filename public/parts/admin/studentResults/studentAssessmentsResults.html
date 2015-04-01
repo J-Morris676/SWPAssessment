@@ -1,0 +1,69 @@
+<section style="margin-top: 25px">
+    <div  class="panel panel-default">
+        <div ng-show="student!=null" class="panel-body">
+            <h2 style="text-align: center;margin-bottom:25px;">Assessments Completed by {{student.username}}</h2>
+            <div class="table-responsive">
+                <table class="table table-striped ">
+                    <th>Assessment</th>
+                    <th>Trainer</th>
+                    <th>Completed Date</th>
+                    <th>Result</th>
+                    <th></th>
+
+                    <tr ng-repeat="assessmentResult in student.assessmentResults track by $index">
+                        <td>
+                            <p >{{assessmentResult.assessment.title}} [version:{{assessmentResult.version}}]</p>
+                        </td>
+                        <td>
+                            <p>
+                                {{assessmentResult.admin}}
+                                <span ng-show="username==assessmentResult.admin">(You)</span>
+                            </p>
+                        </td>
+                        <td>
+                            <p >{{assessmentResult.date | date:"dd/MM/yyyy 'at' h:mma"}}</p>
+                        </td>
+                        <td>
+                            <p>{{assessmentResult.percent}}%</p>
+                        </td>
+
+                        <td>
+                            <button ng-click="goToStudentAssessmentResults(assessmentResult.scheduledAssessment)" class="btn btn-default">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+
+        </div>
+
+        <!-- Loader -->
+        <div ng-show="student==null" class="panel panel-body">
+            <div class="spinner">
+                <div class="spinner-container container1">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container2">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container3">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div style="margin-left:27px;">Loading..</div>
+            </div>
+        </div>
+    </div>
+</section>

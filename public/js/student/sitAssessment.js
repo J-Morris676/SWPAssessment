@@ -11,10 +11,6 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
             $scope.assessmentSchedule = data;
             $scope.questions = data.version.object.QAs;
 
-            //TODO: Prevent seeing 'assessmentAnswers' field in students on 'data'.
-            //TODO: On server, only retrieve 'Student' for assessmentSchedules..
-            //TODO: Then pre-populate $scope.userAnswers with assessmentAnswers in Student! (For continuing..)
-
             //Populate userAnswers of the questions
             for (var question in $scope.questions) {
                 if ($scope.questions[question].type == "call") $scope.questions[question].callView = "background";
@@ -25,6 +21,10 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
                     "type": $scope.questions[question].type
                 });
             }
+
+            //This will pre-populate userAnswers with any answers a user has chosen in a previous session (For continuing):
+            $scope.userAnswers = data.student.assessmentAnswers;
+
         });
 
         //Starts assessment:

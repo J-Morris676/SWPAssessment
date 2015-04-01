@@ -203,19 +203,17 @@ exports.findAllScheduledAssessments = function(query, cb) {
 };
 
 exports.findScheduledAssessmentById = function(scheduleId, cb) {
-    databaseConnection.assessmentSchedule.findOne({"_id": scheduleId},
-        function(err, data) {
+    databaseConnection.assessmentSchedule.findOne({"_id": scheduleId}).lean().exec( function(err, data) {
             if (data == null) {
                 cb({"message": "Scheduled assessment " + scheduleId + " couldn't be found."});
             }
             else {
                 //Mongoose populate doesn't work, doing it ourselves populating version AND assessment:
-                databaseConnection.assessments.findOne({_id: data.assessment}, {"versions.QAs.answer": 0}, function(err, assessment) {
-                    assessment = assessment.toObject();
-                    if (assessment != null) data["_doc"].assessment = assessment;
+                databaseConnection.assessments.findOne({_id: data.assessment}, {"versions.QAs.answer": 0}).lean().exec(function(err, assessment) {
+                    if (assessment != null) data.assessment = assessment;
                     for (var version in assessment.versions) {
-                        if (assessment.versions[version]._id.equals(data["_doc"].version)) {
-                            data["_doc"].version = {
+                        if (assessment.versions[version]._id.equals(data.version)) {
+                            data.version = {
                                 "no": (parseInt(version)+1),
                                 "object": assessment.versions[version]
                             };
