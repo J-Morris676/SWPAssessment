@@ -64,6 +64,9 @@ app.get('/admin/students/:studentId/results', function(req, res) {
 app.get('/admin/students/:studentId/results/:scheduleId', function(req, res) {
     res.sendFile('index.html', { root: __dirname+'/public' });
 });
+app.get('/admin/assessmentSchedules/:id/results', function(req, res) {
+    res.sendFile('index.html', { root: __dirname+'/public' });
+});
 
 //Student paths:
 app.get('/student/:name', function(req, res) {

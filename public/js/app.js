@@ -13,6 +13,7 @@ angular.module('myApp', ["myApp.signIn",
     "myApp.assessmentSchedule",
     "myApp.studentAssessmentResults",
     "myApp.studentAssessmentsResults",
+    "myApp.scheduledAssessmentResults",
 
     //Student modules:
     "myApp.studentHome",
@@ -22,6 +23,7 @@ angular.module('myApp', ["myApp.signIn",
 
     //Directives:
     "myApp.timeDirectives",
+    "myApp.graphDirectives",
 
     //Lib modules:
     "ngRoute",
@@ -43,6 +45,7 @@ angular.module('myApp', ["myApp.signIn",
 
         $routeProvider.when('/admin/assessmentSchedules', {templateUrl: 'parts/admin/assessmentSchedules.html', controller: 'assessmentSchedulesCtrl'});
         $routeProvider.when('/admin/assessmentSchedules/:assessmentScheduleId', {templateUrl: 'parts/admin/assessmentSchedule.html', controller: 'assessmentScheduleCtrl'});
+        $routeProvider.when('/admin/assessmentSchedules/:assessmentScheduleId/results', {templateUrl: 'parts/admin/scheduledAssessmentResults/scheduledAssessmentResults.html', controller: 'scheduledAssessmentResultsCtrl'});
 
         $routeProvider.when('/admin/students', {templateUrl: 'parts/admin/students.html', controller: 'studentsCtrl'});
         $routeProvider.when('/admin/students/:studentUsername', {templateUrl: 'parts/admin/student.html', controller: 'studentCtrl'});

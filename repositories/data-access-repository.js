@@ -248,12 +248,21 @@ exports.hasStudentStartedScheduledAssessment = function(scheduledAssessmentId, s
 };
 
 exports.hasStudentFinishedScheduledAssessment = function(scheduledAssessmentId, studentUsername, cb) {
-    databaseConnection.assessmentSchedule.findOne({_id: ObjectId(scheduledAssessmentId), "students.username": studentUsername, "students": { "$elemMatch": {"dates.endDate": {$exists: true}}}},
+    databaseConnection.assessmentSchedule.aggregate([
+            {$unwind : "$students" },
+            {
+                $match: {
+                    _id: scheduledAssessmentId,
+                    "students.username":  studentUsername,
+                    "students.dates.endDate": {"$exists": true}
+                }
+            }
+        ],
         function(err,data) {
             if (err) {
                 repositoryCallback(err, null,cb);
             }
-            else if (data == null) {
+            else if (data.length == 0) {
                 repositoryCallback(err,false,cb);
             }
             else {

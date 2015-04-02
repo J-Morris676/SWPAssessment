@@ -23,6 +23,6 @@
     "bootstrap": "3.3.2",
     "jquery": "2.0.3",
     "angular-bootstrap": "0.12.1",
-    "underscore": "1.8.2"
+    "d3": "3.5.5"
   }
 }

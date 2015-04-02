@@ -23,7 +23,9 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
             }
 
             //This will pre-populate userAnswers with any answers a user has chosen in a previous session (For continuing):
-            $scope.userAnswers = data.student.assessmentAnswers;
+            for (var previousAnswerIndex = 0; previousAnswerIndex < data.student.assessmentAnswers.length; previousAnswerIndex++) {
+                $scope.userAnswers[previousAnswerIndex].answer = data.student.assessmentAnswers[previousAnswerIndex].answer;
+            }
 
         });
 

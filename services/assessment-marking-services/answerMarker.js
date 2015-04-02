@@ -39,10 +39,11 @@ exports.freeTextMark = function(question, answer) {
     };
 
     for (var possibleFreeTextTerm = 0; possibleFreeTextTerm < question.answer.length; possibleFreeTextTerm++) {
-        var pattern = "^.*" + question.answer[possibleFreeTextTerm] + ".*$"
+        var pattern = "^.*" + question.answer[possibleFreeTextTerm].replace(/ /g,".*") + ".*$"
 
         var QARegex = new RegExp(pattern, "i");
-        if (QARegex.test(answer.answer)) {
+        var n = answer.answer.replace(/(\r\n|\n|\r)/gm," ");
+        if (QARegex.test(n)) {
             markObject.score++;
         }
 

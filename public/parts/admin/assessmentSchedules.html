@@ -210,8 +210,11 @@
                                 <button style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
-                                <button ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right">
+                                <button ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right;float:right">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                <button ng-show="isPast(schedule.endDate)"style="margin-left:5px;" class="btn btn-default" ng-click="goToScheduledAssessmentResults(schedule._id)">
+                                    View Results
                                 </button>
                             </td>
                         </tr>

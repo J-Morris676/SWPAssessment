@@ -107,7 +107,7 @@
                                         <b>Assessment: </b> {{assessmentResult.assessment.title}} </br>
                                         <b>Version: </b>  {{assessmentResult.version}}</br>
                                         <b>Date: </b>  {{assessmentResult.date  | date:"dd/MM/yyyy"}}</br>
-                                        <b>Result: </b>  {{assessmentResult.percent}}%</br>
+                                        <b>Result: </b>  {{assessmentResult.percent|number:0}}%</br>
                                     </div>
                                 </li>
                             </div>

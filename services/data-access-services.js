@@ -131,7 +131,7 @@ exports.getStudentResultsByUsernameAndScheduleId = function(req, res) {
     if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
         dataRepository.findStudentByUsernameAndAssessmentScheduleId(req.params.username, req.params.assessmentScheduleId, function(err, result) {
             if (err) res.status(500).json(err);
-            else if (result == null) res.status(400).json(result);
+            else if (result == null) res.status(404).json(result);
             else res.json(result);
         })
     }

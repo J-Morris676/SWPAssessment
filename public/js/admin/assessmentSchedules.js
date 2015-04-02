@@ -198,8 +198,20 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
             $scope.student = null;
         };
 
+
+        //Determines whether the given date is in the past:
+        $scope.isPast = function(date) {
+            if (new Date(date) < new Date()) {
+                return true;
+            }
+            return false;
+        };
+
         $scope.goToAssessmentSchedule = function(scheduleId) {
             $location.path("/admin/assessmentSchedules/" + scheduleId);
+        };
+        $scope.goToScheduledAssessmentResults = function(scheduleId) {
+            $location.path("/admin/assessmentSchedules/" + scheduleId + "/results");
         }
 
     });

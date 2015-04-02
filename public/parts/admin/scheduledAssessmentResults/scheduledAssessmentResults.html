@@ -1,0 +1,105 @@
+<section style="margin-top: 25px">
+    <div class="panel panel-default">
+
+        <div class="panel panel-body">
+            <div ng-show="students!=null">
+                <h2 style="text-align: center;margin-bottom:25px;">Assessment Results</h2>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <div style="height:200px;">
+                            <pie-chart ng-model="startPercentage"></pie-chart>
+                        </div>
+
+                        <div class="caption">
+                            <p style="font-weight:bold;text-align:center">Percentage of students that started</p>
+                        </div>
+                    </div>
+                    <div class="thumbnail">
+                        <div style="height:200px;">
+                            <pie-chart ng-model="finishPercentage"></pie-chart>
+                        </div>
+
+                        <div class="caption">
+                            <p style="font-weight:bold;text-align:center">Percentage of students that finished</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive col-md-9">
+                    <div style="margin-bottom:20px;max-height:280px;overflow-y:auto">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Username</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Grade</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="studentResult in students">
+                                <td>{{studentResult.username}}</td>
+                                <td>{{studentResult.dates.startDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+                                <td>{{studentResult.dates.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+                                <td><span ng-show="studentResult.grade!=null">{{studentResult.grade|number:0}}%</span></td>
+                                <td>
+                                    <button ng-show="studentResult.dates.endDate != null" ng-click="goToStudentResults(studentResult.username)" class="btn btn-default">Breakdown</button>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+
+                        <div class="well">
+                            <div>
+                                <div ng-init="collapseChart=true" style="float:right">
+                                    <span ng-show="collapseChart==true" ng-click="collapseChart=!collapseChart" style="cursor:pointer;" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                                    <span ng-show="collapseChart==false" ng-click="collapseChart=!collapseChart" style="cursor:pointer;" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+                                </div>
+                                <h4 style="text-align: center">Student Results Chart</h4>
+                            </div>
+                            <div collapse="collapseChart" >
+                                <div class="row">
+                                    <div style="height:300px;" class="col-md-12">
+                                        <student-grades-graph ng-model="students"></student-grades-graph>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Loader -->
+        <div ng-show="students==null" class="panel panel-body">
+            <div class="spinner">
+                <div class="spinner-container container1">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container2">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div class="spinner-container container3">
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                    <div class="circle3"></div>
+                    <div class="circle4"></div>
+                </div>
+                <div style="margin-left:27px;">Loading..</div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
