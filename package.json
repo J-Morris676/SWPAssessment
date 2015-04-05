@@ -26,6 +26,7 @@
         "connect-flash": "*",
         "express-session": "*",
         "passport": "*",
-        "passport-local": "*"
+        "passport-local": "*",
+        "natural": "0.2.1"
     }
 }

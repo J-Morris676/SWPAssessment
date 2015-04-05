@@ -125,7 +125,7 @@ exports.getStudentByUserName = function(req, res) {
     }
 };
 
-//Unfinished:
+
 exports.getStudentResultsByUsernameAndScheduleId = function(req, res) {
     logger.info("GET: Results for student " + req.params.username + " in assessment " + req.params.assessmentScheduleId);
     if (authCheck.admin.checkAuthenticated(req.user) || authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {

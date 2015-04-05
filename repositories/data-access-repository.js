@@ -97,7 +97,7 @@ exports.findStudentByUsernameAndAssessmentScheduleId = function(username, schedu
                             }
 
                             repositoryCallback(err, data, cb);
-                        })
+                        });
                         break;
                     }
                 }

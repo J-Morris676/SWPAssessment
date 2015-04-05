@@ -454,7 +454,7 @@ exports.attemptAssessmentEnd = function(req, res) {
                                             }
                                             catch(e) {
                                                 //Responds any exceptions from marking:
-                                                res.json(e);
+                                                res.status(500).json({"message": e.toString()});
                                             }
                                         }
                                         else {
