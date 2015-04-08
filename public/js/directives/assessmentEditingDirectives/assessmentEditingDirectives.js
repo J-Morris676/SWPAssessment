@@ -20,6 +20,10 @@ angular.module("myApp.assessmentEditingDirectives", [])
             link: function (scope, element, attrs) {
                 console.log(scope);
 
+                scope.popoverTemplates = {
+                    typeInput: "parts/admin/popoverTpls/assessments/typeInput.html"
+                };
+
                 scope.updateQuestionCallback = function(question, updateCallback) {
                     scope.updateCallback(scope.version, scope.questionNumber, question, updateCallback);
                 };
@@ -72,7 +76,12 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 questionUpdate: "=questionUpdate"
             },
             link: function (scope, element, attrs) {
-                console.log(scope);
+
+                scope.popoverTemplates = {
+                    questionInput: "parts/admin/popoverTpls/assessments/questionInput.html",
+                    addAnswerInput: "parts/admin/popoverTpls/assessments/addAnswerInput.html",
+                    answersTable: "parts/admin/popoverTpls/assessments/answersTable.html"
+                };
 
                 scope.changes = false;
 
@@ -141,7 +150,12 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 questionUpdate: "=questionUpdate"
             },
             link: function (scope, element, attrs) {
-                console.log(scope);
+
+                scope.popoverTemplates = {
+                    questionInput: "parts/admin/popoverTpls/assessments/questionInput.html",
+                    addAnswerInput: "parts/admin/popoverTpls/assessments/addAnswerInput.html",
+                    freeTextAnswersTable: "parts/admin/popoverTpls/assessments/freeTextAnswersTable.html"
+                };
 
                 scope.changes = false;
 
@@ -208,7 +222,14 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 questionUpdate: "=questionUpdate"
             },
             link: function (scope, element, attrs) {
-                console.log(scope);
+
+                scope.popoverTemplates = {
+                    questionInput: "parts/admin/popoverTpls/assessments/questionInput.html",
+                    addAnswerInput: "parts/admin/popoverTpls/assessments/addAnswerInput.html",
+                    answersTable: "parts/admin/popoverTpls/assessments/answersTable.html",
+                    callInfoBackgroundInput: "parts/admin/popoverTpls/assessments/callInfoBackgroundInput.html",
+                    callInfoDetailsInput: "parts/admin/popoverTpls/assessments/callInfoDetailsInput.html"
+                };
 
                 scope.changes = false;
                 scope.view = 'background';

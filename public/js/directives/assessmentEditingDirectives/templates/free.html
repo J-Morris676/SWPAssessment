@@ -2,7 +2,7 @@
     <div class="col-xs-12 col-sm-2 col-md-2" style="padding-top:5px;">
         <label for="question-{{ngModel._id}}">Question:</label>
     </div>
-    <div class="col-xs-10 col-sm-9 col-md-9">
+    <div custom-popover popover-title="Enter Question" popover-html="popoverTemplates.questionInput" popover-placement="bottom" class="col-xs-10 col-sm-9 col-md-9">
         <input ng-change="changes=true" placeholder="What is the colour of the sky?" ng-model="ngModel.question" id="question-{{ngModel._id}}" class="form-control">
     </div>
 </div>
@@ -14,7 +14,7 @@
         <div class="col-xs-12 col-sm-2 col-md-2">
             <label for="answer-{{ngModel._id}}">Add Answer: </label>
         </div>
-        <div class="col-xs-10 col-sm-9 col-md-9">
+        <div custom-popover popover-title="Add Answer" popover-html="popoverTemplates.addAnswerInput" popover-placement="bottom" class="col-xs-10 col-sm-9 col-md-9">
             <div class="input-group">
                 <input ng-keyup="$event.keyCode == 13 && isValidAnswer() &&  addAnswer()" ng-model="answer" id="answer-{{ngModel._id}}" placeholder="blue" class="form-control">
                       <span class="input-group-btn">
@@ -30,7 +30,7 @@
         <div class="col-xs-12 col-sm-2 col-md-2">
             <label id="answers-{{ngModel._id}}">Answers: </label>
         </div>
-        <div style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
+        <div custom-popover popover-title="Answers" popover-html="popoverTemplates.freeTextAnswersTable" popover-placement="top" style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
             <table class="table table-hover table-condensed">
                 <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear;" ng-repeat="answer in ngModel.answer track by $id(answer)">
                     <td>

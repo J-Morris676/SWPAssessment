@@ -5,7 +5,7 @@
 
             <!-- Schedule Assessment -->
             <div style="padding:10px;margin-left:15%;margin-right:15%;" class="well">
-                <div>
+                <div custom-popover popover-title="Schedule Assessment" popover-html="popoverTemplates.assessmentSchedule" popover-placement="top">
                     <div ng-init="collapseSchedule=true" style="float:right">
                         <span ng-show="collapseSchedule==true" ng-click="collapseSchedule=!collapseSchedule" style="cursor:pointer;" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
                         <span ng-show="collapseSchedule==false" ng-click="collapseSchedule=!collapseSchedule" style="cursor:pointer;" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
@@ -18,7 +18,7 @@
                             <label>Trainer: </label>
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <input ng-model="newAssessmentSchedule.admin" placeholder="Username.." typeahead="admin for admin in getAdmins($viewValue)" class="form-control">
+                            <input custom-popover popover-title="Select a Trainer" popover-html="popoverTemplates.trainerInputBox" popover-placement="right" ng-model="newAssessmentSchedule.admin" placeholder="Username.." typeahead="admin for admin in getAdmins($viewValue)" class="form-control">
                         </div>
                     </div>
                     <div style="margin-bottom:10px;" class="row vertical-align">
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <select ng-change="newAssessmentSchedule.version=selectedAssessment(newAssessmentSchedule.assessment).versions[0]._id" ng-model="newAssessmentSchedule.assessment" class="form-control">
+                            <select custom-popover popover-title="Select an Assessment" popover-html="popoverTemplates.assessmentInputBox" popover-placement="right" ng-change="newAssessmentSchedule.version=selectedAssessment(newAssessmentSchedule.assessment).versions[0]._id" ng-model="newAssessmentSchedule.assessment" class="form-control">
                                 <option
                                         ng-repeat="assessment in assessments"
                                         value="{{assessment._id}}">
@@ -41,10 +41,10 @@
                             <label>Version: </label>
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <p style="color:red;font-style: italic;" ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length == 0">
+                            <p custom-popover popover-title="Select an Assessment Version" popover-html="popoverTemplates.invalidVersionInput" popover-placement="right" style="color:red;font-style: italic;" ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length == 0">
                                 The selected assessment has no versions, you can make one <a ng-href="/admin/assessments/{{selectedAssessment(newAssessmentSchedule.assessment)._id}}">here</a>
                             </p>
-                            <select ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length > 0" ng-model="newAssessmentSchedule.version" class="form-control">
+                            <select custom-popover popover-title="Select an Assessment Version" popover-html="popoverTemplates.validVersionInput" popover-placement="right" ng-show="selectedAssessment(newAssessmentSchedule.assessment).versions.length > 0" ng-model="newAssessmentSchedule.version" class="form-control">
                                 <option ng-repeat="version in selectedAssessment(newAssessmentSchedule.assessment).versions"
                                         value="{{version._id}}">
                                     {{$index+1}} ({{version.QAs.length}} question(s))
@@ -57,16 +57,16 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label >Add Student: </label>
                         </div>
-                        <div class="col-xs-10 col-sm-9 col-md-9">
+                        <div custom-popover popover-title="Select Students" popover-html="popoverTemplates.studentInput" popover-placement="right" class="col-xs-10 col-sm-9 col-md-9">
                             <input typeahead-on-select="addStudent()" ng-model="student" placeholder="Username.." typeahead="student as student.username for student in getStudents($viewValue)" class="form-control">
                         </div>
                     </div>
 
-                    <div ng-show="newAssessmentSchedule.students.length>0" style="padding-top: 10px;" class="row vertical-align">
+                    <div style="padding-top: 10px;" class="row vertical-align">
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Students: </label>
                         </div>
-                        <div style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
+                        <div custom-popover popover-title="Select Students" popover-html="popoverTemplates.studentsTable" popover-placement="right" style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
                             <table class="table table-hover table-condensed">
                                 <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear; cursor:pointer" ng-repeat="student in newAssessmentSchedule.students track by $id(student)">
                                     <td style="width:95%;">
@@ -84,8 +84,8 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Start Time: </label>
                         </div>
-                        <div class="col-xs-9 col-sm-8 col-md-8">
-                            <timepicker ng-change="updateEndDate(duration);" ng-model="newAssessmentSchedule.startDate" show-meridian="false"></timepicker>
+                        <div custom-popover popover-title="Select Start Time" popover-html="popoverTemplates.startTimeInput" popover-placement="right" class="col-xs-9 col-sm-4 col-md-3">
+                            <timepicker  ng-change="updateEndDate(duration);" ng-model="newAssessmentSchedule.startDate" show-meridian="false"></timepicker>
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
                             <label>Start Date: </label>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-6">
-                            <div class="well well-sm" style="overflow-x:auto">
+                            <div custom-popover popover-title="Select Start Date" popover-html="popoverTemplates.startDateInput" popover-placement="right" class="well well-sm" style="overflow-x:auto">
                                 <datepicker min-date="minDate" ng-change="updateEndDate(duration);" ng-model="newAssessmentSchedule.startDate"
                                             show-weeks="true" >
                                 </datepicker>
@@ -107,7 +107,7 @@
                             <label>Duration: </label>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-6">
-                            <select ng-init="duration=60;updateEndDate(duration);" ng-change="updateEndDate(duration)" ng-model="duration" class="form-control">
+                            <select custom-popover popover-title="Select Start Date" popover-html="popoverTemplates.durationInput" popover-placement="right" ng-init="duration=60;updateEndDate(duration);" ng-change="updateEndDate(duration)" ng-model="duration" class="form-control">
                                 <option value="15">15 minutes</option>
                                 <option value="30">30 minutes</option>
                                 <option value="45">45 minutes</option>
@@ -207,10 +207,10 @@
                             <td>{{schedule.students.length}}</td>
 
                             <td>
-                                <button style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
+                                <button custom-popover popover-title="Remove Scheduled Assessment" popover-html="popoverTemplates.deleteScheduledAssessment" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
-                                <button ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right;float:right">
+                                <button custom-popover popover-title="Edit Scheduled Assessment" popover-html="popoverTemplates.editAssessmentSchedule" popover-placement="left" ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right;float:right">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
                                 <button ng-show="isPast(schedule.endDate)"style="margin-left:5px;" class="btn btn-default" ng-click="goToScheduledAssessmentResults(schedule._id)">

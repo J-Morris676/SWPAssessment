@@ -2,8 +2,9 @@
     <div class="col-xs-12 col-sm-2 col-md-2" style="padding-top:5px;">
         <label for="type-{{ngModel._id}}">Type:</label>
     </div>
+
     <div class="col-xs-10 col-sm-9 col-md-9">
-        <select id="type-{{ngModel._id}}" ng-change="changeType()" ng-model="ngModel.type" class="form-control">
+        <select custom-popover popover-title="Question Type" popover-html="popoverTemplates.typeInput" popover-placement="bottom" id="type-{{ngModel._id}}" ng-change="changeType()" ng-model="ngModel.type" class="form-control">
             <option value="multi">Multiple Choice</option>
             <option value="call">Call Log</option>
             <option value="free">Free Text</option>

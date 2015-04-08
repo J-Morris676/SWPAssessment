@@ -13,6 +13,17 @@ angular.module('myApp.students', ['ngResource'])
             "lastName": ""
         };
 
+        $scope.popoverTemplates = {
+            addStudent: "parts/admin/popoverTpls/students/addStudent.html",
+            usernameInput: "parts/admin/popoverTpls/students/usernameInput.html",
+            passwordInput: "parts/admin/popoverTpls/students/passwordInput.html",
+            firstNameInput: "parts/admin/popoverTpls/students/firstNameInput.html",
+            lastNameInput: "parts/admin/popoverTpls/students/lastNameInput.html",
+            editStudent: "parts/admin/popoverTpls/students/editStudent.html",
+            viewResults: "parts/admin/popoverTpls/students/viewResults.html",
+            deleteStudent: "parts/admin/popoverTpls/students/deleteStudent.html"
+        };
+
         var getStudents = function() {
             $http.get("/resources/students").success(function(data, status) {
                 $scope.students = data;

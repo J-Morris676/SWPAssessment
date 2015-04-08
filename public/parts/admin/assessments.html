@@ -25,10 +25,10 @@
                             {{assessment.createdDate | date:"dd/MM/yyyy 'at' h:mma"}}
                         </td>
                         <td>
-                            <button style="margin-left:5px;float:right;" ng-click="deleteAssessment($index)" class="btn btn-danger" style="float:right">
+                            <button custom-popover popover-title="Delete Assessment" popover-html="popoverTemplates.deleteAssessment" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteAssessment($index)" class="btn btn-danger" style="float:right">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
-                            <button ng-click="goToAssessment(assessment._id)" class="btn btn-warning" style="float:right">
+                            <button custom-popover popover-title="Edit Assessment" popover-html="popoverTemplates.editAssessment" popover-placement="left" ng-click="goToAssessment(assessment._id)" class="btn btn-warning" style="float:right">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
 

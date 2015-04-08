@@ -10,11 +10,6 @@ var bodyParser = require('body-parser');
 var serveStatic = require('serve-static');
 var path = require('path');
 var validate = require('express-validation');
-var natural = require('natural');
-
-console.log(natural.JaroWinklerDistance("a","z"));
-console.log(natural.JaroWinklerDistance("the","te"));
-console.log(natural.LevenshteinDistance("Police Community Support Officers","asdasa Community Support Officers"));
 
 var dataAccessServices = require('./services/data-access-services');
 var dataUploadServices = require('./services/data-upload-services');

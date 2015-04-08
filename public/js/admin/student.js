@@ -13,6 +13,11 @@ angular.module('myApp.student', ['ngResource'])
         };
         getStudent();
 
+        $scope.popoverTemplates = {
+            passwordInput: "parts/admin/popoverTpls/students/passwordInput.html",
+            firstNameInput: "parts/admin/popoverTpls/students/firstNameInput.html",
+            lastNameInput: "parts/admin/popoverTpls/students/lastNameInput.html"
+        };
 
         var setMessageTimer = function(messages, isError) {
             if (!isError) {

@@ -6,7 +6,20 @@
 angular.module('myApp.assessmentSchedule', ['ngResource'])
 
     .controller("assessmentScheduleCtrl", function($scope, $http, $routeParams, $timeout) {
-        //TODO: Finish off assessment schedule editing and tighten up forms for adding stuff!
+
+        $scope.popoverTemplates = {
+            trainerInputBox: "parts/admin/popoverTpls/assessmentScheduling/trainerInputBox.html",
+            assessmentInputBox: "parts/admin/popoverTpls/assessmentScheduling/assessmentInputBox.html",
+            validVersionInput: "parts/admin/popoverTpls/assessmentScheduling/validVersionInput.html",
+            invalidVersionInput: "parts/admin/popoverTpls/assessmentScheduling/invalidVersionInput.html",
+            studentInput: "parts/admin/popoverTpls/assessmentScheduling/studentInput.html",
+            studentsTable: "parts/admin/popoverTpls/assessmentScheduling/studentsTable.html",
+            startTimeInput: "parts/admin/popoverTpls/assessmentScheduling/startTimeInput.html",
+            startDateInput: "parts/admin/popoverTpls/assessmentScheduling/startDateInput.html",
+            durationInput: "parts/admin/popoverTpls/assessmentScheduling/durationInput.html"
+        };
+
+
         $scope.getSchedule = function() {
             $http.get("/resources/schedules/" + $routeParams.assessmentScheduleId).success(function(data, status) {
                 $scope.assessmentSchedule = data;

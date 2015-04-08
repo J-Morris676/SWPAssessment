@@ -7,6 +7,15 @@ angular.module('myApp.assessment', ['ngResource'])
 
     .controller("assessmentCtrl", function($scope, $http, $routeParams) {
         console.log($routeParams);
+        $scope.popoverTemplates = {
+            assessmentTitleInput: "parts/admin/popoverTpls/assessments/assessmentTitleInput.html",
+            addVersion: "parts/admin/popoverTpls/assessments/addVersion.html",
+            deleteVersion: "parts/admin/popoverTpls/assessments/deleteVersion.html",
+            showQuestions: "parts/admin/popoverTpls/assessments/showQuestions.html",
+            showQuestion: "parts/admin/popoverTpls/assessments/showQuestion.html",
+            addQuestion: "parts/admin/popoverTpls/assessments/addQuestion.html",
+            deleteQuestion: "parts/admin/popoverTpls/assessments/deleteQuestion.html"
+        };
 
         $scope.collapsedVersions = [];
         $scope.collapsedQuestions= [];

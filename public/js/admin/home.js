@@ -7,6 +7,11 @@ angular.module('myApp.adminHome', ['ngResource'])
 
     .controller("adminHomeCtrl", function($scope, $http, $location) {
         $scope.currentDate = new Date();
+        $scope.popoverTemplate = {
+            assessmentScheduling: "parts/admin/popoverTpls/home/scheduledAssessmentPopover.html",
+            assessments: "parts/admin/popoverTpls/home/assessmentPopover.html",
+            students: "parts/admin/popoverTpls/home/students.html"
+        };
 
         $http.get("/resources/schedules").success(function(data, status) {
             $scope.assessmentSchedules = data;

@@ -3,12 +3,13 @@
         <!-- col 1 -->
         <div class="col-md-offset-1 col-md-5">
             <div class="panel panel-default">
-                <div style="cursor:pointer" ng-click="goToAssessmentSchedules()" class="panel-heading">
+                <div custom-popover popover-title="Assessment Scheduling" popover-html="popoverTemplate.assessmentScheduling" popover-placement="right" style="cursor:pointer" ng-click="goToAssessmentSchedules()" class="panel-heading">
                     <h3 style="margin-top:10px;">
                         Assessment Schedule
                         <span style="float:right" class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                     </h3>
                 </div>
+
                 <div class="panel-body">
                     <current-time format="dd/MM/yyyy', ' HH:mm" style="float:right"></current-time>
                     <!-- Currently ongoing -->
@@ -64,7 +65,7 @@
         <!-- col 2 -->
         <div class="col-md-5">
             <div class="panel panel-default">
-                <div style="cursor:pointer" ng-click="goToAssessments()" class="panel-heading">
+                <div custom-popover popover-title="Assessments" popover-html="popoverTemplate.assessments" popover-placement="left" style="cursor:pointer" ng-click="goToAssessments()" class="panel-heading">
                     <h3 style="margin-top:10px;">
                         Assessments
                         <span style="float:right;" class="glyphicon glyphicon-edit" aria-hidden="true"></span>
@@ -91,7 +92,7 @@
         <!-- col 3 -->
         <div class="col-md-offset-1 col-md-5">
             <div class="panel panel-default">
-                <div style="cursor:pointer" ng-click="goToStudents()" class="panel-heading">
+                <div custom-popover popover-title="Students" popover-html="popoverTemplate.students" popover-placement="right" style="cursor:pointer" ng-click="goToStudents()" class="panel-heading">
                     <h3 style="margin-top:10px;">
                         Students
                         <span style="float:right" class="glyphicon glyphicon-user" aria-hidden="true"></span>

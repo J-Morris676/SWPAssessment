@@ -102,7 +102,7 @@
                             <div style="max-height:200px;overflow-y: scroll" >
                                 <li ng-repeat="assessmentResult in student.assessmentResults | orderBy:'date'" class="list-group-item">
                                     <div>
-                                        <button style="float:right" ng-click="sendToResults(assessmentResult.scheduledAssessment)" class="btn btn-default">Breakdown</button>
+                                        <button custom-popover popover-title="Results Breakdown" popover-html="popoverTemplates.resultBreakdown" popover-placement="right" style="float:right" ng-click="sendToResults(assessmentResult.scheduledAssessment)" class="btn btn-default">Breakdown</button>
 
                                         <b>Assessment: </b> {{assessmentResult.assessment.title}} </br>
                                         <b>Version: </b>  {{assessmentResult.version}}</br>

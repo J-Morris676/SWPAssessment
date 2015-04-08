@@ -6,6 +6,11 @@
 angular.module('myApp.scheduledAssessmentResults', ['ngResource'])
 
     .controller("scheduledAssessmentResultsCtrl", function($scope, $http, $routeParams, $location) {
+
+        $scope.popoverTemplates = {
+            resultsBreakdown: "parts/admin/popoverTpls/assessmentResults/resultsBreakdown.html"
+        };
+
         $http.get("/resources/schedules/" + $routeParams.assessmentScheduleId).success(function (data, status) {
             console.log(data);
             $scope.students = data.students;

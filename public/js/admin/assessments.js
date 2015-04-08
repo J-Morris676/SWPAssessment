@@ -9,6 +9,10 @@ angular.module('myApp.assessments', ['ngResource'])
         $scope.newAssessment = {
             "title": ""
         };
+        $scope.popoverTemplates = {
+            editAssessment: "parts/admin/popoverTpls/assessments/editAssessment.html",
+            deleteAssessment: "parts/admin/popoverTpls/assessments/deleteAssessment.html"
+        };
 
         $scope.isValidTitle = function() {
             if ($scope.newAssessment.title == "") return false;

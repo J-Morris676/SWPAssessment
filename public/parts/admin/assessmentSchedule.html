@@ -10,7 +10,7 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Trainer: </label>
                         </div>
-                        <div class="col-xs-12 col-sm-9 col-md-9">
+                        <div custom-popover popover-title="Select a Trainer" popover-html="popoverTemplates.trainerInputBox" popover-placement="right" class="col-xs-12 col-sm-9 col-md-9">
                             <input ng-model="assessmentSchedule.admin" placeholder="Username.." typeahead="admin for admin in getAdmins($viewValue)" class="form-control">
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <select ng-options="assessment._id as assessment.title for assessment in assessments"
+                            <select custom-popover popover-title="Select an Assessment" popover-html="popoverTemplates.assessmentInputBox" popover-placement="right" ng-options="assessment._id as assessment.title for assessment in assessments"
                                     ng-change="assessmentSchedule.version=selectedAssessment(assessmentSchedule.assessment).versions[0]._id" ng-model="assessmentSchedule.assessment" class="form-control">
 
                             </select>
@@ -31,10 +31,10 @@
                             <label>Version: </label>
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9">
-                            <p style="color:red;font-style: italic;" ng-show="selectedAssessment(assessmentSchedule.assessment).versions.length == 0">
+                            <p custom-popover popover-title="Select an Assessment Version" popover-html="popoverTemplates.invalidVersionInput" popover-placement="right" style="color:red;font-style: italic;" ng-show="selectedAssessment(assessmentSchedule.assessment).versions.length == 0">
                                 The selected assessment has no versions, you can make one <a ng-href="/admin/assessments/{{assessmentSchedule.assessment._id}}">here</a>
                             </p>
-                            <select ng-options="version._id as (selectedAssessment(assessmentSchedule.assessment).versions.indexOf(version)+1) for version in selectedAssessment(assessmentSchedule.assessment).versions"
+                            <select custom-popover popover-title="Select an Assessment Version" popover-html="popoverTemplates.validVersionInput" popover-placement="right" ng-options="version._id as (selectedAssessment(assessmentSchedule.assessment).versions.indexOf(version)+1) for version in selectedAssessment(assessmentSchedule.assessment).versions"
                                     ng-show="selectedAssessment(assessmentSchedule.assessment).versions.length > 0" ng-model="assessmentSchedule.version" class="form-control">
                             </select>
                         </div>
@@ -44,17 +44,16 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label >Add Student: </label>
                         </div>
-                        <div class="col-xs-10 col-sm-9 col-md-9">
+                        <div custom-popover popover-title="Select Students" popover-html="popoverTemplates.studentInput" popover-placement="right" class="col-xs-10 col-sm-9 col-md-9">
                             <input typeahead-on-select="addStudent()" ng-model="student" placeholder="Username.." typeahead="student as student.username for student in getStudents($viewValue)" class="form-control">
-
                         </div>
                     </div>
 
-                    <div ng-show="assessmentSchedule.students.length>0" style="padding-top: 10px;" class="row vertical-align">
+                    <div style="padding-top: 10px;" class="row vertical-align">
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Students: </label>
                         </div>
-                        <div style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
+                        <div custom-popover popover-title="Select Students" popover-html="popoverTemplates.studentsTable" popover-placement="right" style="max-height:150px;overflow-y: scroll" class="col-xs-9 col-sm-8 col-md-8">
                             <table class="table table-hover table-condensed">
                                 <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear; cursor:pointer" ng-repeat="student in assessmentSchedule.students track by $id(student)">
                                     <td style="width:95%;">
@@ -72,7 +71,7 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Start Time: </label>
                         </div>
-                        <div class="col-xs-9 col-sm-8 col-md-8">
+                        <div custom-popover popover-title="Select Start Time" popover-html="popoverTemplates.startTimeInput" popover-placement="right" class="col-xs-9 col-sm-4 col-md-3">
                             <timepicker ng-change="updateEndDate(duration);" ng-model="assessmentSchedule.startDate" show-meridian="false"></timepicker>
                         </div>
                     </div>
@@ -82,7 +81,7 @@
                             <label>Start Date: </label>
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-6">
-                            <div class="well well-sm" style="overflow-x:auto">
+                            <div custom-popover popover-title="Select Start Date" popover-html="popoverTemplates.startDateInput" popover-placement="right" class="well well-sm" style="overflow-x:auto">
                                 <datepicker min-date="minDate" ng-change="updateEndDate(duration);" ng-model="assessmentSchedule.startDate"
                                             show-weeks="true" >
                                 </datepicker>
@@ -94,7 +93,7 @@
                         <div class="col-xs-12 col-sm-2 col-md-2">
                             <label>Duration: </label>
                         </div>
-                        <div class="col-xs-12 col-sm-8 col-md-6">
+                        <div custom-popover popover-title="Select Start Date" popover-html="popoverTemplates.durationInput" popover-placement="right" class="col-xs-12 col-sm-8 col-md-6">
                             <select ng-init="duration=60;updateEndDate(duration);" ng-change="updateEndDate(duration)" ng-model="duration" class="form-control">
                                 <option value="15">15 minutes</option>
                                 <option value="30">30 minutes</option>

@@ -10,7 +10,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-offset-4 col-md-5">
-                            <h4 style="color:#D3D3D3;float:right;margin-top: 25px;margin-bottom: 10px;">
+                            <h4 custom-popover popover-title="Time Left" popover-html="popoverTemplates.timeLeft" popover-placement="left" style="color:#D3D3D3;float:right;margin-top: 25px;margin-bottom: 10px;">
                                 <countdown on-done="filterDates" ng-model="assessmentSchedule.endDate"></countdown>
                             </h4>
 
@@ -21,10 +21,10 @@
                     <div class="row" ng-show="questions[currentIndex].type=='call'" id="call-log-details">
                         <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-11 col-md-offset-2 col-md-9">
                                 <ul class="nav nav-tabs">
-                                    <li role="presentation" ng-click="questions[currentIndex].callView='background'" ng-class="{active: questions[currentIndex].callView=='background'}" class="active">
+                                    <li custom-popover popover-title="Call Log Background" popover-html="popoverTemplates.callLogBackground" popover-placement="bottom" role="presentation" ng-click="questions[currentIndex].callView='background'" ng-class="{active: questions[currentIndex].callView=='background'}" class="active">
                                         <a href="javascript:void(0);">Background</a>
                                     </li>
-                                    <li role="presentation" ng-click="questions[currentIndex].callView='details'" ng-class="{active: questions[currentIndex].callView=='details'}">
+                                    <li custom-popover popover-title="Call Log Details" popover-html="popoverTemplates.callLogDetails" popover-placement="bottom" role="presentation" ng-click="questions[currentIndex].callView='details'" ng-class="{active: questions[currentIndex].callView=='details'}">
                                         <a href="javascript:void(0);">Details</a>
                                     </li>
                                 </ul>
@@ -114,11 +114,11 @@
                             <h3>{{questions[currentIndex].question}}</h3>
 
                             <!-- Select question (multi AND call) -->
-                            <select ng-model="userAnswers[currentIndex].answer" ng-options="answer for answer in questions[currentIndex].answers" ng-show="questions[currentIndex].type=='multi'||questions[currentIndex].type=='call'" class="form-control">
+                            <select custom-popover popover-title="Multiple Choice Answer" popover-html="popoverTemplates.multiChoice" popover-placement="bottom" ng-model="userAnswers[currentIndex].answer" ng-options="answer for answer in questions[currentIndex].answers" ng-show="questions[currentIndex].type=='multi'||questions[currentIndex].type=='call'" class="form-control">
                                 <option value="">Select an answer..</option>
                             </select>
                             <!-- Free-text question-->
-                            <textarea style="resize: none;" ng-model="userAnswers[currentIndex].answer" ng-show="questions[currentIndex].type=='free'" placeholder="Answer..." ng-show="questions[currentIndex].type=='multi'" class="form-control">
+                            <textarea custom-popover popover-title="Free Text Answer" popover-html="popoverTemplates.freeText" popover-placement="bottom" style="resize: none;" ng-model="userAnswers[currentIndex].answer" ng-show="questions[currentIndex].type=='free'" placeholder="Answer..." ng-show="questions[currentIndex].type=='multi'" class="form-control">
                             </textarea>
                         </div>
                     </div>

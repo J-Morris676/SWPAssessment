@@ -64,7 +64,7 @@ exports.freeTextMark = function(question, answer) {
                     for (var actualAnswerWordIndex = 0; actualAnswerWordIndex < actualAnswerTermArray.length; actualAnswerWordIndex++) {
                         var similarity = natural.JaroWinklerDistance(actualAnswerTermArray[actualAnswerWordIndex].toLowerCase(), givenAnswerTermArray[actualAnswerWordIndex].toLowerCase());
 
-                        if (similarity < 0.7) {
+                        if (similarity < 0.9) {
                             smallestSimilarityWord = 0;
                             break;
                         }
@@ -73,8 +73,8 @@ exports.freeTextMark = function(question, answer) {
                         }
                     }
 
-                    //If ALL words in the term are > 0.7 similar then mark correct:
-                    if (smallestSimilarityWord > 0.7) {
+                    //If ALL words in the term are > 0.9 similar then mark correct:
+                    if (smallestSimilarityWord > 0.9) {
                         markObject.score++;
                         break;
                     }

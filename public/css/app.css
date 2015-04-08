@@ -53,6 +53,15 @@ footer {
     background-color:#FF9966;
 }
 
+/* Custom popover CSS */
+.popover {
+    max-width:none;
+}
+.popover-title {
+    color:white;
+    background: url('../img/SWPBlocks.svg');
+    font-weight:bold;
+}
 
 .axis text {
     font: 10px sans-serif;

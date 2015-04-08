@@ -13,6 +13,11 @@ angular.module('myApp.studentHome', ['ngResource'])
 
     .controller("studentHomeCtrl", function($scope, $http, scheduledAssessmentService,  $location) {
         $scope.trainers = [];
+
+        $scope.popoverTemplates = {
+            resultBreakdown: "parts/student/popoverTpls/home/resultBreakdown.html"
+        };
+
         var getUser = function(username) {
             $http.get("/resources/students/" + username).success(function(data, status) {
                 $scope.student = data;

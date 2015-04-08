@@ -44,7 +44,9 @@
                                 <td>{{studentResult.dates.endDate | date:"dd/MM/yyyy 'at' h:mma"}}</td>
                                 <td><span ng-show="studentResult.grade!=null">{{studentResult.grade|number:0}}%</span></td>
                                 <td>
-                                    <button ng-show="studentResult.dates.endDate != null" ng-click="goToStudentResults(studentResult.username)" class="btn btn-default">Breakdown</button>
+                                    <button custom-popover popover-title="Results Breakdown" popover-html="popoverTemplates.resultsBreakdown" popover-placement="left"
+                                            ng-show="studentResult.dates.endDate != null" ng-click="goToStudentResults(studentResult.username)"
+                                            class="btn btn-default">Breakdown</button>
                                 </td>
                             </tr>
 

@@ -28,8 +28,8 @@
         <div style="text-align: center" class="panel-body">
             <h2>Edit Assessment</h2>
 
-            <form class="form-inline">
-                <div class="form-group">
+            <form class="form-inline" >
+                <div class="form-group" custom-popover popover-title="Edit Assessment Title" popover-html="popoverTemplates.assessmentTitleInput" popover-placement="bottom">
                     <label for="title"><h4>Title:</h4></label>
                     <div class="input-group">
                         <input id="title" type="text" class="form-control" ng-model="tempTitle" placeholder="Assessment title..">
@@ -57,10 +57,10 @@
                 <div style="margin-top:0px;" ng-init="collapsedQuestions.push([]);collapsedVersions.push(true)" ng-repeat="version in assessment.versions track by $index" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span ng-click="deleteVersion(version._id, $index+1)" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span custom-popover popover-title="Remove Version" popover-html="popoverTemplates.deleteVersion" popover-placement="left" ng-click="deleteVersion(version._id, $index+1)" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 
-                            <span ng-show="collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
-                            <span ng-show="!collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+                            <span custom-popover popover-title="Show/hide Questions" popover-html="popoverTemplates.showQuestions" popover-placement="left" ng-show="collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                            <span custom-popover popover-title="Show/hide Questions" popover-html="popoverTemplates.showQuestions" popover-placement="left" ng-show="!collapsedVersions[$index]" ng-click="collapsedVersions[$index]=!collapsedVersions[$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
 
                             <p>
                                 Version {{$index+1}}
@@ -80,10 +80,10 @@
                                             </div>
                                             <div class="col-xs-5 col-sm-offset-7 col-sm-2 col-md-offset-7 col-md-2">
 
-                                                <span ng-click="deleteQuestion({id: version._id, no:$parent.$index+1}, {id: QA._id, no:$index+1})" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                <span custom-popover popover-title="Remove Question" popover-html="popoverTemplates.deleteQuestion" popover-placement="left" ng-click="deleteQuestion({id: version._id, no:$parent.$index+1}, {id: QA._id, no:$index+1})" style="cursor:pointer;padding-left:10px;float:right" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 
-                                                <span ng-show="collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
-                                                <span ng-show="!collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
+                                                <span custom-popover popover-title="Show/hide Question" popover-html="popoverTemplates.showQuestion" popover-placement="left" ng-show="collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-down" aria-hidden="true"></span>
+                                                <span custom-popover popover-title="Show/hide Question" popover-html="popoverTemplates.showQuestion" popover-placement="left" ng-show="!collapsedQuestions[$parent.$index][$index]" ng-click="collapsedQuestions[$parent.$index][$index]=!collapsedQuestions[$parent.$index][$index]" style="cursor:pointer;float:right" class="glyphicon glyphicon-collapse-up" aria-hidden="true"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                 </div>
 
                                 <!-- Add question panel -->
-                                <div ng-click="addQuestion(version._id)" title="Add question" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
+                                <div custom-popover popover-title="Add Question" popover-html="popoverTemplates.addQuestion" popover-placement="top" ng-click="addQuestion(version._id)" title="Add question" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
                                     <div class="panel-heading">
                                         <div style="height: 20px;color: green" class="panel-title">
                                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Add version panel -->
-                <div ng-click="addVersion()" title="Add version" style="text-align:center;cursor:pointer;margin-top:5px;" class="panel panel-default">
+                <div custom-popover popover-title="Add Version" popover-html="popoverTemplates.addVersion" popover-placement="top" ng-click="addVersion()" title="Add version" style="text-align:center;cursor:pointer;margin-top:5px;" class="panel panel-default">
                     <div class="panel-heading">
                         <div style="height: 20px;color: green" class="panel-title">
                             <span style="text-align:center" class="glyphicon glyphicon-plus" aria-hidden="true"></span>

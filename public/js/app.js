@@ -24,6 +24,7 @@ angular.module('myApp', ["myApp.signIn",
     //Directives:
     "myApp.timeDirectives",
     "myApp.graphDirectives",
+    "myApp.customPopOverDirectives",
 
     //Lib modules:
     "ngRoute",

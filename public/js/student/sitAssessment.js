@@ -7,6 +7,14 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
         $scope.currentIndex = 0;
         $scope.userAnswers = [];
 
+        $scope.popoverTemplates = {
+            timeLeft: "parts/student/popoverTpls/sitAssessment/timeLeft.html",
+            freeText: "parts/student/popoverTpls/sitAssessment/freeText.html",
+            multiChoice: "parts/student/popoverTpls/sitAssessment/multiChoice.html",
+            callLogBackground: "parts/student/popoverTpls/sitAssessment/callLogBackground.html",
+            callLogDetails: "parts/student/popoverTpls/sitAssessment/callLogDetails.html"
+        };
+
         $http.get("/resources/schedules/" + $routeParams.assessmentScheduleId).success(function(data, status) {
             $scope.assessmentSchedule = data;
             $scope.questions = data.version.object.QAs;

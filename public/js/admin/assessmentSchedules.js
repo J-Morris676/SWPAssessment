@@ -54,6 +54,22 @@ angular.module('myApp.assessmentSchedules', ['ngResource'])
         $scope.schedules = null;
         $scope.minDate = new Date();
 
+        $scope.popoverTemplates = {
+            assessmentSchedule: "parts/admin/popoverTpls/assessmentScheduling/scheduleAssessment.html",
+            trainerInputBox: "parts/admin/popoverTpls/assessmentScheduling/trainerInputBox.html",
+            assessmentInputBox: "parts/admin/popoverTpls/assessmentScheduling/assessmentInputBox.html",
+            validVersionInput: "parts/admin/popoverTpls/assessmentScheduling/validVersionInput.html",
+            invalidVersionInput: "parts/admin/popoverTpls/assessmentScheduling/invalidVersionInput.html",
+            studentInput: "parts/admin/popoverTpls/assessmentScheduling/studentInput.html",
+            studentsTable: "parts/admin/popoverTpls/assessmentScheduling/studentsTable.html",
+            startTimeInput: "parts/admin/popoverTpls/assessmentScheduling/startTimeInput.html",
+            startDateInput: "parts/admin/popoverTpls/assessmentScheduling/startDateInput.html",
+            durationInput: "parts/admin/popoverTpls/assessmentScheduling/durationInput.html",
+            editAssessmentSchedule: "parts/admin/popoverTpls/assessmentScheduling/editAssessmentSchedule.html",
+            deleteScheduledAssessment: "parts/admin/popoverTpls/assessmentScheduling/deleteScheduledAssessment.html"
+
+        };
+
         var setMessageTimer = function(messages, isError) {
             if (!isError) {
                 $scope.successSubmitMessage = messages;
