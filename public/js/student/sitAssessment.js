@@ -51,6 +51,17 @@ angular.module('myApp.studentSitAssessment', ['ngResource'])
                 })
         };
 
+        //When timer ends, submit automatically:
+        $scope.endAssessment = function() {
+            $http.post("/resources/schedules/" + $routeParams.assessmentScheduleId + "/end/" + $scope.username, $scope.userAnswers).success(function(data, status) {
+                $location.path("/student/assessmentSchedules/results/" + $routeParams.assessmentScheduleId).search({justFinished: 1});
+            }).error(function(data, status) {
+                if (status == 401) {
+                    $location.path("/student/home");
+                }
+            });
+        };
+
         $scope.submitAssessmentAnswers = function() {
             var confirmed = confirm("Are you sure you would like to submit your answers?");
             if (confirmed) {

@@ -66,6 +66,16 @@ angular.module('myApp', ["myApp.signIn",
         $routeProvider.otherwise({redirectTo: '/signIn'});
 	})
 
+    .service("isMobile", function() {
+        return function() {
+            if(window.innerWidth <= 800 && window.innerHeight <= 600) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+    })
+
 	.controller('IndexCtrl', function($rootScope, $scope, $location, $http) {
 		$scope.title = 'SWP Assessment';
 		$scope.version = '0.1';

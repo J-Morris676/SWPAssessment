@@ -36,7 +36,12 @@ angular.module("myApp.timeDirectives", [])
 
                 var countdown = function() {
                     var now = new Date();
-                    var distance = new Date(scope.ngModel) - now;
+
+                    //Client time is 3 seconds behind to allow for auto-submit on assessment end (no submit):
+                    var endDate = new Date(scope.ngModel);
+                    endDate = endDate.setSeconds(endDate.getSeconds() - 3);
+
+                    var distance = endDate - now;
                     if (distance < 0) {
                         $interval.cancel(timer);
                         $(element).parent().remove();

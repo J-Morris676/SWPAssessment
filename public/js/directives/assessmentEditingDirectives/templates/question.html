@@ -4,7 +4,7 @@
     </div>
 
     <div class="col-xs-10 col-sm-9 col-md-9">
-        <select custom-popover popover-title="Question Type" popover-html="popoverTemplates.typeInput" popover-placement="bottom" id="type-{{ngModel._id}}" ng-change="changeType()" ng-model="ngModel.type" class="form-control">
+        <select ng-disabled="isLocked" custom-popover popover-title="Question Type" popover-html="popoverTemplates.typeInput" popover-placement="bottom" id="type-{{ngModel._id}}" ng-change="changeType()" ng-model="ngModel.type" class="form-control">
             <option value="multi">Multiple Choice</option>
             <option value="call">Call Log</option>
             <option value="free">Free Text</option>

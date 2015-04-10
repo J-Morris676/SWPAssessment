@@ -86,7 +86,7 @@ var studentSchema = new Schema({
 
 var adminSchema = new Schema({
     "username": String,
-    "password": String
+    "password": String,
 }, { versionKey: false });
 
 var assessmentSchedule = new Schema({

@@ -87,7 +87,7 @@
                             {{student.assessmentResults.length}}
                         </td>
                         <td>
-                            <button custom-popover popover-title="Delete Student" popover-html="popoverTemplates.deleteStudent" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteStudent(student.username)" class="btn btn-danger">
+                            <button ng-hide="student.assessmentResults.length>0" custom-popover popover-title="Delete Student" popover-html="popoverTemplates.deleteStudent" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteStudent(student.username)" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                             <button custom-popover popover-title="Edit Student" popover-html="popoverTemplates.editStudent" popover-placement="left" ng-click="goToStudent(student.username)" class="btn btn-warning" style="float:right">

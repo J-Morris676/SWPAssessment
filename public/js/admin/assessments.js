@@ -11,7 +11,8 @@ angular.module('myApp.assessments', ['ngResource'])
         };
         $scope.popoverTemplates = {
             editAssessment: "parts/admin/popoverTpls/assessments/editAssessment.html",
-            deleteAssessment: "parts/admin/popoverTpls/assessments/deleteAssessment.html"
+            deleteAssessment: "parts/admin/popoverTpls/assessments/deleteAssessment.html",
+            lockedAssessment: "parts/admin/popoverTpls/assessments/lockedAssessment.html"
         };
 
         $scope.isValidTitle = function() {
@@ -34,6 +35,14 @@ angular.module('myApp.assessments', ['ngResource'])
         };
         getAssessments();
 
+        $scope.isAssessmentLocked = function(assessment) {
+            for (var version = 0; version < assessment.versions.length; version++) {
+                if (assessment.versions[version].locked) {
+                    return true;
+                }
+            }
+            return false;
+        };
 
         $scope.submitAssessment = function() {
             $http.post("/resources/assessments", $scope.newAssessment).success(function(data, status) {

@@ -207,15 +207,18 @@
                             <td>{{schedule.students.length}}</td>
 
                             <td>
-                                <button custom-popover popover-title="Remove Scheduled Assessment" popover-html="popoverTemplates.deleteScheduledAssessment" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
+                                <button ng-hide="isPast(schedule.startDate)" custom-popover popover-title="Remove Scheduled Assessment" popover-html="popoverTemplates.deleteScheduledAssessment" popover-placement="left" style="margin-left:5px;float:right;" ng-click="deleteAssessmentSchedule(schedule._id)" class="btn btn-danger">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
-                                <button custom-popover popover-title="Edit Scheduled Assessment" popover-html="popoverTemplates.editAssessmentSchedule" popover-placement="left" ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right;float:right">
+                                <button ng-hide="isPast(schedule.startDate)" custom-popover popover-title="Edit Scheduled Assessment" popover-html="popoverTemplates.editAssessmentSchedule" popover-placement="left" ng-click="goToAssessmentSchedule(schedule._id)" class="btn btn-warning" style="float:right">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
-                                <button ng-show="isPast(schedule.endDate)"style="margin-left:5px;" class="btn btn-default" ng-click="goToScheduledAssessmentResults(schedule._id)">
+                                <button ng-show="isPast(schedule.endDate)" style="float:right" class="btn btn-default" ng-click="goToScheduledAssessmentResults(schedule._id)">
                                     View Results
                                 </button>
+                                <i ng-show="isPast(schedule.startDate)&& !isPast(schedule.endDate)" style="float:right" ng-click="goToScheduledAssessmentResults(schedule._id)">
+                                    Currently Ongoing..
+                                </i>
                             </td>
                         </tr>
                     </table>

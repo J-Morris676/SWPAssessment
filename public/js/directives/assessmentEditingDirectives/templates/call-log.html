@@ -4,7 +4,7 @@
         <label for="question-{{ngModel._id}}">Question:</label>
     </div>
     <div custom-popover popover-title="Enter Question" popover-html="popoverTemplates.questionInput" popover-placement="bottom" class="col-xs-10 col-sm-9 col-md-9">
-        <input ng-change="changes=true" placeholder="What is the colour of the sky?" ng-model="ngModel.question" id="question-{{ngModel._id}}" class="form-control">
+        <input ng-disabled="isLocked" ng-change="changes=true" placeholder="What is the colour of the sky?" ng-model="ngModel.question" id="question-{{ngModel._id}}" class="form-control">
     </div>
 </div>
 
@@ -15,9 +15,9 @@
         <div class="col-xs-12 col-sm-2 col-md-2">
             <label for="answer-{{ngModel._id}}">Add Answer: </label>
         </div>
-        <div custom-popover popover-title="Add Answer" popover-html="popoverTemplates.addAnswerInput" popover-placement="bottom" class="col-xs-10 col-sm-9 col-md-9">
+        <div ng-disabled="isLocked" custom-popover popover-title="Add Answer" popover-html="popoverTemplates.addAnswerInput" popover-placement="bottom" class="col-xs-10 col-sm-9 col-md-9">
             <div class="input-group">
-                <input ng-keyup="$event.keyCode == 13 && isValidAnswer() &&  addAnswer()" ng-model="answer" id="answer-{{ngModel._id}}" placeholder="blue" class="form-control">
+                <input ng-disabled="isLocked" ng-keyup="$event.keyCode == 13 && isValidAnswer() &&  addAnswer()" ng-model="answer" id="answer-{{ngModel._id}}" placeholder="blue" class="form-control">
                       <span class="input-group-btn">
                          <button ng-disabled="!isValidAnswer()" ng-click="addAnswer();" type="button" class="btn btn-success" aria-label="Left Align">
                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -34,10 +34,10 @@
         <div custom-popover popover-title="Answers" popover-html="popoverTemplates.answersTable" popover-placement="top" style="max-height:150px;overflow-y: auto" class="col-xs-9 col-sm-8 col-md-8">
             <table class="table table-hover table-condensed">
                 <tr id="{{answer}}" style="-webkit-transition:background-color 1.5s linear; cursor:pointer" ng-repeat="answer in ngModel.answers track by $id(answer)">
-                    <td ng-click="ngModel.answer=$index;changes = true;" title="Click to mark as correct answer">
+                    <td ng-click="updateCorrectAnswer($index)" title="Click to mark as correct answer">
                         <span>{{answer}}</span>
                     </td>
-                    <td ng-click="removeAnswer($index);" title="Click to remove answer">
+                    <td ng-hide="isLocked"ng-click="removeAnswer($index);" title="Click to remove answer">
                         <span style="color:red;cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </td>
                     <td ng-show="ngModel.answer==$index" title="Marked as the correct answer">
@@ -71,7 +71,7 @@
                     <label for="callerId-{{ngModel._id}}">Unique ID:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.uniqueID" id="callerId-{{ngModel._id}}" placeholder="ID" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.uniqueID" id="callerId-{{ngModel._id}}" placeholder="ID" class="form-control">
                 </div>
             </div>
 
@@ -80,7 +80,7 @@
                     <label for="callerName-{{ngModel._id}}">Caller Name:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.callerName" id="callerName-{{ngModel._id}}" placeholder="Status" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.callerName" id="callerName-{{ngModel._id}}" placeholder="Status" class="form-control">
                 </div>
             </div>
 
@@ -89,7 +89,7 @@
                     <label for="callerAddress-{{ngModel._id}}">Caller Address:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.callerAddress" id="callerAddress-{{ngModel._id}}" placeholder="Address" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.callerAddress" id="callerAddress-{{ngModel._id}}" placeholder="Address" class="form-control">
                 </div>
             </div>
 
@@ -98,7 +98,7 @@
                     <label for="callerTelephone-{{ngModel._id}}">Caller Number:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.callerTelephone" id="callerTelephone-{{ngModel._id}}" placeholder="Status" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.callerTelephone" id="callerTelephone-{{ngModel._id}}" placeholder="Status" class="form-control">
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
                     <label for="callerStatus-{{ngModel._id}}">Caller Status:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.callerStatus" id="callerStatus-{{ngModel._id}}" placeholder="Status" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.callerStatus" id="callerStatus-{{ngModel._id}}" placeholder="Status" class="form-control">
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
                     <label for="callerMethod-{{ngModel._id}}">Contact Method:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.contactMethod" id="callerMethod-{{ngModel._id}}" placeholder="Status" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.contactMethod" id="callerMethod-{{ngModel._id}}" placeholder="Status" class="form-control">
                 </div>
             </div>
 
@@ -125,7 +125,7 @@
                     <label for="incidentLocation-{{ngModel._id}}">Incident Location:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.incidentLocation" id="incidentLocation-{{ngModel._id}}" placeholder="Status" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.incidentLocation" id="incidentLocation-{{ngModel._id}}" placeholder="Status" class="form-control">
                 </div>
             </div>
 
@@ -134,7 +134,7 @@
                     <label for="openCodeCategory-{{ngModel._id}}">Open Code Category:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.openCodeCategory" id="openCodeCategory-{{ngModel._id}}" placeholder="Open Code Category" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.openCodeCategory" id="openCodeCategory-{{ngModel._id}}" placeholder="Open Code Category" class="form-control">
                 </div>
             </div>
 
@@ -143,7 +143,7 @@
                     <label for="response-{{ngModel._id}}">Response:</label>
                 </div>
                 <div class="col-xs-12 col-md-8">
-                    <input ng-model="ngModel.additionalInfo.background.response" id="response-{{ngModel._id}}" placeholder="Response" class="form-control">
+                    <input ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.response" id="response-{{ngModel._id}}" placeholder="Response" class="form-control">
                 </div>
             </div>
 
@@ -152,11 +152,12 @@
                     <label for="dateReceived-{{ngModel._id}}">Date Received:</label>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="well well-sm" style="overflow-x:auto">
-                        <datepicker  ng-model="ngModel.additionalInfo.background.dateReceived" id="dateReceived-{{ngModel._id}}"
+                    <div ng-hide="isLocked" class="well well-sm" style="overflow-x:auto">
+                        <datepicker ng-disabled="isLocked" ng-model="ngModel.additionalInfo.background.dateReceived" id="dateReceived-{{ngModel._id}}"
                                      min-date="minDate" show-weeks="true" >
                         </datepicker>
                     </div>
+                    <p style="padding-top:5px;" ng-show="isLocked">{{ngModel.additionalInfo.background.dateReceived| date:"dd/MM/yyyy"}}</p>
                 </div>
             </div>
 
@@ -165,11 +166,12 @@
                     <label for="dateRecorded-{{ngModel._id}}">Date Recorded:</label>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="well well-sm" style="overflow-x:auto">
-                        <datepicker  ng-model="ngModel.additionalInfo.background.dateRecorded" id="dateRecorded-{{ngModel._id}}"
+                    <div ng-hide="isLocked" class="well well-sm" style="overflow-x:auto">
+                        <datepicker ng-model="ngModel.additionalInfo.background.dateRecorded" id="dateRecorded-{{ngModel._id}}"
                                      show-weeks="true">
                         </datepicker>
                     </div>
+                    <p style="padding-top:5px;" ng-show="isLocked">{{ngModel.additionalInfo.background.dateRecorded| date:"dd/MM/yyyy"}}</p>
                 </div>
             </div>
         </div>
@@ -177,7 +179,7 @@
         <div style="padding-top:10px;max-height:400px;overflow-y: auto;overflow-x:hidden;" ng-show="view=='details'">
             <div ng-repeat="callDetails in ngModel.additionalInfo.details track by $index">
                 <div class="row" style="margin-bottom:5px;">
-                    <div class="col-xs-offset-8 col-xs-4 col-sm-offset-10 col-sm-1 col-md-offset-10 col-md-1">
+                    <div ng-hide="isLocked" class="col-xs-offset-8 col-xs-4 col-sm-offset-10 col-sm-1 col-md-offset-10 col-md-1">
                         <button ng-click="removeCallDetail($index);" type="button" class="btn btn-danger" aria-label="Left Align">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </button>
@@ -188,7 +190,7 @@
                         <label >Log:</label>
                     </div>
                     <div class="col-xs-9 col-md-8">
-                        <input ng-model="callDetails.log" placeholder="Log" class="form-control">
+                        <input ng-disabled="isLocked" ng-model="callDetails.log" placeholder="Log" class="form-control">
                     </div>
                 </div>
                 <div class="row vertical-align">
@@ -196,24 +198,26 @@
                         <label >Time:</label>
                     </div>
                     <div class="col-xs-12 col-md-8">
-                        <timepicker ng-model="callDetails.date" show-meridian="false"></timepicker>
+                        <timepicker ng-hide="isLocked" ng-model="callDetails.date" show-meridian="false"></timepicker>
+                        <p style="padding-top:10px;" ng-show="isLocked">{{callDetails.date | date:"h:mma"}}</p>
                     </div>
                 </div>
                 <div class="row vertical-align">
                     <div class="col-xs-12 col-md-3">
-                        <label >Date:</label>
+                        <label>Date:</label>
                     </div>
                     <div class="col-xs-12 col-md-8">
-                        <div class="well well-sm" style="overflow-x:auto">
-                            <datepicker ng-model="callDetails.date"
+                        <div ng-hide="isLocked" class="well well-sm" style="overflow-x:auto">
+                            <datepicker  ng-model="callDetails.date"
                                          show-weeks="true" >
                             </datepicker>
                         </div>
+                        <p style="padding-top:5px;" ng-show="isLocked">{{callDetails.date| date:"dd/MM/yyyy"}}</p>
                     </div>
                 </div>
                 <hr>
             </div>
-            <div ng-click="addCallDetail()" title="Add call detail" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
+            <div ng-hide="isLocked" ng-click="addCallDetail()" title="Add call detail" style="margin-top:0px;text-align:center;cursor:pointer;margin-top:0px;" class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title">
                         <div style="height: 20px;color: green" class="panel-title">
@@ -234,6 +238,6 @@
     </div>
 
     <div class="col-xs-3 col-md-2">
-        <button style="display:inline" ng-click="questionUpdate(ngModel, updateCallback)" type="button" class="btn btn-default">Update</button>
+        <button ng-disabled="isLocked" style="display:inline" ng-click="questionUpdate(ngModel, updateCallback)" type="button" class="btn btn-default">Update</button>
     </div>
 </div>

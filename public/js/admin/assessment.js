@@ -5,8 +5,8 @@
 
 angular.module('myApp.assessment', ['ngResource'])
 
-    .controller("assessmentCtrl", function($scope, $http, $routeParams) {
-        console.log($routeParams);
+    .controller("assessmentCtrl", function($scope, $http, $routeParams, isMobile) {
+
         $scope.popoverTemplates = {
             assessmentTitleInput: "parts/admin/popoverTpls/assessments/assessmentTitleInput.html",
             addVersion: "parts/admin/popoverTpls/assessments/addVersion.html",
@@ -14,7 +14,9 @@ angular.module('myApp.assessment', ['ngResource'])
             showQuestions: "parts/admin/popoverTpls/assessments/showQuestions.html",
             showQuestion: "parts/admin/popoverTpls/assessments/showQuestion.html",
             addQuestion: "parts/admin/popoverTpls/assessments/addQuestion.html",
-            deleteQuestion: "parts/admin/popoverTpls/assessments/deleteQuestion.html"
+            deleteQuestion: "parts/admin/popoverTpls/assessments/deleteQuestion.html",
+            lockedVersion: "parts/admin/popoverTpls/assessments/lockedVersion.html",
+            lockedQuestion: "parts/admin/popoverTpls/assessments/lockedQuestion.html"
         };
 
         $scope.collapsedVersions = [];
@@ -27,6 +29,10 @@ angular.module('myApp.assessment', ['ngResource'])
             });
         };
         $scope.getAssessments();
+
+        $scope.questionChange = function(questionNumber) {
+            console.log("Question has been changed! " + questionNumber);
+        };
 
         $scope.deleteVersion = function(versionId, versionNo) {
             var confirmed = confirm("Are you sure you want to permanently delete version " + versionNo + " of this assessment?");
@@ -51,13 +57,14 @@ angular.module('myApp.assessment', ['ngResource'])
         };
 
         $scope.addVersion = function() {
-            var newVersion = {QAs: [{
-                "type": "multi",
-                "question": "",
-                "answer": null,
-                "answers": []
-            }]
-        };
+            var newVersion = {
+                QAs: [{
+                    "type": "multi",
+                    "question": "",
+                    "answer": null,
+                    "answers": []
+                }]
+            };
             $http.post("/resources/assessments/" + $routeParams.assessmentId + "/versions", newVersion)
                 .success(function(data, status) {
                     $scope.getAssessments();
@@ -87,13 +94,7 @@ angular.module('myApp.assessment', ['ngResource'])
                  })
         };
 
-        $scope.isMobile = function() {
-            if(window.innerWidth <= 800 && window.innerHeight <= 600) {
-                return true;
-            } else {
-                return false;
-            }
-        };
+        $scope.isMobile = isMobile;
 
         $scope.updateAssessment = function() {
             var id = $scope.assessment._id;

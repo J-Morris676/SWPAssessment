@@ -15,10 +15,10 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 ngModel: "=ngModel",
                 version: "=version",
                 updateCallback: "=updateCallback",
-                questionNumber: "=questionNumber"
+                questionNumber: "=questionNumber",
+                isLocked: "=isLocked"
             },
             link: function (scope, element, attrs) {
-                console.log(scope);
 
                 scope.popoverTemplates = {
                     typeInput: "parts/admin/popoverTpls/assessments/typeInput.html"
@@ -49,13 +49,13 @@ angular.module("myApp.assessmentEditingDirectives", [])
                     element.find("multi").remove();element.find("call").remove();element.find("free").remove();
                     var questionElement;
                     if (directiveType == "multi") {
-                        questionElement = angular.element("<multi question-update='updateQuestionCallback' ng-model='ngModel'></multi>");
+                        questionElement = angular.element("<multi is-locked='isLocked' question-update='updateQuestionCallback' ng-model='ngModel'></multi>");
                     }
                     else if (directiveType == "free") {
-                        questionElement = angular.element("<free question-update='updateQuestionCallback' ng-model='ngModel'></free>");
+                        questionElement = angular.element("<free is-locked='isLocked' question-update='updateQuestionCallback' ng-model='ngModel'></free>");
                     }
                     else if (directiveType == "call") {
-                        questionElement = angular.element("<call question-update='updateQuestionCallback' ng-model='ngModel'></call>");
+                        questionElement = angular.element("<call is-locked='isLocked' question-update='updateQuestionCallback' ng-model='ngModel'></call>");
                     }
                     $compile(questionElement)(scope);
                     element.append(questionElement);
@@ -73,10 +73,10 @@ angular.module("myApp.assessmentEditingDirectives", [])
             templateUrl: 'js/directives/assessmentEditingDirectives/templates/multi-choice.html',
             scope: {
                 ngModel: "=ngModel",
-                questionUpdate: "=questionUpdate"
+                questionUpdate: "=questionUpdate",
+                isLocked: "=isLocked"
             },
             link: function (scope, element, attrs) {
-
                 scope.popoverTemplates = {
                     questionInput: "parts/admin/popoverTpls/assessments/questionInput.html",
                     addAnswerInput: "parts/admin/popoverTpls/assessments/addAnswerInput.html",
@@ -84,6 +84,13 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 };
 
                 scope.changes = false;
+
+                scope.updateCorrectAnswer = function(index) {
+                    if (!scope.isLocked) {
+                        scope.ngModel.answer=index;
+                        scope.changes = true
+                    }
+                };
 
                 scope.isValidAnswer = function() {
                     if (scope.answer==""||scope.answer==null) return false;
@@ -125,13 +132,15 @@ angular.module("myApp.assessmentEditingDirectives", [])
                 };
 
                 scope.removeAnswer = function(index) {
-                    scope.changes = true;
-                    var isConfirmed = confirm("Are you sure you would like to delete answer '" + scope.ngModel.answers[index] + "'?");
-                    if (isConfirmed) {
-                        if (scope.ngModel.answer > index) {
-                            scope.ngModel.answer--;
+                    if (scope.isLocked) {
+                        scope.changes = true;
+                        var isConfirmed = confirm("Are you sure you would like to delete answer '" + scope.ngModel.answers[index] + "'?");
+                        if (isConfirmed) {
+                            if (scope.ngModel.answer > index) {
+                                scope.ngModel.answer--;
+                            }
+                            scope.ngModel.answers.splice(index, 1);
                         }
-                        scope.ngModel.answers.splice(index, 1);
                     }
                 }
             }
@@ -147,7 +156,8 @@ angular.module("myApp.assessmentEditingDirectives", [])
             templateUrl: 'js/directives/assessmentEditingDirectives/templates/free.html',
             scope: {
                 ngModel: "=ngModel",
-                questionUpdate: "=questionUpdate"
+                questionUpdate: "=questionUpdate",
+                isLocked: "=isLocked"
             },
             link: function (scope, element, attrs) {
 
@@ -219,7 +229,8 @@ angular.module("myApp.assessmentEditingDirectives", [])
             templateUrl: 'js/directives/assessmentEditingDirectives/templates/call-log.html',
             scope: {
                 ngModel: "=ngModel",
-                questionUpdate: "=questionUpdate"
+                questionUpdate: "=questionUpdate",
+                isLocked: "=isLocked"
             },
             link: function (scope, element, attrs) {
 
@@ -233,6 +244,13 @@ angular.module("myApp.assessmentEditingDirectives", [])
 
                 scope.changes = false;
                 scope.view = 'background';
+
+                scope.updateCorrectAnswer = function(index) {
+                    if (!scope.isLocked) {
+                        scope.ngModel.answer=index;
+                        scope.changes = true
+                    }
+                };
 
                 scope.isValidAnswer = function() {
                     if (scope.answer==""||scope.answer==null) return false;
