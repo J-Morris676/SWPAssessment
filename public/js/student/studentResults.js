@@ -5,8 +5,12 @@
 
 angular.module('myApp.studentResults', ['ngResource'])
 
-    .controller("studentResultsCtrl", function($scope, $location, $http, $routeParams) {
+    .controller("studentResultsCtrl", function($scope, $window, $location, $http, $routeParams) {
         $scope.justFinished = $routeParams.justFinished;
+
+        $scope.popoverTemplates = {
+            downloadReport:  "parts/student/popoverTpls/assessmentResults/downloadReport.html"
+        };
 
         //Async retrieval of username:
         if ($scope.username == null) {
@@ -25,6 +29,10 @@ angular.module('myApp.studentResults', ['ngResource'])
                 if (status == 400) $location.path("/student/home");
                 $scope.results = data;
             });
+        }
+
+        $scope.downloadReport = function() {
+            $window.open('/resources/schedules/' + $routeParams.assessmentScheduleId + '/students/' + $scope.username + '/report', '_blank');
         }
 
     });

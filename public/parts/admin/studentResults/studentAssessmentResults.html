@@ -16,6 +16,9 @@
                             <b>Completed</b>: {{results.date  | date:"dd/MM/yyyy"}}<br>
                             <br>
                             <b>Grade</b>: {{results.percent|number:0}}%<br>
+                            <button custom-popover popover-title="Download Report" popover-html="popoverTemplates.downloadReport" popover-placement="right" ng-click="downloadReport()" type="button" class="btn btn-default" style="float:right">
+                                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -6,11 +6,10 @@
  *      - (cb) - A standard callback function with error and result params respectively
  *  - Created by Jamie Morris on 06/02/15.
  */
-var log4js = require("log4js");
-
 var databaseConnection = require('./database-connection');
 var ObjectId = require('mongoose').Types.ObjectId;
 var async = require('async');
+
 //Standard callback function for all access repository functions:
 function repositoryCallback(err, data, cb) {
     if (err) cb(err, null);
@@ -267,6 +266,35 @@ exports.hasStudentFinishedScheduledAssessment = function(scheduledAssessmentId, 
             }
             else {
                 repositoryCallback(err,true,cb);
+            }
+        });
+};
+
+exports.findStudentResultsInAssessmentSchedule = function(scheduleId, studentUsername, cb) {
+    databaseConnection.students.aggregate([
+            {$unwind: "$assessmentResults"},
+            {
+                $match: {
+                    "username": studentUsername,
+                    "assessmentResults.scheduledAssessment": ObjectId(scheduleId)
+                }
+            },
+            {
+                $project: {
+                    "assessmentResults": 1,
+                    _id: 0
+                }
+            }
+        ],
+        function(err,data) {
+            if (err) {
+                repositoryCallback(err, null,cb);
+            }
+            else if (data.length == 0) {
+                repositoryCallback(err,null,cb);
+            }
+            else {
+                repositoryCallback(err,data[0].assessmentResults,cb);
             }
         });
 };

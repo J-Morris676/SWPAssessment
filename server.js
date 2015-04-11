@@ -25,7 +25,7 @@ var session = require("express-session");
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3002);
+app.set('port', process.env.PORT || 3003);
 
 app.use(serveStatic(path.join(__dirname, 'public')));
 app.disable('etag');
@@ -109,7 +109,11 @@ app.get("/resources/schedules", dataAccessServices.getScheduledAssessments);
 app.get("/resources/schedules/:scheduledAssessmentId", dataAccessServices.getScheduledAssessmentsById);
 app.get("/resources/schedules/students/:username", validate(paramsValidation.user), dataAccessServices.getScheduledAssessmentsByStudentUsername);
 
+app.get("/resources/schedules/:scheduleAssessmentId/students/:username/report", dataAccessServices.createAssessmentResultsReport);
+
 app.get("/auth/isLoggedIn", dataAccessServices.isLoggedIn);
+
+
 
 /************************************************
  *                                              *
@@ -172,6 +176,7 @@ app.use(function(err, req, res, next) {
 
     res.status(500).send({error: error});
 });
+
 
 
 http.createServer(app).listen(app.get('port'), function(){

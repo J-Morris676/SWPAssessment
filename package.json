@@ -27,6 +27,7 @@
         "express-session": "*",
         "passport": "*",
         "passport-local": "*",
-        "natural": "0.2.1"
+        "natural": "0.2.1",
+        "pdfkit": "0.7.1"
     }
 }

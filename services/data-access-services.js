@@ -9,8 +9,8 @@ var databaseConnection = require('../repositories/database-connection');
 var authCheck = require('../authentication/check-authenticated');
 
 var fs = require('fs');
-var md5 = require('md5');
 var path = require('path');
+var PDFDocument = require("pdfkit");
 
 var log4js = require("log4js");
 var log4js_extend = require("log4js-extend");
@@ -409,3 +409,117 @@ exports.isLoggedIn = function(req, res) {
         res.json({"loggedIn": false});
     }
 };
+
+exports.createAssessmentResultsReport= function(req, res) {
+    logger.info("GET: Assessment results report");
+    dataRepository.findStudentResultsInAssessmentSchedule(req.params.scheduleAssessmentId, req.params.username, function(err, studentResults) {
+        if (studentResults == null) {
+            res.status(404).json("This Student hasn't sat this assessment");
+        }
+        else {
+            var doc;
+            res.set({
+                'Content-Type': 'application/pdf'
+            });
+            //If an admin is requesting this resource, build with detailed results:
+            if (authCheck.admin.checkAuthenticated(req.user)) {
+                var doc = buildResultsReport(req.params.username, studentResults, true);
+                doc.pipe(res);
+                doc.end()
+            }
+            //If the Student requesting it is the Student signed in, build with limited detailed results:
+            else if (authCheck.student.checkAuthenticatedByUserName(req.user, req.params.username)) {
+                var doc = buildResultsReport(req.params.username, studentResults, false);
+                doc.pipe(res);
+                doc.end();
+            }
+            else {
+                res.status(401).json({"message": "Unauthorised to access this resource"});
+            }
+        }
+    });
+};
+
+
+/*
+    Uses the pdfkit API to construct a PDF document with a report of students results
+ */
+
+//TODO: Before list of QA's.. Put in a 'summary' showing pass/fail and percentage
+function buildResultsReport(studentUsername, studentResults, isAdmin) {
+    var doc = new PDFDocument();
+    //Main page:
+    doc.image('resources/front-page-crest-left.jpg', 0, 0, {width: 615, height: 800});
+    doc.font('Helvetica');
+    doc.fillColor("white")
+        .fontSize(16)
+        .text(studentUsername, 200, 580)
+        .moveDown(0.5)
+        .text("Learning Development Portfolio")
+        .moveDown(0.5)
+        .text(studentResults.date.getDate() + "/" + (studentResults.date.getMonth()+1) + "/" + studentResults.date.getFullYear());
+
+    //Assessment summary page:
+    doc.addPage();
+    doc.switchToPage(1);
+    doc.fontSize(20).fillColor("#004B8E").text("Assessment Summary").moveDown(1);
+    doc.fontSize(12).fillColor("black").text("Grade: ", {continued:true});
+    var roundedGrade = Math.round(studentResults.percent);
+    if (roundedGrade >= 75) {
+        doc.fillColor("green").text(roundedGrade + "%");
+    }
+    else {
+        doc.fillColor("red").text(roundedGrade + "%");
+    }
+
+    doc.fillColor("black").text("The pass mark for assessments is 75% meaning '" + studentUsername + "'", {continued:true});
+    if (roundedGrade >= 75) {
+        doc.text(" has successfully passed this assessment and is not expected to resit.")
+    }
+    else {
+        doc.text(" has failed this assessment and is required to resit.");
+    }
+    //Question breakdown pages:
+    doc.addPage();
+    doc.switchToPage(2);
+    doc.fontSize(20).fillColor("#004B8E").text("Assessment Breakdown").moveDown(1);
+
+    doc.fontSize(12);
+    for (var questionIndex = 0; questionIndex < studentResults.markedAnswers.length; questionIndex++) {
+        if (isAdmin) {
+            doc.fillColor("gray");
+            doc.text(studentResults.markedAnswers[questionIndex].type);
+        }
+        doc.fillColor("black");
+        doc.text("Question " + (questionIndex+1) + ")");
+        doc.text(studentResults.markedAnswers[questionIndex].question, {indent: 30});
+
+        if (isAdmin) {
+            doc.text("Answer:", {indent: 60});
+            doc.text("\"" + studentResults.markedAnswers[questionIndex].answer + "\"", {indent:90});
+            doc.text("Expected Answer(s):", {indent:60});
+            if (studentResults.markedAnswers[questionIndex].type == "free") {
+                for (var freeTextAnswer = 0; freeTextAnswer < studentResults.markedAnswers[questionIndex].result.actual.length; freeTextAnswer++) {
+                    doc.text("\"" + studentResults.markedAnswers[questionIndex].result.actual[freeTextAnswer] + "\"", {indent:90});
+
+                }
+            }
+            else {
+                doc.text("\"" + studentResults.markedAnswers[questionIndex].result.actual + "\"", {indent:90});
+            }
+        }
+
+        if (studentResults.markedAnswers[questionIndex].result.score == studentResults.markedAnswers[questionIndex].result.possible)
+            doc.fillColor("green");
+        else if (studentResults.markedAnswers[questionIndex].result.score == 0)
+            doc.fillColor("red");
+        else
+            doc.fillColor("orange");
+
+        doc.text(studentResults.markedAnswers[questionIndex].result.score + "/" + studentResults.markedAnswers[questionIndex].result.possible,
+            {align:"right"});
+
+        doc.moveDown(1.5);
+    }
+    return doc;
+}
