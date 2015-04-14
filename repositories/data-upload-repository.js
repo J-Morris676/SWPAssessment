@@ -56,7 +56,8 @@ exports.insertAssessment = function(assessment, cb) {
 };
 
 exports.editAssessment = function(assessmentId, assessment, cb) {
-    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId) },
+    //An assessment with ANY locked versions cannot be edited:
+    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions.locked": {$ne: true} },
         {$set: assessment},
         function(err, data) {repositoryCallback(err,data,cb);}
     );
@@ -70,14 +71,30 @@ exports.insertVersionIntoAssessment = function(assessmentId, version, cb) {
 };
 
 exports.editVersionInAssessment = function(assessmentId, versionId, version, cb) {
-    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions._id": ObjectId(versionId) },
+    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId),
+            //Only matches assessments with the given version ID AND where that version is NOT locked:
+            "versions": {
+                "$elemMatch": {
+                    "_id": ObjectId(versionId),
+                    "locked": {$ne: true}
+                }
+            }
+        },
         {$set: {"versions.$": version}},
         function(err, data) {repositoryCallback(err,data,cb);
     });
 };
 
 exports.insertQuestionIntoVersionOfAssessment = function(question, assessmentId, versionId, cb) {
-    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions._id": ObjectId(versionId) },
+    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId),
+            //Only matches assessments with the given version ID AND where that version is NOT locked:
+            "versions": {
+                "$elemMatch": {
+                    "_id": ObjectId(versionId),
+                    "locked": {$ne: true}
+                }
+            }
+        },
         {$push: {"versions.$.QAs": question}},
         function(err, data) {repositoryCallback(err,data,cb);
     });
@@ -89,7 +106,15 @@ exports.editQuestionInVersionOfAssessment = function(question, assessmentId, ver
     updateObj["$set"][fieldString] = question;
 
 
-    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId), "versions._id": ObjectId(versionId) },
+    databaseConnection.assessments.update({ "_id": ObjectId(assessmentId),
+            //Only matches assessments with the given version ID AND where that version is NOT locked:
+            "versions": {
+                "$elemMatch": {
+                    "_id": ObjectId(versionId),
+                    "locked": {$ne: true}
+                }
+            }
+        },
         updateObj,
         function(err, data) {repositoryCallback(err,data,cb);
         });
@@ -101,19 +126,28 @@ exports.insertAssessmentSchedule = function(assessmentDateObject, cb) {
 
 exports.insertStudentIntoAssessmentSchedule = function(scheduledAssessmentId, student, cb) {
     student.attended = false;
-    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId) },
+    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId),
+            //CANT edit any schedules in the past:
+            startDate: {$gt : new Date() }
+        },
         { $push: { students: student } },
         function(err, data) {repositoryCallback(err,data,cb);});
 };
 
 exports.editAssessmentScheduleDates = function(scheduledAssessmentId, dates, cb) {
-    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId) },
+    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId),
+            //CANT edit any schedules in the past:
+            startDate: {$gt : new Date() }
+        },
         dates,
         function(err, data) {repositoryCallback(err,data,cb);});
 };
 
 exports.editAssessmentSchedule = function(scheduledAssessmentId, schedule, cb) {
-    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId) },
+    databaseConnection.assessmentSchedule.update({ "_id": ObjectId(scheduledAssessmentId),
+            //CANT edit any schedules in the past:
+            startDate: {$gt : new Date() }
+        },
         schedule,
         function(err, data) {repositoryCallback(err,data,cb);});
 };

@@ -18,6 +18,9 @@ function repositoryCallback(err, data, cb) {
         var returnObj
         if (data.result)
             returnObj = {"changesMade": (data.result.n>0)};
+        else if (data.n > 0) {
+            returnObj = {"changesMade": (data.n>0)};
+        }
         else
             returnObj = {"changesMade": (data.nModified>0)};
 
@@ -30,22 +33,30 @@ exports.deleteAdmin = function(username, cb) {
 };
 
 exports.deleteStudent = function(username, cb) {
-    databaseConnection.students.remove({"username": username}, function(err, data) {repositoryCallback(err,data,cb);});
+    databaseConnection.students.remove({"username": username, "assessmentResults": {$size: 0} }, function(err, data) {repositoryCallback(err,data,cb);});
 };
 
 exports.deleteAssessmentById = function(assessmentId, cb) {
-    databaseConnection.assessments.remove({"_id": assessmentId}, function(err, data) {repositoryCallback(err,data,cb);});
+    databaseConnection.assessments.remove({"_id": assessmentId, "versions.locked": {$ne: true}}, function(err, data) {repositoryCallback(err,data,cb);});
 };
 
 exports.deleteAssessmentVersions = function(assessmentId, cb) {
-    databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
+    databaseConnection.assessments.update( { _id: ObjectId(assessmentId), "versions.locked": {$ne: true} },
         {"$set": {"versions": []} },
         function(err, data) {repositoryCallback(err,data,cb);}
     );
 };
 
 exports.deleteVersionInAssessmentById = function(assessmentId, versionId, cb) {
-    databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
+    databaseConnection.assessments.update({_id: ObjectId(assessmentId),
+            //Only matches assessments with the given version ID AND where that version is NOT locked:
+            "versions": {
+                "$elemMatch": {
+                    "_id": ObjectId(versionId),
+                    "locked": {$ne: true}
+                }
+            }
+        },
         { $pull:{
                 "versions":{
                     "_id":ObjectId(versionId)
@@ -57,63 +68,100 @@ exports.deleteVersionInAssessmentById = function(assessmentId, versionId, cb) {
 };
 
 exports.deleteQuestionsInVersionByAssessmentIdAndVersionId = function(assessmentId, versionId, cb) {
-    databaseConnection.assessments.findOne({_id: ObjectId(assessmentId)}, function(err, data) {
-        var versionNo;
-        for (var versionIndex = 0; versionIndex < data.versions.length; versionIndex++) {
-            if (data.versions[versionIndex]._id.equals(new ObjectId(versionId))) {
-                versionNo = versionIndex;
-                break;
+    databaseConnection.assessments.findOne({_id: ObjectId(assessmentId),
+        //Only matches assessments with the given version ID AND where that version is NOT locked:
+        "versions": {
+            "$elemMatch": {
+                "_id": ObjectId(versionId),
+                "locked": {$ne: true}
             }
         }
-        if (versionNo != null) {
-            var fieldString = "versions." + versionNo + ".QAs";
-            var updateObj = { $set: {} };
-            updateObj["$set"][fieldString] = [];
-
-            databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
-                updateObj,
-                function(err, data) {repositoryCallback(err,data,cb);}
-            );
+    },function(err, data) {
+        if (data == null) {
+            repositoryCallback(null, null, cb);
+        }
+        else if (err) {
+            repositoryCallback(err, null, cb);
         }
         else {
-            repositoryCallback({"message": "No such versionId"}, null, cb);
+            var versionNo;
+            for (var versionIndex = 0; versionIndex < data.versions.length; versionIndex++) {
+                if (data.versions[versionIndex]._id.equals(new ObjectId(versionId))) {
+                    versionNo = versionIndex;
+                    break;
+                }
+            }
+            if (versionNo != null) {
+                var fieldString = "versions." + versionNo + ".QAs";
+                var updateObj = { $set: {} };
+                updateObj["$set"][fieldString] = [];
+
+                databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
+                    updateObj,
+                    function(err, data) {repositoryCallback(err,data,cb);}
+                );
+            }
+            else {
+                repositoryCallback({"message": "No such versionId"}, null, cb);
+            }
         }
     })
-
 };
 
 exports.deleteQuestionInVersionByAssessmentIdAndVersionNoAndQuestionId = function(assessmentId, versionId, questionId, cb) {
-    databaseConnection.assessments.findOne({_id: ObjectId(assessmentId)}, function(err, data) {
-        var versionNo;
-        for (var versionIndex = 0; versionIndex < data.versions.length; versionIndex++) {
-            if (data.versions[versionIndex]._id.equals(new ObjectId(versionId))) {
-                versionNo = versionIndex;
-                break;
+    databaseConnection.assessments.findOne({_id: ObjectId(assessmentId),
+        //Only matches assessments with the given version ID AND where that version is NOT locked:
+            "versions": {
+                "$elemMatch": {
+                    "_id": ObjectId(versionId),
+                    "locked": {$ne: true}
+                }
             }
-        }
-        if (versionNo != null) {
-            var fieldString = "versions." + versionNo + ".QAs";
-            var updateObj = { $pull: {} };
-            updateObj["$pull"][fieldString] = {"_id":  ObjectId(questionId) };
+        }, function(err, data) {
+            if (data == null) {
+                repositoryCallback(null, null, cb);
+            }
+            else if (err) {
+                repositoryCallback(err, null, cb);
+            }
+            else {
+                var versionNo;
+                for (var versionIndex = 0; versionIndex < data.versions.length; versionIndex++) {
+                    if (data.versions[versionIndex]._id.equals(new ObjectId(versionId))) {
+                        versionNo = versionIndex;
+                        break;
+                    }
+                }
+                if (versionNo != null) {
+                    var fieldString = "versions." + versionNo + ".QAs";
+                    var updateObj = { $pull: {} };
+                    updateObj["$pull"][fieldString] = {"_id":  ObjectId(questionId) };
 
-            databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
-                updateObj,
-                function(err, data) {repositoryCallback(err,data,cb);}
-            );
-        }
-        else {
-            repositoryCallback({"message": "No such versionId"}, null, cb);
+                    databaseConnection.assessments.update( { _id: ObjectId(assessmentId)},
+                        updateObj,
+                        function(err, data) {repositoryCallback(err,data,cb);}
+                    );
+                }
+                else {
+                    repositoryCallback({"message": "No such versionId"}, null, cb);
+                }
         }
     });
 };
 
 exports.deleteScheduleByScheduleId = function(scheduleId, cb) {
-    databaseConnection.assessmentSchedule.remove({"_id": scheduleId},function(err, data) {repositoryCallback(err,data,cb);});
+    databaseConnection.assessmentSchedule.remove({"_id": scheduleId,
+            //CANT remove schedules in the past:
+            startDate: {$gt : new Date() }
+        }, function(err, data) {repositoryCallback(err,data,cb);});
 };
 
 exports.deleteStudentFromScheduleByScheduleIdAndUsername = function(scheduleId, username, cb) {
-    databaseConnection.assessmentSchedule.update({_id: scheduleId}, { $pull: {"students": {"username": username}}},
+    databaseConnection.assessmentSchedule.update({_id: scheduleId,
+            //CANT modify schedules in the past in any way:
+            startDate: {$gt : new Date() }
+        },
+        { $pull: {"students": {"username": username}}},
         function(err, data) {repositoryCallback(err,data,cb);}
     );
 };
-

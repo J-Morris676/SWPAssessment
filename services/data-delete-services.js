@@ -4,10 +4,9 @@
  * Created by Jamie Morris on 07/02/15..
  */
 var dataDeleteRepository = require('../repositories/data-delete-repository.js');
-var databaseConnection = require('../repositories/database-connection');
+var authCheck = require('../authentication/check-authenticated');
 
 var fs = require('fs');
-var md5 = require('md5');
 var path = require('path');
 
 var log4js = require("log4js");
@@ -22,75 +21,129 @@ var logger = log4js.getLogger();
 
 exports.deleteAdmin = function(req, res) {
     logger.info("DELETE: admin " + req.params.username);
-    dataDeleteRepository.deleteAdmin(req.params.username, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteAdmin(req.params.username, function (err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteStudent = function(req, res) {
     logger.info("DELETE: student " + req.params.username);
-    dataDeleteRepository.deleteStudent(req.params.username, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteStudent(req.params.username, function(err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteAssessmentById = function(req, res) {
     logger.info("DELETE: assessment " + req.params.assessmentId);
-    dataDeleteRepository.deleteAssessmentById(req.params.assessmentId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteAssessmentById(req.params.assessmentId, function (err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteVersionsInAssessment = function(req, res) {
-    logger.info("DELETE: all version in [assessment: " + req.params.assessmentId + "]");
-    dataDeleteRepository.deleteAssessmentVersions(req.params.assessmentId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+    logger.info("DELETE: all versions in [assessment: " + req.params.assessmentId + "]");
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteAssessmentVersions(req.params.assessmentId, function (err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteVersionInAssessmentById = function(req, res) {
     logger.info("DELETE: version " + req.params.versionId + " in [assessment: " + req.params.assessmentId + "]");
-    dataDeleteRepository.deleteVersionInAssessmentById(req.params.assessmentId, req.params.versionId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteVersionInAssessmentById(req.params.assessmentId, req.params.versionId, function(err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteQuestionsInAssessmentVersion = function(req, res) {
     logger.info("DELETE: all questions [assessment: " + req.params.assessmentId + ", version: " + req.params.versionId+"]");
-    dataDeleteRepository.deleteQuestionsInVersionByAssessmentIdAndVersionId(req.params.assessmentId, req.params.versionId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteQuestionsInVersionByAssessmentIdAndVersionId(req.params.assessmentId, req.params.versionId, function(err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteQuestionInAssessmentVersion = function(req, res) {
     logger.info("DELETE: question " + req.params.questionId + " [assessment: " + req.params.assessmentId + ", version: " + req.params.versionId +"]");
-    dataDeleteRepository.deleteQuestionInVersionByAssessmentIdAndVersionNoAndQuestionId(req.params.assessmentId, req.params.versionId,
-        req.params.questionId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteQuestionInVersionByAssessmentIdAndVersionNoAndQuestionId(req.params.assessmentId, req.params.versionId,
+            req.params.questionId, function(err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteScheduleByScheduleId = function(req, res) {
     logger.info("DELETE: schedule " + req.params.scheduleId);
-    dataDeleteRepository.deleteScheduleByScheduleId(req.params.scheduleId, function(err, responseObj) {
-        if (err) res.status(500).json(err);
-        else res.json(responseObj);
-    });
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteScheduleByScheduleId(req.params.scheduleId, function(err, responseObj) {
+            if (err) res.status(500).json(err);
+            else res.json(responseObj);
+        });
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };
 
 exports.deleteStudentFromScheduleByScheduleIdAndUsername = function(req, res) {
     logger.info("DELETE: "  + req.params.username + " from assessment schedule " + req.params.scheduleId);
-    dataDeleteRepository.deleteStudentFromScheduleByScheduleIdAndUsername(req.params.scheduleId, req.params.username,
-        function(err, responseObj) {
-            if (err) res.status(500).json(err);
-            else res.json(responseObj);
-        }
-    );
+
+    if (authCheck.admin.checkAuthenticated(req.user)) {
+        dataDeleteRepository.deleteStudentFromScheduleByScheduleIdAndUsername(req.params.scheduleId, req.params.username,
+            function(err, responseObj) {
+                if (err) res.status(500).json(err);
+                else res.json(responseObj);
+            }
+        );
+    }
+    else {
+        res.status(401).json({"message": "Not authenticated"});
+    }
 };

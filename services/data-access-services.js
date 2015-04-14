@@ -418,9 +418,7 @@ exports.createAssessmentResultsReport= function(req, res) {
         }
         else {
             var doc;
-            res.set({
-                'Content-Type': 'application/pdf'
-            });
+
             //If an admin is requesting this resource, build with detailed results:
             if (authCheck.admin.checkAuthenticated(req.user)) {
                 var doc = buildResultsReport(req.params.username, studentResults, true);
@@ -496,7 +494,12 @@ function buildResultsReport(studentUsername, studentResults, isAdmin) {
 
         if (isAdmin) {
             doc.text("Answer:", {indent: 60});
-            doc.text("\"" + studentResults.markedAnswers[questionIndex].answer + "\"", {indent:90});
+            if (studentResults.markedAnswers[questionIndex].answer == null) {
+                doc.text('""', {indent:90});
+            }
+            else {
+                doc.text("\"" + studentResults.markedAnswers[questionIndex].answer + "\"", {indent:90});
+            }
             doc.text("Expected Answer(s):", {indent:60});
             if (studentResults.markedAnswers[questionIndex].type == "free") {
                 for (var freeTextAnswer = 0; freeTextAnswer < studentResults.markedAnswers[questionIndex].result.actual.length; freeTextAnswer++) {

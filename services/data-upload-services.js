@@ -27,6 +27,9 @@ log4js_extend(log4js, {
 
 var logger = log4js.getLogger();
 
+//TODO: (Like delete) Prevent making changes to resources that can't be altered:
+//i.e. Can't delete a Student who has taken a test.
+
 exports.insertStudent = function(req, res) {
     logger.info("POST: inserting a student");
 
@@ -61,6 +64,7 @@ exports.editStudent = function(req, res) {
     logger.info("PUT: editing student '" + req.params.studentUsername + "'");
 
     if (authCheck.admin.checkAuthenticated(req.user)) {
+        //Only username and password can be edited:
         var username = req.body.username;
         var studentDetails = req.body;
         delete req.body.username;
@@ -114,6 +118,7 @@ exports.editAdmin = function(req, res) {
     logger.info("PUT: editing admin '" + req.params.adminUsername + "'");
 
     if (authCheck.admin.checkAuthenticatedByUserName(req.user, req.params.adminUsername)) {
+        //Only username and password can be edited:
         var username = req.body.username;
         var adminDetails = req.body;
         delete req.body.username;
@@ -157,7 +162,6 @@ exports.insertAssessment = function(req, res) {
     else {
         res.status(401).json({"message": "Not authenticated"});
     }
-
 };
 
 exports.editAssessment = function(req, res) {
